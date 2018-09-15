@@ -44,7 +44,7 @@ class DialogIconLabelState extends State<DialogIconLabel> {
                 textInputAction: TextInputAction.done,
                 controller: myController,
                 decoration: new InputDecoration(
-                  labelText: 'Write Icon Text',
+                  labelText: 'Edit Text',
                   hintText: '${myController.text}'
                 ),
               ),
@@ -53,7 +53,7 @@ class DialogIconLabelState extends State<DialogIconLabel> {
         ),
         actions: <Widget>[
           new FlatButton(
-            child: const Text('Update Text'),
+            child: const Text('Update'),
             onPressed: () => Navigator.pop(context, myController.text)
           ),
         ],

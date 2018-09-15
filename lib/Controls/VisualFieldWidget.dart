@@ -15,6 +15,7 @@ import '../Dialogs/DialogEditorIcon.dart';
 import '../Dialogs/DialogEditorFolder.dart';
 import '../Models/IconType.dart';
 import '../Models/EmbeddedIconModel.dart';
+import '../Pages/FolderCreator.dart';
 import '../Pages/IconCreator.dart';
 import '../Storage/IconDatabase.dart';
 
@@ -482,7 +483,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         heroTag: "addFolderTag",
         mini: false,
         child: Icon(Icons.folder_open),
-        onPressed: () async {
+        onPressed: () => _navigateToFolderCreatorScreen(context),
+        /*
+        async {
           print("TODO: Folder selection options");
 
           SavedIcon savedIcon = SavedIcon();
@@ -520,6 +523,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                                     initialPosition: Offset(insert.x, insert.y),));
           });
         },
+        */
       )
     );
   }
@@ -670,7 +674,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     return true;
   }
 
-  // TODO: merge these
+  // Trigger editor for icons
   void triggerEditor(Widget widget) {
     if (widget is ReactiveIconWidget)
     {
@@ -893,6 +897,53 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                           storedId: insert.storedId,
                                           initialPosition: Offset(insert.x, insert.y),));
     });
+  }
+
+  /// Navigate to icon creator
+  /// 
+  /// 
+  void _navigateToFolderCreatorScreen(BuildContext context) async {
+    debugPrint("_navigateToIconCreatorScreen()");
+    EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FolderCreatorScreen(dir)));
+
+    if (result == null) return;
+
+    /*
+    SavedIcon savedIcon = SavedIcon();
+    savedIcon.id        = null;
+    savedIcon.iconName  = result.iconText;
+    savedIcon.iconPath  = result.assetLocation;
+    savedIcon.x         = 0.0;
+    savedIcon.y         = 0.0;
+    savedIcon.embedded  = result.isEmbedded;
+    savedIcon.pinned    = false;
+    savedIcon.scale     = 1.0;
+    savedIcon.active    = false;
+    savedIcon.isStored  = false;
+    savedIcon.storedId  = -1;
+    savedIcon.isFolder  = false;
+
+    SavedIcon insert = await iconDb.insert(savedIcon);
+
+    setState(() 
+    {
+      stackElements.add(ReactiveIconWidget(label: insert.iconName,
+                                          iconType: IconType.Icon,
+                                          assetPath: insert.iconPath, 
+                                          isInSingleMode: boardSettings.checkIsInSingleMode,
+                                          isEmbbedded: insert.embedded,
+                                          isStored: insert.isStored, 
+                                          isInPlay: false,
+                                          isPinnedToLocation: insert.pinned,
+                                          launchEditor: triggerEditor,
+                                          scale: insert.scale,
+                                          defaultWidth: 200.0,
+                                          moveToTop: moveIconToTop,
+                                          id: insert.id,
+                                          storedId: insert.storedId,
+                                          initialPosition: Offset(insert.x, insert.y),));
+    });
+    */
   }
 
   /// Build menu
