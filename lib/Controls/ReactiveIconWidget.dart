@@ -171,8 +171,6 @@ class IconBox extends StatelessWidget {
     final inheritedIconState = InheritedIconState.of(context);
     final screenInformation = MediaQuery.of(context);
 
-    print('build: width: ${inheritedIconState.defaultWidth} scale: ${inheritedIconState.scale}');
-
     var settingsIcon =  GestureDetector(behavior: HitTestBehavior.opaque,
                                           onTap: () => inheritedIconState.onTap(),
                                           child: Align(child: Icon(Icons.edit,),
@@ -197,14 +195,12 @@ class IconBox extends StatelessWidget {
 
     var item = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
                          height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                         //key: GlobalKey(),
                          decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
                                                    color: inheritedIconState.color),
                          child: Column(children: [Expanded(child: centerColumn,)]),);
 
     var avatar = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
                            height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                           //key: GlobalKey(),
                            decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
                                                      color: inheritedIconState.color),
                            child: Column(children: [Expanded(child: centerColumn,)]),);
@@ -224,18 +220,18 @@ class IconBox extends StatelessWidget {
             return;
           }
 
-
           var newX = offset.dx;
           var newY = offset.dy;
 
           newX = (newX < 0.0) ? 0.0 : newX;
-          //newX = (newX + item.size.width > screenInformation.size.width) ? screenInformation.size.width - item.size.width : newX;
+          newX = (newX + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.width) ? 
+            screenInformation.size.width - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newX;
 
           newY = (newY < 0.0) ? 0.0 : newY;
-          //newY = (newY + item.size.height > screenInformation.size.height) ? screenInformation.size.height - item.size.height : newY;        
+          newY = (newY + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.height) ? 
+            screenInformation.size.height - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newY;        
           
           inheritedIconState.onPositionChanged(Offset(newX, newY));
-          //widget.currentPosition = new Offset(newX, newY);
         });
 
     return new Positioned(
