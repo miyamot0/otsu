@@ -290,6 +290,9 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
     );
   }
 
+  /// Debug print
+  /// 
+  /// 
   void debugPrint(String output) {
     if (outputToTerminal == false) return;
 

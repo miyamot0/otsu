@@ -908,7 +908,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (result == null) return;
 
-    /*
     SavedIcon savedIcon = SavedIcon();
     savedIcon.id        = null;
     savedIcon.iconName  = result.iconText;
@@ -921,29 +920,29 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     savedIcon.active    = false;
     savedIcon.isStored  = false;
     savedIcon.storedId  = -1;
-    savedIcon.isFolder  = false;
+    savedIcon.isFolder  = true;
 
     SavedIcon insert = await iconDb.insert(savedIcon);
 
     setState(() 
     {
-      stackElements.add(ReactiveIconWidget(label: insert.iconName,
-                                          iconType: IconType.Icon,
-                                          assetPath: insert.iconPath, 
-                                          isInSingleMode: boardSettings.checkIsInSingleMode,
-                                          isEmbbedded: insert.embedded,
-                                          isStored: insert.isStored, 
-                                          isInPlay: false,
-                                          isPinnedToLocation: insert.pinned,
-                                          launchEditor: triggerEditor,
-                                          scale: insert.scale,
-                                          defaultWidth: 200.0,
-                                          moveToTop: moveIconToTop,
-                                          id: insert.id,
-                                          storedId: insert.storedId,
-                                          initialPosition: Offset(insert.x, insert.y),));
+      stackElements.add(ReactiveFolderWidget(
+        label: insert.iconName,
+        iconType: IconType.Folder,
+        assetPath: insert.iconPath,
+        isInSingleMode: boardSettings.checkIsInSingleMode,
+        isEmbbedded: insert.embedded,
+        isStored: insert.isStored,
+        isInPlay: false,
+        isPinnedToLocation: insert.pinned,
+        launchEditor: triggerEditor,
+        openFolderDialog: _navigateToFolderContentDialog,
+        scale: insert.scale,
+        defaultWidth: 200.0,
+        moveToTop: moveIconToTop,
+        id: insert.id,
+        initialPosition: Offset(insert.x, insert.y),));
     });
-    */
   }
 
   /// Build menu
