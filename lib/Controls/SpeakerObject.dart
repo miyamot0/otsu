@@ -7,32 +7,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-final bool outputToTerminal = true;
+final bool outputToTerminal = false;
 
 class SpeakerObject extends StatefulWidget {
   final Function emitSpeech;
   final Function toggleDebug;
 
   SpeakerObject(this.emitSpeech, this.toggleDebug);
-  Image image;
-  MediaQueryData mediaQueryData;
-
-  double width;
 
   static const platform = const MethodChannel('com.example.dragdropexample/tts');
+
   /// Pipe text into platform-specific TTS
   /// 
-  /// TODO: handle re-speaking
+  /// 
   Future<Null> speak(String output) async {
     debugPrint("speak: $output");
     var sendMap = <String, dynamic> { 'output' : output }; 
 
     try {
       await platform.invokeMethod('speak', sendMap);
-
     } on PlatformException catch (e) {
       print('Exception: ${e.message}');
-      
     }
   }
 
@@ -41,48 +36,69 @@ class SpeakerObject extends StatefulWidget {
 }
 
 class SpeakerObjectState extends State<SpeakerObject> {
-  final padding = 10.0;
+  static const padding = 10.0;
 
   DateTime emitterPressTime;
+  Image image, imageBase, imageActive;
+  MediaQueryData mediaQueryData;
+  double width;
+
+  static const BoxDecoration box = BoxDecoration(color: Colors.transparent);
 
   @override
   Widget build(BuildContext context) {
-    if (widget.mediaQueryData == null)
-    {
-      widget.mediaQueryData = MediaQuery.of(context);
 
-      widget.width = (widget.mediaQueryData.size.height - (2 * padding)) * 0.25;
+    if (mediaQueryData == null)
+    {
+      mediaQueryData = MediaQuery.of(context);
+      width = (mediaQueryData.size.height - (2 * padding)) * 0.25;
     }
 
-    if (widget.image == null)
+    if (imageBase == null)
     {
-      widget.image = Image.asset('images/speaker.png',
-                                                    height: widget.width,
-                                                    fit: BoxFit.cover);
+      imageBase = Image.asset(
+        'images/speaker.png',
+        color: Colors.black,
+        height: width,
+        fit: BoxFit.cover);
     }
+
+    if (imageActive == null)
+    {
+      imageActive = Image.asset(
+        'images/speaker.png',
+        color: Colors.greenAccent,
+        height: width,
+        fit: BoxFit.cover);
+    }
+
+    // default up to cached standard one
+    image = imageBase;
 
     return Positioned(
-            left: widget.mediaQueryData.size.width - widget.width - padding,
+            left: mediaQueryData.size.width - width - padding,
             top:  padding,
-            child: GestureDetector(onTapDown: pressSpeechEmitterTest,
-                                   onTapUp: releaseSpeechEmitterTest,
-                                   onTapCancel: cancelActionRedraw,
-                                   child: Container(width: widget.width,
-                                      height: widget.width,
-                                      child: Align(alignment: Alignment.center,
-                                                    child: widget.image),
-                                   decoration: BoxDecoration(color: Colors.transparent)),
+            child: GestureDetector(
+              onTapDown: pressSpeechEmitterTest,
+              onTapUp: releaseSpeechEmitterTest,
+              onTapCancel: cancelActionRedraw,
+              child: Container(
+                width: width,
+                height: width,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: image
                 ),
+                decoration: box
+              ),
+            ),
           ); 
   }
 
   void cancelActionRedraw() {
     setState(()
     {
-      widget.image = Image.asset('images/speaker.png',
-                                  height: widget.width,
-                                  color: Colors.black,
-                                  fit: BoxFit.cover);
+      image = imageBase;
     });
   }
 
@@ -90,10 +106,7 @@ class SpeakerObjectState extends State<SpeakerObject> {
   void pressSpeechEmitterTest(TapDownDetails deets) {
     setState(() 
     { 
-      widget.image = Image.asset('images/speaker.png',
-                                  height: widget.width,
-                                  color: Colors.greenAccent,
-                                  fit: BoxFit.cover);
+      image = imageActive;
       emitterPressTime = DateTime.now(); 
     });
   }
@@ -112,10 +125,7 @@ class SpeakerObjectState extends State<SpeakerObject> {
 
     setState(()
     {
-      widget.image = Image.asset('images/speaker.png',
-                                  height: widget.width,
-                                  color: Colors.black,
-                                  fit: BoxFit.cover);
+      image = imageBase;
     });
   }
 
