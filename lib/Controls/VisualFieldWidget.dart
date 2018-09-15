@@ -89,6 +89,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
         if (icons[i].isFolder == false)
         {
+          if (icons[i].isStored == true) continue;
+          
           stackElements.add(ReactiveIconWidget(label: icons[i].iconName,
                                               iconType: IconType.Icon,
                                               assetPath: icons[i].iconPath, 
@@ -691,15 +693,21 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       imgs.add(new Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 1.0),
+          border: Border.all(
+            color: Colors.black, 
+            width: 1.0,
+          ),
           color: Colors.white,
         ),
         child: GestureDetector(
-          child: new Image.asset(storedIcon.iconPath),
-                                 onTap: () {
-                                   _restoreIconFromStorage(storedIcon);
-                                   Navigator.pop(context);
-                                 },
+          child: new Image.asset(
+            storedIcon.iconPath
+          ),
+          onTap: () 
+          {
+            _restoreIconFromStorage(storedIcon);
+            Navigator.pop(context);
+          },
         ),
       ));
     }
@@ -966,6 +974,8 @@ class VisualFieldBox extends StatelessWidget {
 }
 
 /// Scaffold for visual field
+/// 
+/// 
 class FieldBox extends StatelessWidget {
   static const defaultStyle = const TextStyle(
     color: Colors.black, 
