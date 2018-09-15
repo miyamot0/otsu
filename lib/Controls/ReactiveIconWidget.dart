@@ -8,17 +8,17 @@ class ReactiveIconWidget extends StatefulWidget {
   final Offset initialPosition;
   final IconType iconType;
 
-  ReactiveIconWidget({this.label, 
-                      this.assetPath,
-                      this.documentsFolder,
-                      this.isInPlay,
-                      this.isEmbbedded,
-                      this.isInSingleMode,
-                      this.isStored,
-                      this.showEditOptions,
-                      this.moveToTop, 
-                      this.iconType,
-                      this.initialPosition}) : super(key: GlobalKey());
+  ReactiveIconWidget({@required this.label, 
+                      @required this.assetPath,
+                      @required this.documentsFolder,
+                      @required this.isInPlay,
+                      @required this.isEmbbedded,
+                      @required this.isInSingleMode,
+                      @required this.isStored,
+                      @required this.showEditOptions,
+                      @required this.moveToTop, 
+                      @required this.iconType,
+                      @required this.initialPosition}) : super(key: GlobalKey());
 
   @override
   ReactiveIconWidgetState createState() => ReactiveIconWidgetState(label: label, 
@@ -199,16 +199,13 @@ class IconBox extends StatelessWidget {
         childWhenDragging: new Opacity(opacity: 0.0, child: item),
         onDragStarted: () => print("onDragStarted: ..."),
         onDraggableCanceled: (velocity, offset) {
-          if (velocity.pixelsPerSecond.distance < 1)
+          if (offset.distance < 1)
           {
-            print("onDraggableCanceled. Velocity low, kill off event");
+            print("onDraggableCanceled. Distance low, kill off event");
 
             return;
           }
-          else
-          {
-            print("onDraggableCanceled. Velocity: ${velocity.pixelsPerSecond.distance}");
-          }
+
 
           var newX = offset.dx;
           var newY = offset.dy;

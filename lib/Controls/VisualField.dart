@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../Controls/AnimatedMenu.dart';
+import '../Controls/ReactiveIconWidget.dart';
 import '../Controls/SpeakerObject.dart';
 import '../Controls/StripObject.dart';
+
+import '../Models/IconType.dart';
 
 import '../Storage/IconDatabase.dart';
 
@@ -59,7 +62,18 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     List<SavedIcon> icons = await iconDb.getSavedIcons();
 
     setState(() {
-        background = (!inDebugMode) ? Colors.lightBlueAccent : Colors.orange;
+
+        stackElements.add(ReactiveIconWidget(label: "almost hack",
+                                             iconType: IconType.Icon,
+                                             assetPath: 'images/almond.png',
+                                             showEditOptions: false,
+                                             isInSingleMode: boardSettings.checkIsInSingleMode,
+                                             isEmbbedded: true,
+                                             documentsFolder: dir,
+                                             isStored: false, 
+                                             isInPlay: true,
+                                             moveToTop: moveIconToTop,//todo
+                                             initialPosition: Offset(100.0, 100.0),));
 
         childButtons.add(_buildAddFolderButton());
         childButtons.add(_buildAddIconButton());
@@ -72,6 +86,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         
         speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));          
     });
+  }
+
+  void moveIconToTop(ReactiveIconWidget widget) {
+    print("moveTestIconToTop(TestIcon widget)");
+
+    stackElements.remove(widget);
+    stackElements.add(widget);
   }
 
   /// Rebuild menu

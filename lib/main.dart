@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-//import 'Controls/IconField.dart';
-import 'Storage/IconDatabase.dart';
 import 'Controls/VisualField.dart';
 
-void main() async {
-
-  IconDatabase iconDb = new IconDatabase();
-  await iconDb.open();  
-
+void main() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight, 
     DeviceOrientation.landscapeLeft]).then((_)
