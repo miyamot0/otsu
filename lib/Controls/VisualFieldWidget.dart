@@ -95,7 +95,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                               isStored: icons[i].isStored, 
                                               isInPlay: false,
                                               isPinnedToLocation: icons[i].pinned,
-                                              launchEditor: _triggerIconEditor,
+                                              launchEditor: triggerEditor,
                                               scale: icons[i].scale,
                                               defaultWidth: 200.0,
                                               moveToTop: moveIconToTop,
@@ -111,7 +111,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                               isInSingleMode: boardSettings.checkIsInSingleMode,
                                               isEmbbedded: icons[i].embedded,
                                               isStored: icons[i].isStored, 
-                                              launchEditor: _triggerFolderEditor,
+                                              launchEditor: triggerEditor,
                                               openFolderDialog: _navigateToFolderContentDialog,
                                               isInPlay: false,
                                               isPinnedToLocation: icons[i].pinned,
@@ -290,7 +290,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Save the most recent widget
   /// 
   /// 
-  _saveLatestStack(Widget widget) async {
+  void _saveLatestStack(Widget widget) async {
     debugPrint("_saveLatestStack() " + new DateTime.now().toString());
 
     if (iconDb == null) return;
@@ -331,6 +331,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           savedIcon.scale     = widget.key.currentState.scale;
           savedIcon.active    = widget.key.currentState.isInPlay;
           savedIcon.isStored  = widget.key.currentState.isStored;
+          savedIcon.storedId  = -1;
           savedIcon.isFolder  = true;
 
           await iconDb.update(savedIcon);
@@ -508,7 +509,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                                     isInSingleMode: boardSettings.checkIsInSingleMode,
                                                     isEmbbedded: insert.embedded,
                                                     isStored: insert.isStored, 
-                                                    launchEditor: _triggerFolderEditor,
+                                                    launchEditor: triggerEditor,
                                                     openFolderDialog: _navigateToFolderContentDialog,
                                                     isInPlay: false,
                                                     isPinnedToLocation: insert.pinned,
@@ -670,11 +671,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   }
 
   // TODO: merge these
-
-  /// Launch editor for icon
-  /// 
-  /// 
-  void _triggerIconEditor(ReactiveIconWidget widget) {
+  void triggerEditor(Widget widget) {
+    if (widget is ReactiveIconWidget)
+    {
       debugPrint("_triggerIconEditor()");
       
       Navigator.of(context).push(PageRouteBuilder(
@@ -683,12 +682,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
               return DialogEditorIcon(widget, _removeFromDatabase);
           }
       ));
-  }
+    }
 
-  /// Launch editor for folder
-  /// 
-  /// 
-  void _triggerFolderEditor(ReactiveFolderWidget widget) {
+    if (widget is ReactiveFolderWidget)
+    {
       debugPrint("_triggerIconEditor()");
       
       Navigator.of(context).push(PageRouteBuilder(
@@ -697,6 +694,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
               return DialogEditorFolder(widget, _removeFromDatabase);
           }
       ));
+    }
+
+
   }
 
   /// Navigate to folder contents
@@ -773,7 +773,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                           isStored: savedIcon.isStored, 
                                           isInPlay: false,
                                           isPinnedToLocation: savedIcon.pinned,
-                                          launchEditor: _triggerIconEditor,
+                                          launchEditor: triggerEditor,
                                           scale: savedIcon.scale,
                                           defaultWidth: 200.0,
                                           moveToTop: moveIconToTop,
@@ -885,7 +885,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                           isStored: insert.isStored, 
                                           isInPlay: false,
                                           isPinnedToLocation: insert.pinned,
-                                          launchEditor: _triggerIconEditor,
+                                          launchEditor: triggerEditor,
                                           scale: insert.scale,
                                           defaultWidth: 200.0,
                                           moveToTop: moveIconToTop,
