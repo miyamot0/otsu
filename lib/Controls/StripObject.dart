@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// TODO: change to stateless
+
 class StripObject extends StatefulWidget {
   final double padding;
   Size stripSize;

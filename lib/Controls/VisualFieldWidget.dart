@@ -52,6 +52,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    iconDb.close();
+
+    super.dispose();
+  }
+
   /// Load icons from database
   /// 
   /// 
@@ -399,9 +406,23 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       inDebugMode = false;
     });
 
-    if (boardSettings.checkIsInSingleMode == true) {
+    if (boardSettings.checkIsInSingleMode == true) 
+    {
       deselectAllIcons();
-    }    
+    }
+    else 
+    {
+      for (var i = 0; i < stackElements.length; i++)
+      {
+        if (stackElements[i] is ReactiveIconWidget)
+        {
+          (stackElements[i] as ReactiveIconWidget).key.currentState.setState(() 
+          {
+            (stackElements[i] as ReactiveIconWidget).key.currentState.isInPlay = _isWithinStrip((stackElements[i] as ReactiveIconWidget));
+          });
+        }
+      }
+    }
   }
 
   /// Toggle debug mode
