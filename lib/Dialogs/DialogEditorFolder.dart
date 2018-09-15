@@ -2,15 +2,20 @@
 ///
 ///
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../Controls/ReactiveFolderWidget.dart';
+import '../Dialogs/DialogIconLabel.dart';
 
 class DialogEditorFolder extends StatefulWidget {
   final ReactiveFolderWidget folderWidget;
   final Function deleteCallback;
 
-  DialogEditorFolder(this.folderWidget, this.deleteCallback);
+  DialogEditorFolder(
+    this.folderWidget, 
+    this.deleteCallback
+  );
 
   @override
   DialogEditorFolderState createState() => new DialogEditorFolderState();
@@ -69,9 +74,17 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Rename Element"), 
-      onPressed: () {
-        print("STUB: Rename Element");
-        
+      onPressed: () async {
+        String newText = await _showInputDialog();
+
+        if (newText == null) return;
+
+        widget.folderWidget.key.currentState.setState(()
+        {
+          widget.folderWidget.key.currentState.label = newText;  
+        });
+
+        Navigator.pop(context, newText);
       }, 
       splashColor: Colors.redAccent,
     );
@@ -104,6 +117,17 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
         });
       }, 
       splashColor: Colors.redAccent,
+    );
+  }
+
+  /// Show edit text dialog
+  /// 
+  /// 
+  Future<String> _showInputDialog() async {
+    debugPrint("_showInputDialog()");
+    return await showDialog<String>(
+      context: context,
+      child: new DialogIconLabel(assetText: widget.folderWidget.key.currentState.label),
     );
   }
 

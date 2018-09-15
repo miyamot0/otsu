@@ -91,39 +91,49 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         {
           if (icons[i].isStored == true) continue;
           
-          stackElements.add(ReactiveIconWidget(label: icons[i].iconName,
-                                              iconType: IconType.Icon,
-                                              assetPath: icons[i].iconPath, 
-                                              isInSingleMode: boardSettings.checkIsInSingleMode,
-                                              isEmbbedded: icons[i].embedded,
-                                              isStored: icons[i].isStored, 
-                                              isInPlay: false,
-                                              isPinnedToLocation: icons[i].pinned,
-                                              launchEditor: triggerEditor,
-                                              scale: icons[i].scale,
-                                              defaultWidth: 200.0,
-                                              moveToTop: moveIconToTop,
-                                              id: icons[i].id,
-                                              storedId: icons[i].storedId,
-                                              initialPosition: Offset(icons[i].x, icons[i].y),));
+          stackElements.add(ReactiveIconWidget(
+            label: icons[i].iconName,
+            iconType: IconType.Icon,
+            assetPath: icons[i].iconPath, 
+            isInSingleMode: boardSettings.checkIsInSingleMode,
+            isEmbbedded: icons[i].embedded,
+            isStored: icons[i].isStored, 
+            isInPlay: false,
+            isPinnedToLocation: icons[i].pinned,
+            launchEditor: triggerEditor,
+            scale: icons[i].scale,
+            defaultWidth: 200.0,
+            moveToTop: moveIconToTop,
+            id: icons[i].id,
+            storedId: icons[i].storedId,
+            initialPosition: Offset(
+              icons[i].x, 
+              icons[i].y),
+            ),
+          );
         }
         else
         {
-          stackElements.add(ReactiveFolderWidget(label: icons[i].iconName,
-                                              iconType: IconType.Folder,
-                                              assetPath: icons[i].iconPath, 
-                                              isInSingleMode: boardSettings.checkIsInSingleMode,
-                                              isEmbbedded: icons[i].embedded,
-                                              isStored: icons[i].isStored, 
-                                              launchEditor: triggerEditor,
-                                              openFolderDialog: _navigateToFolderContentDialog,
-                                              isInPlay: false,
-                                              isPinnedToLocation: icons[i].pinned,
-                                              scale: icons[i].scale,
-                                              defaultWidth: 200.0,
-                                              moveToTop: moveIconToTop,
-                                              id: icons[i].id,
-                                              initialPosition: Offset(icons[i].x, icons[i].y),));
+          stackElements.add(ReactiveFolderWidget(
+            label: icons[i].iconName,
+            iconType: IconType.Folder,
+            assetPath: icons[i].iconPath, 
+            isInSingleMode: boardSettings.checkIsInSingleMode,
+            isEmbbedded: icons[i].embedded,
+            isStored: icons[i].isStored, 
+            launchEditor: triggerEditor,
+            openFolderDialog: _navigateToFolderContentDialog,
+            isInPlay: false,
+            isPinnedToLocation: icons[i].pinned,
+            scale: icons[i].scale,
+            defaultWidth: 200.0,
+            moveToTop: moveIconToTop,
+            id: icons[i].id,
+            initialPosition: Offset(
+              icons[i].x, 
+              icons[i].y),
+            ),
+          );
         }
       }
         
@@ -636,17 +646,38 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   }
 
   // Trigger editor for icons
-  void triggerEditor(Widget widget) {
+  void triggerEditor(Widget widget) async {
     if (widget is ReactiveIconWidget)
     {
       debugPrint("_triggerIconEditor()");
       
-      Navigator.of(context).push(PageRouteBuilder(
+      String newName = await Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) {
-              return DialogEditorIcon(widget, _removeFromDatabase);
+              return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
           }
       ));
+
+      if (newName != null)
+      {
+        debugPrint("_triggerIconEditor(): $newName");
+
+          SavedIcon savedIcon = SavedIcon();
+          savedIcon.id        = widget.id;
+          savedIcon.iconName  = newName;
+          savedIcon.iconPath  = widget.assetPath;
+          savedIcon.x         = widget.key.currentState.currentPosition.dx;
+          savedIcon.y         = widget.key.currentState.currentPosition.dy;
+          savedIcon.embedded  = widget.key.currentState.isEmbbedded;
+          savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
+          savedIcon.scale     = widget.key.currentState.scale;
+          savedIcon.active    = widget.key.currentState.isInPlay;
+          savedIcon.isStored  = widget.key.currentState.isStored;
+          savedIcon.storedId  = widget.storedId;
+          savedIcon.isFolder  = false;
+
+          await iconDb.update(savedIcon);
+      }
     }
 
     if (widget is ReactiveFolderWidget)

@@ -164,7 +164,8 @@ class InheritedIconState extends InheritedWidget {
            currentPosition != oldWidget.currentPosition || 
            showEditOptions != oldWidget.showEditOptions || 
            scale != oldWidget.scale || 
-           isPinnedToLocation != oldWidget.isPinnedToLocation;
+           isPinnedToLocation != oldWidget.isPinnedToLocation ||
+           label != oldWidget.label;
   }
 
   static InheritedIconState of(BuildContext context) {

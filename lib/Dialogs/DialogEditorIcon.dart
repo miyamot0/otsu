@@ -2,15 +2,20 @@
 ///
 ///
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../Controls/ReactiveIconWidget.dart';
+import '../Dialogs/DialogIconLabel.dart';
 
 class DialogEditorIcon extends StatefulWidget {
   final ReactiveIconWidget iconWidget;
   final Function deleteCallback;
 
-  DialogEditorIcon(this.iconWidget, this.deleteCallback);
+  DialogEditorIcon(
+    this.iconWidget, 
+    this.deleteCallback,
+  );
 
   @override
   DialogEditorIconState createState() => new DialogEditorIconState();
@@ -66,10 +71,18 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Rename Element"), 
-      onPressed: () {
-        print("STUB: Rename Element");
-        
-      }, 
+      onPressed: () async {
+        String newText = await _showInputDialog();
+
+        if (newText == null) return;
+
+        widget.iconWidget.key.currentState.setState(()
+        {
+          widget.iconWidget.key.currentState.label = newText;  
+        });
+
+        Navigator.pop(context, newText);
+      },
       splashColor: Colors.redAccent);
   }
 
@@ -99,6 +112,17 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         });
       }, 
       splashColor: Colors.redAccent);
+  }
+
+  /// Show edit text dialog
+  /// 
+  /// 
+  Future<String> _showInputDialog() async {
+    debugPrint("_showInputDialog()");
+    return await showDialog<String>(
+      context: context,
+      child: new DialogIconLabel(assetText: widget.iconWidget.key.currentState.label),
+    );
   }
 
   static const defaultStyle = TextStyle(
