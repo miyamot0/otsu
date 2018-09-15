@@ -65,8 +65,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
         stackElements.add(ReactiveIconWidget(label: "almost hack",
                                              iconType: IconType.Icon,
-                                             assetPath: 'images/almond.png',
-                                             showEditOptions: false,
+                                             assetPath: 'images/almond.png', 
                                              isInSingleMode: boardSettings.checkIsInSingleMode,
                                              isEmbbedded: true,
                                              documentsFolder: dir,
@@ -214,6 +213,35 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     });
   }
 
+  void emitSpeech() {
+    print("emitSpeech()");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    childButtons.clear();
+    childButtons.add(_buildAddFolderButton());
+    childButtons.add(_buildAddIconButton());
+    childButtons.add(_buildSwitchModeButton());
+    childButtons.add(_buildAutoOutputModeButton()); 
+    childButtons.add(_buildAutoDeselectModeButton());      
+    childButtons.add(_buildResumeChildModeButton()); 
+  
+    animatedMenu = _buildAnimatedMenu(childButtons);
+
+    toggleSentenceStrip();
+    
+    return InheritedVisualFieldState(
+      background: background,
+      inDebugMode: inDebugMode,
+      stackElements: stackElements,
+      animatedMenu: animatedMenu,
+      boardSettings: boardSettings,
+      child: VisualFieldBox(),
+      key: GlobalKey(),
+    );
+  }
+
   /// Toggle visibility of strip
   /// 
   /// 
@@ -321,35 +349,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                               childButtons: buttons);
   }
 
-  void emitSpeech() {
-    print("emitSpeech()");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-      childButtons.clear();
-      childButtons.add(_buildAddFolderButton());
-      childButtons.add(_buildAddIconButton());
-      childButtons.add(_buildSwitchModeButton());
-      childButtons.add(_buildAutoOutputModeButton()); 
-      childButtons.add(_buildAutoDeselectModeButton());      
-      childButtons.add(_buildResumeChildModeButton()); 
-    
-      animatedMenu = _buildAnimatedMenu(childButtons);
-
-      toggleSentenceStrip();
-      
-      return InheritedVisualFieldState(
-        background: background,
-        inDebugMode: inDebugMode,
-        stackElements: stackElements,
-        animatedMenu: animatedMenu,
-        boardSettings: boardSettings,
-        child: VisualFieldBox(),
-        key: GlobalKey(),
-      );
-  }
 }
 
 class InheritedVisualFieldState extends InheritedWidget {

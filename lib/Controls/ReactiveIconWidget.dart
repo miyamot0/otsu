@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../Models/IconType.dart';
+import '../Controls/VisualFieldWidget.dart';
 
 class ReactiveIconWidget extends StatefulWidget {
   final String label, assetPath, documentsFolder;
-  final bool isInPlay, isEmbbedded, isInSingleMode, isStored, showEditOptions;
+  final bool isInPlay, isEmbbedded, isInSingleMode, isStored;
   final double scale, defaultWidth;
   final Function moveToTop;
   final Offset initialPosition;
@@ -16,7 +18,6 @@ class ReactiveIconWidget extends StatefulWidget {
                       @required this.isEmbbedded,
                       @required this.isInSingleMode,
                       @required this.isStored,
-                      @required this.showEditOptions,
                       @required this.moveToTop, 
                       @required this.iconType,
                       @required this.scale,
@@ -31,7 +32,6 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    isEmbbedded: isEmbbedded,
                                                                    isInSingleMode: isInSingleMode,
                                                                    isStored: isStored,
-                                                                   showEditOptions: showEditOptions,
                                                                    moveToTop: moveToTop, 
                                                                    scale: scale,
                                                                    defaultWidth: defaultWidth,
@@ -42,7 +42,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   Function moveToTop;
 
   String label, assetPath, documentsFolder;
-  bool isInPlay, isEmbbedded, isInSingleMode, isStored, showEditOptions;
+  bool isInPlay, isEmbbedded, isInSingleMode, isStored;
   Color color = Colors.white;
   Offset currentPosition;
   double defaultWidth = 200.0;
@@ -56,7 +56,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
       this.isEmbbedded,
       this.isInSingleMode,
       this.isStored,
-      this.showEditOptions,
       this.moveToTop, 
       this.scale,
       this.defaultWidth,
@@ -75,7 +74,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
         isEmbbedded: isEmbbedded,
         isInSingleMode: isInSingleMode,
         isStored: isStored,
-        showEditOptions: showEditOptions,
         currentPosition: currentPosition,
         defaultWidth: defaultWidth,
         scale: scale,        
@@ -169,6 +167,10 @@ class IconBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inheritedIconState = InheritedIconState.of(context);
+    final inheritedFieldState = InheritedVisualFieldState.of(context);
+
+    print("in field mode: ${inheritedFieldState.inDebugMode}");
+
     final screenInformation = MediaQuery.of(context);
 
     var settingsIcon =  GestureDetector(behavior: HitTestBehavior.opaque,
@@ -187,7 +189,7 @@ class IconBox extends StatelessWidget {
 
     var centerColumn = Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Flexible(child: inheritedIconState.showEditOptions ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
+                                Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
                                 Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
                                 Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedIconState.label, style: defaultStyle)), flex: 2)
                               ]
