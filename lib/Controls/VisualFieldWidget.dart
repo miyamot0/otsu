@@ -7,15 +7,11 @@ import '../Controls/ReactiveIconWidget.dart';
 import '../Controls/ReactiveFolderWidget.dart';
 import '../Controls/SpeakerObject.dart';
 import '../Controls/StripObject.dart';
-
 import '../Dialogs/DialogEditorIcon.dart';
 import '../Dialogs/DialogEditorFolder.dart';
-
 import '../Models/IconType.dart';
 import '../Models/EmbeddedIconModel.dart';
-
 import '../Pages/IconCreator.dart';
-
 import '../Storage/IconDatabase.dart';
 
 class VisualFieldWidget extends StatefulWidget {
@@ -65,6 +61,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     await iconDb.open();
 
     boardSettings = await iconDb.loadSettings();
+
+    //hack
+    boardSettings.checkIsInSingleMode = false;
 
     if (boardSettings.checkIsInSingleMode == false) {
       stackElements.add(sentenceStripReference);      
@@ -128,11 +127,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     childButtons.add(_buildAutoOutputModeButton()); 
     childButtons.add(_buildAutoDeselectModeButton());      
     childButtons.add(_buildResumeChildModeButton()); 
-
   }
 
   Future<bool> _isIconOverlappingWithFolder(ReactiveIconWidget widget) async {
-    debugPrint("_isIconOverlappingWithFolder()");
+    debugPrint("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
 
     var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
                                 .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
@@ -168,7 +166,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         return true;
     }
 
-    debugPrint("_isIconOverlappingWithFolder() == FALSE");
+    print("_isIconOverlappingWithFolder() == FALSE");
 
     return false;
   }
@@ -212,7 +210,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
 
     _saveLatestStack(widget);
-
   }
 
   _saveLatestStack(Widget widget) async {
@@ -486,8 +483,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   }
 
   /// TODO: assign size (square, based on %age height)
-  /// TODO: query stored icons
-  /// TODO: display in grid view
+  /// 
+  /// 
   AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
     debugPrint("_buildFolderPopupDialog, length = ${storedIcons.length}");
 
@@ -671,6 +668,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         ));
   }
 
+  /// Navigate to icon creator
+  /// 
+  /// 
   _navigateToIconCreatorScreen(BuildContext context) async {
     debugPrint("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
