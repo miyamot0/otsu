@@ -286,13 +286,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
     }
 
-    iconDb.saveSettings(boardSettings);
+    await iconDb.saveSettings(boardSettings);
   }
 
   /// Remove from stack
   /// 
   /// 
-  _removeFromDatabase(Widget widget) async {
+  void _removeFromDatabase(Widget widget) async {
     print("_removeFromStack(Widget widget)");
 
     if (widget is ReactiveIconWidget)
@@ -317,93 +317,182 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Build auto output button
   /// 
   /// 
-  _buildAutoOutputModeButton() {
+  AnimatedMenuItem _buildAutoOutputModeButton() {
     return AnimatedMenuItem(
-        hasLabel: true,
-        labelText: boardSettings.checkIsAutoSpeaking == true ? "Change to Manual Mode" : "Change to Autospeak Mode",
-        labelColor: Colors.black,
-        currentButton: FloatingActionButton(
-            backgroundColor: Colors.blue,
-            heroTag: "autoTag",
-            mini: false,
-            child: Icon(Icons.volume_up),
-            onPressed: () {
-              setState(() {
-                boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
+      hasLabel: true,
+      labelText: boardSettings.checkIsAutoSpeaking == true ? "Change to Manual Mode" : "Change to Autospeak Mode",
+      labelColor: Colors.black,
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        heroTag: "autoTag",
+        mini: false,
+        child: Icon(Icons.volume_up),
+        onPressed: () async {
+          setState(() {
+            boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
 
-                print("autoSpeaking Delegate: Status = ${boardSettings.checkIsAutoSpeaking}");
-              });
-            },
-        ));
+            print("autoSpeaking Delegate: Status = ${boardSettings.checkIsAutoSpeaking}");
+          });
+
+          await iconDb.saveSettings(boardSettings);
+        },
+      )
+    );
   }
 
   /// Build auto deselect button
   /// 
   /// 
-  _buildAutoDeselectModeButton() {
+  AnimatedMenuItem _buildAutoDeselectModeButton() {
     return AnimatedMenuItem(
-        hasLabel: true,
-        labelText: boardSettings.checkIsAutoDeselecting == true ? "Disable Auto-Deselect" : "Enable Auto-Deselect",
-        labelColor: Colors.black,
-        currentButton: FloatingActionButton(
-            backgroundColor: Colors.red,
-            heroTag: "deselectTag",
-            mini: false,
-            child: Icon(Icons.fingerprint),
-            onPressed: () {
-              setState(() {
-                boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
+      hasLabel: true,
+      labelText: boardSettings.checkIsAutoDeselecting == true ? "Disable Auto-Deselect" : "Enable Auto-Deselect",
+      labelColor: Colors.black,
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        heroTag: "deselectTag",
+        mini: false,
+        child: Icon(Icons.fingerprint),
+        onPressed: () async {
+          setState(() {
+            boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
 
-                print("autoDeselect Delegate: Status = ${boardSettings.checkIsAutoDeselecting}");
-              });
-            },
-        ));
+            print("autoDeselect Delegate: Status = ${boardSettings.checkIsAutoDeselecting}");
+          });
+
+          await iconDb.saveSettings(boardSettings);
+        },
+      )
+    );
   }
 
   /// Build switch button
   ///
   ///
-  _buildSwitchModeButton() {
+  AnimatedMenuItem _buildSwitchModeButton() {
     return AnimatedMenuItem(
-        hasLabel: true,
-        labelText: boardSettings.checkIsInSingleMode == true ? "Change to Frame Mode" : "Change to Icon Mode",
-        labelColor: Colors.black,
-        currentButton: FloatingActionButton(
-            backgroundColor: Colors.deepOrange,
-            heroTag: "frameTag",
-            mini: false,
-            child: Icon(Icons.border_all),
-            onPressed: () {
-              setState(() {
-                boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
+      hasLabel: true,
+      labelText: boardSettings.checkIsInSingleMode == true ? "Change to Frame Mode" : "Change to Icon Mode",
+      labelColor: Colors.black,
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.deepOrange,
+        heroTag: "frameTag",
+        mini: false,
+        child: Icon(Icons.border_all),
+        onPressed: () async {
+          setState(() {
+            boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
 
-                print("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
-              });
-            },
-        ));
+            print("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
+          });
+
+          await iconDb.saveSettings(boardSettings);
+        },
+      )
+    );
   }
 
   /// Build resume button
   ///
   ///
-  _buildResumeChildModeButton() {
+  AnimatedMenuItem _buildResumeChildModeButton() {
     return AnimatedMenuItem(
-        hasLabel: true,
-        labelText: "Resume Child Mode",
-        labelColor: Colors.black,
-        currentButton: FloatingActionButton(
-            backgroundColor: Colors.deepPurple,
-            heroTag: "resumeTag",
-            mini: false,
-            child: Icon(Icons.play_arrow),
-            onPressed: _resumeChildMode,
-        ));
+      hasLabel: true,
+      labelText: "Resume Child Mode",
+      labelColor: Colors.black,
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
+        heroTag: "resumeTag",
+        mini: false,
+        child: Icon(Icons.play_arrow),
+        onPressed: () async {
+          _resumeChildMode();
+
+          await iconDb.saveSettings(boardSettings);
+        }
+      )
+    );
+  }
+
+  /// Build icon button 
+  ///
+  ///
+  AnimatedMenuItem _buildAddFolderButton() {
+    return AnimatedMenuItem(
+      hasLabel: true,
+      labelText: "Add a Folder",
+      labelColor: Colors.black,
+      
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.amber,
+        heroTag: "addFolderTag",
+        mini: false,
+        child: Icon(Icons.folder_open),
+        onPressed: () async {
+          debugPrint("TODO: Folder selection options");
+
+          SavedIcon savedIcon = SavedIcon();
+          savedIcon.id        = null;
+          savedIcon.iconName  = "Folder 1";
+          savedIcon.iconPath  = "images/FolderOpenRed.png";
+          savedIcon.x         = 500.0;
+          savedIcon.y         = 500.0;
+          savedIcon.embedded  = true;
+          savedIcon.pinned    = false;
+          savedIcon.scale     = 1.0;
+          savedIcon.active    = false;
+          savedIcon.isStored  = false;
+          savedIcon.storedId  = -1;
+          savedIcon.isFolder  = true;
+
+          SavedIcon insert = await iconDb.insert(savedIcon);
+
+          setState(() 
+          {
+            stackElements.add(ReactiveFolderWidget(label: insert.iconName,
+                                                    iconType: IconType.Folder,
+                                                    assetPath: insert.iconPath, 
+                                                    isInSingleMode: boardSettings.checkIsInSingleMode,
+                                                    isEmbbedded: insert.embedded,
+                                                    isStored: insert.isStored, 
+                                                    launchEditor: _triggerFolderEditor,
+                                                    openFolderDialog: _navigateToFolderContentDialog,
+                                                    isInPlay: false,
+                                                    isPinnedToLocation: insert.pinned,
+                                                    scale: insert.scale,
+                                                    defaultWidth: 200.0,
+                                                    moveToTop: moveIconToTop,
+                                                    id: insert.id,
+                                                    initialPosition: Offset(insert.x, insert.y),));
+          });
+        },
+      )
+    );
+  }
+
+  /// Build icon button 
+  ///
+  ///
+  AnimatedMenuItem _buildAddIconButton() {
+    return AnimatedMenuItem(
+      hasLabel: true,
+      labelText: "Add an Icon",
+      labelColor: Colors.black,
+      
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        heroTag: "addIconTag",
+        mini: false,
+        child: Icon(Icons.add_a_photo),
+        onPressed: () => _navigateToIconCreatorScreen(context),
+      )
+    );
   }
 
   /// Resume child interaction mode
   /// 
   /// This disables debug mode (hides buttons)
-  _resumeChildMode() {
+  void _resumeChildMode() async {
     print('_resumeChildMode()');
 
     setState(() {
@@ -427,6 +516,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
       }
     }
+
+    await iconDb.saveSettings(boardSettings);
   }
 
   /// Toggle debug mode
@@ -511,7 +602,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Check if icon is within strip, in framed mode
   /// 
   /// 
-  _isWithinStrip(ReactiveIconWidget icon) {
+  bool _isWithinStrip(ReactiveIconWidget icon) {
     debugPrint("_isWithinStrip");
 
     if (sentenceStripReference.stripSize == null) return false;
@@ -523,10 +614,12 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     return true;
   }
 
+  // TODO: merge these
+
   /// Launch editor for icon
   /// 
   /// 
-  _triggerIconEditor(ReactiveIconWidget widget) {
+  void _triggerIconEditor(ReactiveIconWidget widget) {
       debugPrint("_triggerIconEditor()");
       
       Navigator.of(context).push(PageRouteBuilder(
@@ -540,7 +633,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Launch editor for folder
   /// 
   /// 
-  _triggerFolderEditor(ReactiveFolderWidget widget) {
+  void _triggerFolderEditor(ReactiveFolderWidget widget) {
       debugPrint("_triggerIconEditor()");
       
       Navigator.of(context).push(PageRouteBuilder(
@@ -552,18 +645,20 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   }
 
   /// Navigate to folder contents
-  _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
+  /// 
+  /// 
+  void _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
     debugPrint("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
 
-      var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
+    var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
 
-      showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return _buildFolderPopupDialog(folderWidget, storedIcons);
-        },
-      );
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return _buildFolderPopupDialog(folderWidget, storedIcons);
+      },
+    );
   }
 
   /// TODO: assign size (square, based on %age height)
@@ -576,18 +671,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     for (SavedIcon storedIcon in storedIcons)
     {
-        imgs.add(new Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 1.0),
-            color: Colors.white,
-          ),
-          child: GestureDetector(child: new Image.asset(storedIcon.iconPath),
-                                  onTap: () {
-                                    _restoreIconFromStorage(storedIcon);
-
-                                    Navigator.pop(context);
-                                  },),            
-        ));
+      imgs.add(new Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 1.0),
+          color: Colors.white,
+        ),
+        child: GestureDetector(
+          child: new Image.asset(storedIcon.iconPath),
+                                 onTap: () {
+                                   _restoreIconFromStorage(storedIcon);
+                                   Navigator.pop(context);
+                                 },
+        ),
+      ));
     }
 
     return AlertDialog(title: Center(child: Text(folderWidget.key.currentState.label)),
@@ -599,11 +695,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                                                     children: imgs,),
                                           width: 500.0,
                                           height: 500.0,),
-                                          ); 
+                                          );
   }
 
   /// Restore image from storage
-  _restoreIconFromStorage(SavedIcon savedIcon) async {
+  /// 
+  /// 
+  void _restoreIconFromStorage(SavedIcon savedIcon) async {
     debugPrint("_restoreIconFromStorage(SavedIcon savedIcon)");
 
     savedIcon.isStored = false;
@@ -626,7 +724,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                           moveToTop: moveIconToTop,
                                           id: savedIcon.id,
                                           storedId: savedIcon.storedId,
-                                          initialPosition: Offset(savedIcon.x, savedIcon.y),));           
+                                          initialPosition: Offset(savedIcon.x, savedIcon.y),)
+      );
     });
   }
 
@@ -679,83 +778,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
   }
 
-  /// Build icon button 
-  ///
-  ///
-  _buildAddFolderButton() {
-    return AnimatedMenuItem(
-        hasLabel: true,
-        labelText: "Add a Folder",
-        labelColor: Colors.black,
-        
-        currentButton: FloatingActionButton(
-            backgroundColor: Colors.amber,
-            heroTag: "addFolderTag",
-            mini: false,
-            child: Icon(Icons.folder_open),
-            onPressed: () async {
-              debugPrint("TODO: Folder selection options");
-
-              SavedIcon savedIcon = SavedIcon();
-              savedIcon.id        = null;
-              savedIcon.iconName  = "Folder 1";
-              savedIcon.iconPath  = "images/FolderOpenRed.png";
-              savedIcon.x         = 500.0;
-              savedIcon.y         = 500.0;
-              savedIcon.embedded  = true;
-              savedIcon.pinned    = false;
-              savedIcon.scale     = 1.0;
-              savedIcon.active    = false;
-              savedIcon.isStored  = false;
-              savedIcon.storedId  = -1;
-              savedIcon.isFolder  = true;
-
-              SavedIcon insert = await iconDb.insert(savedIcon);
-
-              setState(() 
-              {
-                stackElements.add(ReactiveFolderWidget(label: insert.iconName,
-                                                    iconType: IconType.Folder,
-                                                    assetPath: insert.iconPath, 
-                                                    isInSingleMode: boardSettings.checkIsInSingleMode,
-                                                    isEmbbedded: insert.embedded,
-                                                    isStored: insert.isStored, 
-                                                    launchEditor: _triggerFolderEditor,
-                                                    openFolderDialog: _navigateToFolderContentDialog,
-                                                    isInPlay: false,
-                                                    isPinnedToLocation: insert.pinned,
-                                                    scale: insert.scale,
-                                                    defaultWidth: 200.0,
-                                                    moveToTop: moveIconToTop,
-                                                    id: insert.id,
-                                                    initialPosition: Offset(insert.x, insert.y),));
-              });
-            },
-        ));
-  }
-
-  /// Build icon button 
-  ///
-  ///
-  _buildAddIconButton() {
-    return AnimatedMenuItem(
-        hasLabel: true,
-        labelText: "Add an Icon",
-        labelColor: Colors.black,
-        
-        currentButton: FloatingActionButton(
-            backgroundColor: Colors.green,
-            heroTag: "addIconTag",
-            mini: false,
-            child: Icon(Icons.add_a_photo),
-            onPressed: () => _navigateToIconCreatorScreen(context),
-        ));
-  }
-
   /// Navigate to icon creator
   /// 
   /// 
-  _navigateToIconCreatorScreen(BuildContext context) async {
+  void _navigateToIconCreatorScreen(BuildContext context) async {
     debugPrint("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
 
@@ -800,18 +826,22 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Build menu
   ///
   ///
-  _buildAnimatedMenu(List<Widget> buttons) {
-    return AnimatedMenuWidget(backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-                              parentButtonBackground: Colors.redAccent,
-                              orientation: AnimatedMenuOrientation.VERTICAL,
-                              parentButton: Icon(Icons.settings),
-                              hasBackground: false,
-                              isLeft: false,
-                              childButtons: buttons);
+  AnimatedMenuWidget _buildAnimatedMenu(List<Widget> buttons) {
+    return AnimatedMenuWidget(
+      backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+      parentButtonBackground: Colors.redAccent,
+      orientation: AnimatedMenuOrientation.VERTICAL,
+      parentButton: Icon(Icons.settings),
+      hasBackground: false,
+      isLeft: false,
+      childButtons: buttons
+    );
   }
-
 }
 
+/// Inherited members for icons/folders lower in tree
+/// 
+/// 
 class InheritedVisualFieldState extends InheritedWidget {
   InheritedVisualFieldState({
     Key key,
@@ -834,9 +864,9 @@ class InheritedVisualFieldState extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedVisualFieldState oldWidget) {
     return inDebugMode != oldWidget.inDebugMode ||
-           boardSettings.checkIsInSingleMode != oldWidget.boardSettings.checkIsInSingleMode ||
-           boardSettings.checkIsAutoDeselecting != oldWidget.boardSettings.checkIsAutoDeselecting ||
-           boardSettings.checkIsAutoSpeaking != oldWidget.boardSettings.checkIsAutoSpeaking;
+      boardSettings.checkIsInSingleMode != oldWidget.boardSettings.checkIsInSingleMode ||
+      boardSettings.checkIsAutoDeselecting != oldWidget.boardSettings.checkIsAutoDeselecting ||
+      boardSettings.checkIsAutoSpeaking != oldWidget.boardSettings.checkIsAutoSpeaking;
   }
 
   static InheritedVisualFieldState of(BuildContext context) {
@@ -844,6 +874,9 @@ class InheritedVisualFieldState extends InheritedWidget {
   }
 }
 
+/// Wrapper for stateless view of field
+/// 
+/// 
 class VisualFieldBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -851,20 +884,29 @@ class VisualFieldBox extends StatelessWidget {
   }
 }
 
+/// Scaffold for visual field
 class FieldBox extends StatelessWidget {
-  final defaultStyle = new TextStyle(color: Colors.black, 
-                                     decoration: TextDecoration.none, 
-                                     fontSize: 20.0);
+  final defaultStyle = new TextStyle(
+    color: Colors.black, 
+    decoration: TextDecoration.none, 
+    fontSize: 20.0);
 
   @override
   Widget build(BuildContext context) {
     final inheritedState = InheritedVisualFieldState.of(context);
 
-    return Scaffold(body: 
-                    Container(child: Stack(children: inheritedState.stackElements),
-                              decoration: BoxDecoration(color: inheritedState.inDebugMode ? Colors.orangeAccent : Colors.blueAccent)),
-                    floatingActionButton: inheritedState.inDebugMode ? inheritedState.animatedMenu : null,
-                    primary: false,
-                    resizeToAvoidBottomPadding: false,);  
+    return Scaffold(
+      body: Container(
+        child: Stack(
+          children: inheritedState.stackElements
+        ),
+        decoration: BoxDecoration(
+          color: inheritedState.inDebugMode ? Colors.orangeAccent : Colors.blueAccent
+          )
+      ),
+      floatingActionButton: inheritedState.inDebugMode ? inheritedState.animatedMenu : null,
+      primary: false,
+      resizeToAvoidBottomPadding: false,
+    );  
   }
 }
