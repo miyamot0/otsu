@@ -181,25 +181,29 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void moveIconToTop(Widget widget) async {
-    print("moveTestIconToTop(TestIcon widget)");
+    print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
+
+    ReactiveIconWidget iconHolder;
 
     // Is the icon at the top of the stack overlapping with a folder?
-    if (widget is ReactiveIconWidget)
+    if (widget is ReactiveIconWidget && await _isIconOverlappingWithFolder(widget) == true)
     {
-      if (await _isIconOverlappingWithFolder(widget) == true)
-      {
         return;
-      }
     }
 
     if (boardSettings.checkIsInSingleMode == true)
     {
       for (var i = 0; i < stackElements.length; i++)
       {
-        if (stackElements[i] is ReactiveIconWidget && stackElements[i] != widget)
+        // Skip if not an icon
+        if (!(stackElements[i] is ReactiveIconWidget)) continue;
+
+        iconHolder = stackElements[i] as ReactiveIconWidget;
+
+        if (iconHolder != widget && iconHolder.key.currentState.isInPlay == true)
         {
-          (stackElements[i] as ReactiveIconWidget).key.currentState.setState(() {
-            (stackElements[i] as ReactiveIconWidget).key.currentState.isInPlay = false;
+          iconHolder.key.currentState.setState(() {
+            iconHolder.key.currentState.isInPlay = false;
           });
         }
       }
@@ -220,16 +224,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
       }
     }
-    else
+    else if (boardSettings.checkIsInSingleMode == false)
     {
       for (var i = 0; i < stackElements.length; i++)
       {
-        if (stackElements[i] is ReactiveIconWidget)
+        // Skip if not an icon
+        if (!(stackElements[i] is ReactiveIconWidget)) continue;
+
+        iconHolder = stackElements[i] as ReactiveIconWidget;
+
+        iconHolder.key.currentState.setState(() 
         {
-          (stackElements[i] as ReactiveIconWidget).key.currentState.setState(() {
-            (stackElements[i] as ReactiveIconWidget).key.currentState.isInPlay = _isWithinStrip((stackElements[i] as ReactiveIconWidget));
-          });
-        }
+            iconHolder.key.currentState.isInPlay = _isWithinStrip(iconHolder);
+        });
       }
 
       setState(() {

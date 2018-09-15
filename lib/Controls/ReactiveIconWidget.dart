@@ -100,7 +100,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   /// 
   /// 
   void onTap() {
-    print('onTap(): ${this.label}');
+    //print('Reactive Icon Widget: onTap(): ${this.label}');
 
     setState(() {
       launchEditor(widget);
@@ -111,7 +111,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   /// 
   /// 
   void onPositionChanged(Offset position) {
-    print("onPositionChanged(Offset position): ${this.label}");
+    //print("Reactive Icon Widget: onPositionChanged(Offset position): ${this.label}");
     setState(() {
       currentPosition = position;
       
@@ -263,7 +263,7 @@ class IconBox extends StatelessWidget {
           child: item,
           onTap: () 
           {
-            debugPrint("onTap: Widget pinned");
+            //print("Reactive Icon Widget: onTap: Widget pinned");
             inheritedIconState.onPositionChanged(
               Offset(
                 inheritedIconState.currentPosition.dx, 
@@ -307,7 +307,7 @@ class IconBox extends StatelessWidget {
       {
         if (offset.distance < 1)
         {
-          print("onDraggableCanceled. Distance low, kill off event");
+          //print("Reactive Icon Widget: onDraggableCanceled. Distance low, kill off event");
 
           return;
         }
