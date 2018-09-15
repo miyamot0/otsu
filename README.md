@@ -29,7 +29,6 @@ This project uses licensed visual images in order to operate:
 
 - image_picker - Copyright 2017, Flutter project authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/image_picker)
 - sqflite - Copyright 2017, Alexandre Roux Tekartik (MIT). [Github](https://github.com/tekartik/sqflite)
-- cupertino_icons - Copyright 2016, [Drifty](http://drifty.com/) (MIG). [Github](https://github.com/flutter/cupertino_icons)
 - path_provider - Copyright 2017, Flutter project authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/path_provider)
 - date_format - Copyright (c) 2017, Ravi Teja Gudapati <tejainece@gmail.com> (BSD-3). [Github](https://github.com/tejainece/date_format)
 - path - Copyright 2014, Flutter project authors (BSD-3). [Github](https://github.com/dart-lang/path)
