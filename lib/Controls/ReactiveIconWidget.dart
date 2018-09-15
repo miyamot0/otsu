@@ -186,6 +186,23 @@ class IconBox extends StatelessWidget {
     fontSize: 20.0
   );
 
+  static const Align editMarker = Align(
+    child: Icon(
+      Icons.edit,
+      ),
+    alignment: Alignment.centerRight,
+  );
+
+  static Border thinBorder = Border.all(
+    color: Colors.black, 
+    width: 3.0
+  );
+
+  static Border thickBorder = Border.all(
+    color: Colors.black, 
+    width: 5.0
+  );
+
   @override
   Widget build(BuildContext context) {
     InheritedIconState inheritedIconState = InheritedIconState.of(context);
@@ -195,11 +212,8 @@ class IconBox extends StatelessWidget {
     GestureDetector settingsIcon =  GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => inheritedIconState.onTap(),
-      child: Align(
-        child: Icon(Icons.edit,),
-        alignment: Alignment.centerRight,
-        ),
-      );
+      child: editMarker,
+    );
 
     Row topRow = Row(
       children: [settingsIcon],
@@ -226,22 +240,10 @@ class IconBox extends StatelessWidget {
     Container item = Container(
       width: inheritedIconState.scale * inheritedIconState.defaultWidth,
       height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-      decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-      color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
-      child: Column(
-        children: [
-          Expanded(
-            child: centerColumn,
-          )
-        ]
+      decoration: BoxDecoration(
+        border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,      
+        color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white
       ),
-    );
-
-    Container avatar = Container(
-      width: inheritedIconState.scale * inheritedIconState.defaultWidth,
-      height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-      decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-      color: inheritedIconState.isInSingleMode ? Colors.greenAccent : Colors.white),
       child: Column(
         children: [
           Expanded(
@@ -257,17 +259,39 @@ class IconBox extends StatelessWidget {
         left: inheritedIconState.currentPosition.dx, 
         key: GlobalKey(),
         top: inheritedIconState.currentPosition.dy,         
-        child: GestureDetector(child: item,
-                               onTap: () 
-                               {
-                                 debugPrint("onTap: Widget pinned");
-                                 inheritedIconState.onPositionChanged(Offset(
-                                   inheritedIconState.currentPosition.dx, 
-                                   inheritedIconState.currentPosition.dy
-                                   )
-                                  );
-                               }));
+        child: GestureDetector(
+          child: item,
+          onTap: () 
+          {
+            debugPrint("onTap: Widget pinned");
+            inheritedIconState.onPositionChanged(
+              Offset(
+                inheritedIconState.currentPosition.dx, 
+                inheritedIconState.currentPosition.dy
+              )
+            );
+          }
+        )
+      );
     }
+
+    Container avatar = Container(
+      width: inheritedIconState.scale * inheritedIconState.defaultWidth,
+      height: inheritedIconState.scale * inheritedIconState.defaultWidth,
+      decoration: BoxDecoration(
+        border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,      
+        color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: centerColumn,
+          )
+        ]
+      ),
+    );
+
+
 
     Draggable draggable = new Draggable(
       feedback: avatar,
