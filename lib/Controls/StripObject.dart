@@ -34,10 +34,8 @@ class StripObjectState extends State<StripObject> {
     border: border,
   );
 
-
   @override
   Widget build(BuildContext context) {
-
     if (stripSize == null)
     {
       var mediaQueryData = MediaQuery.of(context);

@@ -12,6 +12,11 @@ class PreviewIcon extends StatelessWidget {
   final String documentsDirectory;
   final bool isEmbedded;
 
+  static const backgroundColor = Colors.white;
+  static const showingEditOptions = false;
+  static const isPinnedToCurrentLocation = true;
+  static const currentOpacity = 1.0;
+
   PreviewIcon(this.previewSize, this.assetPath, this.text, this.isEmbedded, this.documentsDirectory);
 
   @override
@@ -21,12 +26,12 @@ class PreviewIcon extends StatelessWidget {
         size: previewSize,
         label: text,
         assetPath: assetPath,
-        opacity: 1.0,
-        isPinnedToLocation: true,
-        showEditOptions: false,
+        opacity: currentOpacity,
+        isPinnedToLocation: isPinnedToCurrentLocation,
+        showEditOptions: showingEditOptions,
         isEmbedded: isEmbedded,
         documentsDirectory: documentsDirectory,
         editFunction: () {},
-        backgroundColor: Colors.white);    
+        backgroundColor: backgroundColor);    
   }
 }
