@@ -186,9 +186,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     // Is the icon at the top of the stack overlapping with a folder?
     if (widget is ReactiveIconWidget)
     {
-      if (await _isIconOverlappingWithFolder(widget) == true) 
+      if (await _isIconOverlappingWithFolder(widget) == true)
+      {
         return;
-
+      }
     }
 
     if (boardSettings.checkIsInSingleMode == true)
@@ -203,8 +204,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
       }
 
-      stackElements.remove(widget);
-      stackElements.add(widget);
+      setState(() {
+        stackElements.remove(widget);
+        stackElements.add(widget);
+      });
 
       if (widget is ReactiveIconWidget)
       {
@@ -229,8 +232,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
       }
 
-      stackElements.remove(widget);
-      stackElements.add(widget);      
+      setState(() {
+        stackElements.remove(widget);
+        stackElements.add(widget);
+      });    
     }
 
     _saveLatestStack(widget);

@@ -96,6 +96,9 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
       );
   }
 
+  /// Launch editor
+  /// 
+  /// 
   void onTap() {
     print('onTap(): ${this.label}');
 
@@ -104,6 +107,9 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
     });
   }
 
+  /// Save and trigger events, since position changed
+  /// 
+  /// 
   void onPositionChanged(Offset position) {
     print("onPositionChanged(Offset position): ${this.label}");
     setState(() {
@@ -174,80 +180,76 @@ class IconTree extends StatelessWidget {
 }
 
 class IconBox extends StatelessWidget {
-  final defaultStyle = new TextStyle(color: Colors.black, 
-                                     decoration: TextDecoration.none, 
-                                     fontSize: 20.0);
+  static const defaultStyle = TextStyle(
+    color: Colors.black,
+    decoration: TextDecoration.none,
+    fontSize: 20.0
+  );
 
   @override
   Widget build(BuildContext context) {
-    final inheritedIconState = InheritedIconState.of(context);
-    final inheritedFieldState = InheritedVisualFieldState.of(context);
+    InheritedIconState inheritedIconState = InheritedIconState.of(context);
+    InheritedVisualFieldState inheritedFieldState = InheritedVisualFieldState.of(context);
+    MediaQueryData screenInformation = MediaQuery.of(context);
 
-    final screenInformation = MediaQuery.of(context);
+    GestureDetector settingsIcon =  GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => inheritedIconState.onTap(),
+      child: Align(
+        child: Icon(Icons.edit,),
+        alignment: Alignment.centerRight,
+        ),
+      );
 
-    var settingsIcon =  GestureDetector(behavior: HitTestBehavior.opaque,
-                                          onTap: () => inheritedIconState.onTap(),
-                                          child: Align(child: Icon(Icons.edit,),
-                                                      alignment: Alignment.centerRight,),);
+    Row topRow = Row(
+      children: [settingsIcon],
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      verticalDirection: VerticalDirection.up,
+    );
 
-    var topRow = Row(children: [settingsIcon], 
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              verticalDirection: VerticalDirection.up,);
+    Image imgAsset = Image.asset(
+      inheritedIconState.assetPath,
+      height: (inheritedIconState.scale * inheritedIconState.defaultWidth) * 0.7,
+      fit: BoxFit.cover
+    );
 
-    var imgAsset = Image.asset(inheritedIconState.assetPath,
-                               height: (inheritedIconState.scale * inheritedIconState.defaultWidth) * 0.7,
-                               fit: BoxFit.cover);
+    Column centerColumn = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
+        Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
+        Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedIconState.label, style: defaultStyle)), flex: 2)
+      ]
+    );
 
-    var centerColumn = Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
-                                Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
-                                Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedIconState.label, style: defaultStyle)), flex: 2)
-                              ]
-                            );
+    Container item = Container(
+      width: inheritedIconState.scale * inheritedIconState.defaultWidth,
+      height: inheritedIconState.scale * inheritedIconState.defaultWidth,
+      decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
+      color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
+      child: Column(
+        children: [
+          Expanded(
+            child: centerColumn,
+          )
+        ]
+      ),
+    );
 
-    var item = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                         height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                         decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                   color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
-                         child: Column(children: [Expanded(child: centerColumn,)]),);
-
-    var avatar = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                           height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                           decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                     color: inheritedIconState.isInSingleMode ? Colors.greenAccent : Colors.white),
-                           child: Column(children: [Expanded(child: centerColumn,)]),);
-
-    var draggable = new Draggable(
-        feedback: avatar,
-        maxSimultaneousDrags: 1,
-        ignoringFeedbackSemantics: false,
-        child: item,
-        childWhenDragging: new Opacity(opacity: 0.0, child: item),
-        onDragStarted: () {
-        },
-        onDraggableCanceled: (velocity, offset) {
-          if (offset.distance < 1)
-          {
-            print("onDraggableCanceled. Distance low, kill off event");
-
-            return;
-          }
-
-          var newX = offset.dx;
-          var newY = offset.dy;
-
-          newX = (newX < 0.0) ? 0.0 : newX;
-          newX = (newX + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.width) ? 
-            screenInformation.size.width - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newX;
-
-          newY = (newY < 0.0) ? 0.0 : newY;
-          newY = (newY + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.height) ? 
-            screenInformation.size.height - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newY;        
-          
-          inheritedIconState.onPositionChanged(Offset(newX, newY));
-        });
+    Container avatar = Container(
+      width: inheritedIconState.scale * inheritedIconState.defaultWidth,
+      height: inheritedIconState.scale * inheritedIconState.defaultWidth,
+      decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
+      color: inheritedIconState.isInSingleMode ? Colors.greenAccent : Colors.white),
+      child: Column(
+        children: [
+          Expanded(
+            child: centerColumn,
+          )
+        ]
+      ),
+    );
 
     if (inheritedIconState.isPinnedToLocation == true)
     {
@@ -259,9 +261,47 @@ class IconBox extends StatelessWidget {
                                onTap: () 
                                {
                                  debugPrint("onTap: Widget pinned");
-                                 inheritedIconState.onPositionChanged(Offset(inheritedIconState.currentPosition.dx, inheritedIconState.currentPosition.dy));
+                                 inheritedIconState.onPositionChanged(Offset(
+                                   inheritedIconState.currentPosition.dx, 
+                                   inheritedIconState.currentPosition.dy
+                                   )
+                                  );
                                }));
     }
+
+    Draggable draggable = new Draggable(
+      feedback: avatar,
+      maxSimultaneousDrags: 1,
+      ignoringFeedbackSemantics: false,
+      child: item,
+      childWhenDragging: new Opacity(
+        opacity: 0.0, 
+        child: item
+      ),
+      onDragStarted: () {},
+      onDraggableCanceled: (velocity, offset) 
+      {
+        if (offset.distance < 1)
+        {
+          print("onDraggableCanceled. Distance low, kill off event");
+
+          return;
+        }
+
+        var newX = offset.dx;
+        var newY = offset.dy;
+
+        newX = (newX < 0.0) ? 0.0 : newX;
+        newX = (newX + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.width) ? 
+          screenInformation.size.width - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newX;
+
+        newY = (newY < 0.0) ? 0.0 : newY;
+        newY = (newY + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.height) ? 
+          screenInformation.size.height - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newY;        
+        
+        inheritedIconState.onPositionChanged(Offset(newX, newY));
+      }
+    );
 
     return new Positioned(
       left: inheritedIconState.currentPosition.dx, 
