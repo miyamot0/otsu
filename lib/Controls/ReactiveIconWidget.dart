@@ -10,6 +10,7 @@ class ReactiveIconWidget extends StatefulWidget {
   final Function moveToTop;
   final Offset initialPosition;
   final IconType iconType;
+  GlobalKey<ReactiveIconWidgetState> key = GlobalKey<ReactiveIconWidgetState>();
 
   ReactiveIconWidget({@required this.label, 
                       @required this.assetPath,
@@ -33,22 +34,22 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    moveToTop: moveToTop, 
                                                                    scale: scale,
                                                                    defaultWidth: defaultWidth,
-                                                                   currentPosition: initialPosition);
+                                                                   currentPosition: initialPosition,
+                                                                   key: key);
 
-  static ReactiveIconWidgetState of(BuildContext context) => context.ancestorStateOfType(const TypeMatcher<ReactiveIconWidgetState>());
+  static InheritedIconState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedIconState) as InheritedIconState;
 }
 
 class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   Function moveToTop;
-
   String label, assetPath;
   bool isInPlay, isEmbbedded, isInSingleMode, isStored;
-  Color color = Colors.white;
   Offset currentPosition;
   double defaultWidth = 200.0;
   double scale;
 
   ReactiveIconWidgetState({
+      Key key,
       this.label, 
       this.assetPath,
       this.isInPlay,
@@ -63,7 +64,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   @override
   Widget build(BuildContext context) {
       return InheritedIconState(
-        color: color,
         onTap: onTap,
         onPositionChanged: onPositionChanged,
         label: label,
@@ -86,7 +86,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
     setState(() {
       isInPlay = !isInPlay;
 
-      color = (isInPlay == true) ? Colors.greenAccent : Colors.white;
+      //color = (isInPlay == true) ? Colors.greenAccent : Colors.white;
     });
   }
 
@@ -103,7 +103,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
 class InheritedIconState extends InheritedWidget {
   InheritedIconState({
     Key key,
-    this.color,
     this.onTap,
     this.onPositionChanged,
     this.label,
@@ -122,7 +121,6 @@ class InheritedIconState extends InheritedWidget {
   }) : super (key: key, child: child);
 
   final Offset currentPosition, startingPosition;
-  final Color color;
   final Function onTap;
   final Function onPositionChanged;
   final String label;
@@ -198,13 +196,13 @@ class IconBox extends StatelessWidget {
     var item = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
                          height: inheritedIconState.scale * inheritedIconState.defaultWidth,
                          decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                   color: inheritedIconState.color),
+                                                   color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
                          child: Column(children: [Expanded(child: centerColumn,)]),);
 
     var avatar = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
                            height: inheritedIconState.scale * inheritedIconState.defaultWidth,
                            decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                     color: inheritedIconState.color),
+                                                     color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
                            child: Column(children: [Expanded(child: centerColumn,)]),);
 
     var draggable = new Draggable(

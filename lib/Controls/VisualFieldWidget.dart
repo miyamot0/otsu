@@ -74,6 +74,18 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
                                              initialPosition: Offset(100.0, 100.0),));
+
+        stackElements.add(ReactiveIconWidget(label: "almost hack",
+                                             iconType: IconType.Icon,
+                                             assetPath: 'images/almond.png', 
+                                             isInSingleMode: boardSettings.checkIsInSingleMode,
+                                             isEmbbedded: true,
+                                             isStored: false, 
+                                             isInPlay: true,
+                                             scale: 1.0,
+                                             defaultWidth: 200.0,
+                                             moveToTop: moveIconToTop,//todo
+                                             initialPosition: Offset(200.0, 120.0),));
         
         speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));          
     });
@@ -92,8 +104,32 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   void moveIconToTop(ReactiveIconWidget widget) {
     print("moveTestIconToTop(TestIcon widget)");
 
+    if (boardSettings.checkIsInSingleMode == true)
+    {
+      for (var i = 0; i < stackElements.length; i++)
+      {
+        if (stackElements[i] is ReactiveIconWidget)
+        {
+          (stackElements[i] as ReactiveIconWidget).key.currentState.setState(() {
+            (stackElements[i] as ReactiveIconWidget).key.currentState.isInPlay = false;
+          });
+        }
+      }
+    }
+
     stackElements.remove(widget);
     stackElements.add(widget);
+
+
+    widget.key.currentState.setState(() {
+      widget.key.currentState.isInPlay = true;
+    });
+    //int index = stackElements.indexOf(widget);
+
+    //widget.
+    
+
+    //ReactiveIconWidget.of(context).isInPlay = true;
   }
 
   /// Build auto output button
