@@ -47,6 +47,26 @@ class ReactiveFolderWidget extends StatefulWidget {
                                                                    key: key);
 
   static InheritedFolderState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedFolderState) as InheritedFolderState;
+
+  double xIcon1, xIcon2, xFolder1, xFolder2;
+  double yIcon1, yIcon2, yFolder1, yFolder2;
+
+  // Check of 
+  bool intersectsWith(double size, Offset offset) {
+    xIcon1 = offset.dx;
+    xIcon2 = offset.dx + size;
+
+    yIcon1 = offset.dy;
+    yIcon2 = offset.dy + size;
+
+    xFolder1 = key.currentState.currentPosition.dx;
+    xFolder2 = key.currentState.currentPosition.dx + key.currentState.defaultWidth;
+
+    yFolder1 = key.currentState.currentPosition.dy;
+    yFolder2 = key.currentState.currentPosition.dy + key.currentState.defaultWidth;
+        
+    return ((xFolder2 >= xIcon1 && xFolder1 <= xIcon2) && (yFolder2 >= yIcon1 && yFolder1 <= yIcon2));
+  }
 }
 
 class ReactiveFolderWidgetState extends State<ReactiveFolderWidget> {

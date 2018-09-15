@@ -46,26 +46,6 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    key: key);
 
   static InheritedIconState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedIconState) as InheritedIconState;
-
-  double xIcon1, xIcon2, xFolder1, xFolder2;
-  double yIcon1, yIcon2, yFolder1, yFolder2;
-
-  // Check of 
-  bool intersectsWith(Size size, Offset offset) {
-    xIcon1 = offset.dx;
-    xIcon2 = offset.dx + size.width;
-
-    yIcon1 = offset.dy;
-    yIcon2 = offset.dy + size.height;
-
-    xFolder1 = key.currentState.currentPosition.dx;
-    xFolder2 = key.currentState.currentPosition.dx + key.currentState.defaultWidth;
-
-    yFolder1 = key.currentState.currentPosition.dy;
-    yFolder2 = key.currentState.currentPosition.dy + key.currentState.defaultWidth;
-        
-    return ((xFolder2 >= xIcon1 && xFolder1 <= xIcon2) && (yFolder2 >= yIcon1 && yFolder1 <= yIcon2));
-  }
 }
 
 class ReactiveIconWidgetState extends State<ReactiveIconWidget> {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -130,7 +131,49 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   }
 
-  void moveIconToTop(Widget widget) {
+  Future<bool> _isIconOverlappingWithFolder(ReactiveIconWidget widget) async {
+    debugPrint("_isIconOverlappingWithFolder()");
+
+    var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
+                                .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
+                                .where((w) => (w as ReactiveFolderWidget).intersectsWith(widget.key.currentState.defaultWidth, 
+                                                                                         widget.key.currentState.currentPosition))
+                                .toList();   
+
+    if (folders != null && folders.length > 0)
+    {
+        ReactiveFolderWidget droppableFolder = folders.first;
+        debugPrint("DROP: folder.text = ${droppableFolder.key.currentState.label} folder.id = ${droppableFolder.id} ");
+
+        SavedIcon savedIcon = SavedIcon();
+        savedIcon.id        = widget.id;
+        savedIcon.iconName  = widget.key.currentState.label;
+        savedIcon.iconPath  = widget.assetPath;
+        savedIcon.x         = widget.key.currentState.currentPosition.dx;
+        savedIcon.y         = widget.key.currentState.currentPosition.dy;
+        savedIcon.embedded  = widget.key.currentState.isEmbbedded;
+        savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
+        savedIcon.scale     = widget.key.currentState.scale;
+        savedIcon.active    = widget.key.currentState.isInPlay;
+        savedIcon.isStored  = true;
+        savedIcon.storedId  = droppableFolder.id;
+        savedIcon.isFolder  = false;
+
+        await iconDb.update(savedIcon);
+
+        setState(() {
+          stackElements.remove(widget);          
+        });
+
+        return true;
+    }
+
+    debugPrint("_isIconOverlappingWithFolder() == FALSE");
+
+    return false;
+  }
+
+  void moveIconToTop(Widget widget) async {
     print("moveTestIconToTop(TestIcon widget)");
 
     if (boardSettings.checkIsInSingleMode == true)
@@ -160,7 +203,20 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       }
     }
 
-    _saveLatestStack(widget);
+
+
+    // Is the icon at the top of the stack overlapping with a folder?
+    if (widget is ReactiveIconWidget)
+    {
+      if (await _isIconOverlappingWithFolder(widget) == true) 
+        return;
+
+      _saveLatestStack(widget);
+    }
+    else
+    {
+      _saveLatestStack(widget);
+    }
 
 
 
