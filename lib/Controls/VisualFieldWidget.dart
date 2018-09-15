@@ -605,11 +605,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   bool _isWithinStrip(ReactiveIconWidget icon) {
     debugPrint("_isWithinStrip");
 
-    if (sentenceStripReference.stripSize == null) return false;
+    if (sentenceStripReference.key.currentState.stripSize == null) return false;
 
-    if (icon.key.currentState.currentPosition.dy > (sentenceStripReference.stripSize.height + sentenceStripReference.padding)) return false;
+    if (icon.key.currentState.currentPosition.dy > 
+      (sentenceStripReference.key.currentState.stripSize.height + sentenceStripReference.padding)) return false;
 
-    if (icon.key.currentState.currentPosition.dx > (sentenceStripReference.stripSize.width + sentenceStripReference.padding))  return false;
+    if (icon.key.currentState.currentPosition.dx > 
+      (sentenceStripReference.key.currentState.stripSize.width + sentenceStripReference.padding))  return false;
 
     return true;
   }
@@ -886,7 +888,7 @@ class VisualFieldBox extends StatelessWidget {
 
 /// Scaffold for visual field
 class FieldBox extends StatelessWidget {
-  final defaultStyle = new TextStyle(
+  static const defaultStyle = const TextStyle(
     color: Colors.black, 
     decoration: TextDecoration.none, 
     fontSize: 20.0);
