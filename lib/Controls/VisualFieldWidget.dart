@@ -176,6 +176,14 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   void moveIconToTop(Widget widget) async {
     print("moveTestIconToTop(TestIcon widget)");
 
+    // Is the icon at the top of the stack overlapping with a folder?
+    if (widget is ReactiveIconWidget)
+    {
+      if (await _isIconOverlappingWithFolder(widget) == true) 
+        return;
+
+    }
+
     if (boardSettings.checkIsInSingleMode == true)
     {
       for (var i = 0; i < stackElements.length; i++)
@@ -203,29 +211,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       }
     }
 
+    _saveLatestStack(widget);
 
-
-    // Is the icon at the top of the stack overlapping with a folder?
-    if (widget is ReactiveIconWidget)
-    {
-      if (await _isIconOverlappingWithFolder(widget) == true) 
-        return;
-
-      _saveLatestStack(widget);
-    }
-    else
-    {
-      _saveLatestStack(widget);
-    }
-
-
-
-    //int index = stackElements.indexOf(widget);
-
-    //widget.
-    
-
-    //ReactiveIconWidget.of(context).isInPlay = true;
   }
 
   _saveLatestStack(Widget widget) async {
