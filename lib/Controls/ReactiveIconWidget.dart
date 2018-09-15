@@ -10,6 +10,7 @@ class ReactiveIconWidget extends StatefulWidget {
   final Function moveToTop, launchEditor;
   final Offset initialPosition;
   final IconType iconType;
+  final int id, storedId;
 
   final GlobalKey<ReactiveIconWidgetState> key = GlobalKey<ReactiveIconWidgetState>();
 
@@ -25,6 +26,8 @@ class ReactiveIconWidget extends StatefulWidget {
                       @required this.iconType,
                       @required this.scale,
                       @required this.defaultWidth,
+                      @required this.id,
+                      @required this.storedId,
                       @required this.initialPosition}) : super(key: GlobalKey());
 
   @override

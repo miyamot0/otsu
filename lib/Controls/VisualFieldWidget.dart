@@ -9,6 +9,9 @@ import '../Controls/StripObject.dart';
 import '../Dialogs/DialogEditorIcon.dart';
 
 import '../Models/IconType.dart';
+import '../Models/EmbeddedIconModel.dart';
+
+import '../Pages/IconCreator.dart';
 
 import '../Storage/IconDatabase.dart';
 
@@ -66,8 +69,29 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     List<SavedIcon> icons = await iconDb.getSavedIcons();
 
+    print(icons.length);
+
     setState(() {
 
+        for (var i = 0; i < icons.length; i++) {
+          stackElements.add(ReactiveIconWidget(label: icons[i].iconName,
+                                              iconType: IconType.Icon,
+                                              assetPath: icons[i].iconPath, 
+                                              isInSingleMode: boardSettings.checkIsInSingleMode,
+                                              isEmbbedded: icons[i].embedded,
+                                              isStored: icons[i].isStored, 
+                                              isInPlay: false,
+                                              isPinnedToLocation: icons[i].pinned,
+                                              launchEditor: _triggerIconEditor,
+                                              scale: icons[i].scale,
+                                              defaultWidth: 200.0,
+                                              moveToTop: moveIconToTop,
+                                              id: icons[i].id,
+                                              storedId: icons[i].storedId,
+                                              initialPosition: Offset(icons[i].x, icons[i].y),));          
+        }
+
+        /*
         stackElements.add(ReactiveIconWidget(label: "almost hack",
                                              iconType: IconType.Icon,
                                              assetPath: 'images/almond.png', 
@@ -95,6 +119,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
                                              initialPosition: Offset(200.0, 120.0),));
+        */
         
         speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));          
     });
@@ -110,7 +135,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   }
 
-  void moveIconToTop(ReactiveIconWidget widget) {
+  void moveIconToTop(Widget widget) {
     print("moveTestIconToTop(TestIcon widget)");
 
     if (boardSettings.checkIsInSingleMode == true)
@@ -128,14 +153,21 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       stackElements.remove(widget);
       stackElements.add(widget);
 
-      widget.key.currentState.setState(() {
-        widget.key.currentState.isInPlay = true;
-      });
+      if (widget is ReactiveIconWidget)
+      {
+        widget.key.currentState.setState(() {
+          widget.key.currentState.isInPlay = true;
+        });
 
-      if (boardSettings.checkIsAutoSpeaking) {
-        emitSpeech();
+        if (boardSettings.checkIsAutoSpeaking) {
+          emitSpeech();
+        }
       }
     }
+
+    _saveLatestStack(widget);
+
+
 
     //int index = stackElements.indexOf(widget);
 
@@ -143,6 +175,36 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     
 
     //ReactiveIconWidget.of(context).isInPlay = true;
+  }
+
+  _saveLatestStack(Widget widget) async {
+    debugPrint("_saveLatestStack() " + new DateTime.now().toString());
+
+    if (iconDb == null) return;
+
+    if (widget != null && widget is ReactiveIconWidget)
+    {
+        if (widget.iconType == IconType.Icon)
+        {
+          SavedIcon savedIcon = SavedIcon();
+          savedIcon.id        = widget.id;
+          savedIcon.iconName  = widget.label;
+          savedIcon.iconPath  = widget.assetPath;
+          savedIcon.x         = widget.key.currentState.currentPosition.dx;
+          savedIcon.y         = widget.key.currentState.currentPosition.dy;
+          savedIcon.embedded  = widget.key.currentState.isEmbbedded;
+          savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
+          savedIcon.scale     = widget.key.currentState.scale;
+          savedIcon.active    = widget.key.currentState.isInPlay;
+          savedIcon.isStored  = widget.key.currentState.isStored;
+          savedIcon.storedId  = widget.storedId;
+          savedIcon.isFolder  = false;
+
+          await iconDb.update(savedIcon);
+        }
+    }
+
+    iconDb.saveSettings(boardSettings);
   }
 
   /// Build auto output button
@@ -454,8 +516,58 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             heroTag: "addIconTag",
             mini: false,
             child: Icon(Icons.add_a_photo),
-            onPressed: () => print("STUB: ADD ICON"),//_navigateToIconCreatorScreen(context),
+            onPressed: () => _navigateToIconCreatorScreen(context),
         ));
+  }
+
+  _navigateToIconCreatorScreen(BuildContext context) async {
+    debugPrint("_navigateToIconCreatorScreen()");
+    EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
+
+    if (result == null) return;
+
+    SavedIcon savedIcon = SavedIcon();
+    savedIcon.id        = null;
+    savedIcon.iconName  = result.iconText;
+    savedIcon.iconPath  = result.assetLocation;
+    savedIcon.x         = 0.0;
+    savedIcon.y         = 0.0;
+    savedIcon.embedded  = result.isEmbedded;
+    savedIcon.pinned    = false;
+    savedIcon.scale     = 1.0;
+    savedIcon.active    = false;
+    savedIcon.isStored  = false;
+    savedIcon.storedId  = -1;
+    savedIcon.isFolder  = false;
+
+    SavedIcon insert = await iconDb.insert(savedIcon);
+
+    /*
+    IconWidget holder;
+
+    setState(() 
+    {
+      holder = IconWidget(text: result.iconText,  
+                                initialOffset: new Offset(savedIcon.x, savedIcon.y), 
+                                assetPath: savedIcon.iconPath, 
+                                repositionCallback: _bringToTop,
+                                deleteCallback: _removeFromDatabase,
+                                showEditOptions: inDebugMode,
+                                editCallback: _triggerIconEditor,
+                                scale: savedIcon.scale,
+                                isPinned: savedIcon.pinned,
+                                isEmbbedded: savedIcon.embedded,
+                                documentsFolder: dir,
+                                inPlay: false,
+                                isInSingleMode: boardSettings.checkIsInSingleMode,
+                                id: insert.id,
+                                storedId: savedIcon.storedId,);
+      
+      _stackElements.add(holder);
+    });
+    */
+
+    //_refreshIconSelections();
   }
 
   /// Build menu
