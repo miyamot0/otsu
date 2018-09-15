@@ -27,6 +27,7 @@ class ApplicationState extends State<MainApp> {
   {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
+      showPerformanceOverlay: true,
       home: SafeArea(child: Scaffold(body: VisualFieldWidget())),
     );
   }
