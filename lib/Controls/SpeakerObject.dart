@@ -60,6 +60,8 @@ class SpeakerObjectState extends State<SpeakerObject> {
         height: width,
         fit: BoxFit.cover
       );
+
+      image = imageBase;
     }
 
     if (imageActive == null)
@@ -71,9 +73,6 @@ class SpeakerObjectState extends State<SpeakerObject> {
         fit: BoxFit.cover
       );
     }
-
-    // default up to cached standard one
-    image = imageBase;
 
     return Positioned(
       left: mediaQueryData.size.width - width - padding,
@@ -113,7 +112,6 @@ class SpeakerObjectState extends State<SpeakerObject> {
 
   /// Determine how to handle interaction with emitter
   void releaseSpeechEmitterTest(TapUpDetails deets) {
-
     if (DateTime.now().difference(emitterPressTime).inSeconds < 5)
     {
       widget.emitSpeech();
