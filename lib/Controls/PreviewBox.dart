@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../Models/ModificationType.dart';
 
 class PreviewBox extends StatefulWidget {
 
@@ -30,21 +29,13 @@ class PreviewBoxState extends State<PreviewBox> {
 
   @override
   Widget build(BuildContext context) {
-    var pinnedIcon =   GestureDetector(behavior: HitTestBehavior.opaque,
-                                       onTap: () => widget.editFunction(ModifyAction.Pin),
-                                       child: Align(child: Icon(Icons.pin_drop,),),);
+    var pinnedIcon = Align(child: Icon(Icons.pin_drop,),);
 
-    var deleteIcon =   GestureDetector(behavior: HitTestBehavior.opaque,
-                                       onTap: () => widget.editFunction(ModifyAction.Delete),
-                                       child: Align(child: Icon(Icons.delete,),),);
+    var deleteIcon = Align(child: Icon(Icons.delete,  ),);
 
-    var growIcon =     GestureDetector(behavior: HitTestBehavior.opaque,
-                                       onTap: () => widget.editFunction(ModifyAction.Grow),
-                                       child: Align(child: Icon(Icons.photo_size_select_large,),),);
+    var growIcon   = Align(child: Icon(Icons.photo_size_select_large,),);
 
-    var shrinkIcon =   GestureDetector(behavior: HitTestBehavior.opaque,
-                                       onTap: () => widget.editFunction(ModifyAction.Shrink),
-                                       child: Align(child: Icon(Icons.photo_size_select_small,),),);
+    var shrinkIcon = Align(child: Icon(Icons.photo_size_select_small,),);
 
     Row topRow = Row(children: [pinnedIcon, growIcon, shrinkIcon, deleteIcon], 
                                 crossAxisAlignment: CrossAxisAlignment.end,
