@@ -4,6 +4,7 @@ import '../Models/IconType.dart';
 class ReactiveIconWidget extends StatefulWidget {
   final String label, assetPath, documentsFolder;
   final bool isInPlay, isEmbbedded, isInSingleMode, isStored, showEditOptions;
+  final double scale, defaultWidth;
   final Function moveToTop;
   final Offset initialPosition;
   final IconType iconType;
@@ -18,6 +19,8 @@ class ReactiveIconWidget extends StatefulWidget {
                       @required this.showEditOptions,
                       @required this.moveToTop, 
                       @required this.iconType,
+                      @required this.scale,
+                      @required this.defaultWidth,
                       @required this.initialPosition}) : super(key: GlobalKey());
 
   @override
@@ -30,6 +33,8 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    isStored: isStored,
                                                                    showEditOptions: showEditOptions,
                                                                    moveToTop: moveToTop, 
+                                                                   scale: scale,
+                                                                   defaultWidth: defaultWidth,
                                                                    currentPosition: initialPosition);  
 }
 
@@ -40,6 +45,8 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   bool isInPlay, isEmbbedded, isInSingleMode, isStored, showEditOptions;
   Color color = Colors.white;
   Offset currentPosition;
+  double defaultWidth = 200.0;
+  double scale;
 
   ReactiveIconWidgetState({
       this.label, 
@@ -51,6 +58,8 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
       this.isStored,
       this.showEditOptions,
       this.moveToTop, 
+      this.scale,
+      this.defaultWidth,
       this.currentPosition});
 
   @override
@@ -68,6 +77,8 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
         isStored: isStored,
         showEditOptions: showEditOptions,
         currentPosition: currentPosition,
+        defaultWidth: defaultWidth,
+        scale: scale,        
         child: IconTree(),
         key: GlobalKey(),
       );
@@ -106,9 +117,11 @@ class InheritedIconState extends InheritedWidget {
     this.isEmbbedded,
     this.isInSingleMode,
     this.isStored,
+    this.defaultWidth,
     this.showEditOptions,
     this.currentPosition,
     this.startingPosition,
+    this.scale,
     Widget child,
   }) : super (key: key, child: child);
 
@@ -119,13 +132,15 @@ class InheritedIconState extends InheritedWidget {
   final String label;
   final String assetPath;
   final String documentsFolder;
-  final Size size = Size(200.0, 200.0);
+  final double defaultWidth;
+  final double scale;
   final bool isPinnedToLocation = false;
   final bool isInPlay;
   final bool showEditOptions;
   final bool isEmbbedded; 
   final bool isInSingleMode;
   final bool isStored;
+
 
   @override
   bool updateShouldNotify(InheritedIconState oldWidget) {
@@ -154,6 +169,9 @@ class IconBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inheritedIconState = InheritedIconState.of(context);
+    final screenInformation = MediaQuery.of(context);
+
+    print('build: width: ${inheritedIconState.defaultWidth} scale: ${inheritedIconState.scale}');
 
     var settingsIcon =  GestureDetector(behavior: HitTestBehavior.opaque,
                                           onTap: () => inheritedIconState.onTap(),
@@ -166,7 +184,7 @@ class IconBox extends StatelessWidget {
                               verticalDirection: VerticalDirection.up,);
 
     var imgAsset = Image.asset(inheritedIconState.assetPath,
-                               height: inheritedIconState.size.height * 0.7,
+                               height: (inheritedIconState.scale * inheritedIconState.defaultWidth) * 0.7,
                                fit: BoxFit.cover);
 
     var centerColumn = Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,19 +195,19 @@ class IconBox extends StatelessWidget {
                               ]
                             );
 
-    var item = Container(width: inheritedIconState.size.width,
-                         height: inheritedIconState.size.height,
+    var item = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
+                         height: inheritedIconState.scale * inheritedIconState.defaultWidth,
                          //key: GlobalKey(),
                          decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
                                                    color: inheritedIconState.color),
                          child: Column(children: [Expanded(child: centerColumn,)]),);
 
-    var avatar = Container(width: inheritedIconState.size.width,
-                         height: inheritedIconState.size.height,
-                         //key: GlobalKey(),
-                         decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                   color: inheritedIconState.color),
-                         child: Column(children: [Expanded(child: centerColumn,)]),);
+    var avatar = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
+                           height: inheritedIconState.scale * inheritedIconState.defaultWidth,
+                           //key: GlobalKey(),
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
+                                                     color: inheritedIconState.color),
+                           child: Column(children: [Expanded(child: centerColumn,)]),);
 
     var draggable = new Draggable(
         feedback: avatar,
@@ -211,10 +229,10 @@ class IconBox extends StatelessWidget {
           var newY = offset.dy;
 
           newX = (newX < 0.0) ? 0.0 : newX;
-          //newX = (newX + item.size.width > mediaQueryData.size.width) ? mediaQueryData.size.width - item.size.width : newX;
+          //newX = (newX + item.size.width > screenInformation.size.width) ? screenInformation.size.width - item.size.width : newX;
 
           newY = (newY < 0.0) ? 0.0 : newY;
-          //newY = (newY + item.size.height > mediaQueryData.size.height) ? mediaQueryData.size.height - item.size.height : newY;        
+          //newY = (newY + item.size.height > screenInformation.size.height) ? screenInformation.size.height - item.size.height : newY;        
           
           inheritedIconState.onPositionChanged(Offset(newX, newY));
           //widget.currentPosition = new Offset(newX, newY);

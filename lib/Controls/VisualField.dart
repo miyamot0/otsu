@@ -72,6 +72,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              documentsFolder: dir,
                                              isStored: false, 
                                              isInPlay: true,
+                                             scale: 1.0,
+                                             defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
                                              initialPosition: Offset(100.0, 100.0),));
 
