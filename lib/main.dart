@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'Controls/IconField.dart';
+//import 'Controls/IconField.dart';
 import 'Storage/IconDatabase.dart';
+import 'Controls/VisualField.dart';
 
 void main() async {
 
@@ -13,30 +14,22 @@ void main() async {
     DeviceOrientation.landscapeRight, 
     DeviceOrientation.landscapeLeft]).then((_)
   {
-    runApp(new MainApp(iconDb: iconDb,));
+    runApp(new MainApp());
   }); 
 }
 
 class MainApp extends StatefulWidget {
-  MainApp({this.iconDb});
-
-  final IconDatabase iconDb;
-
   @override
-  ApplicationState createState() => ApplicationState(iconDb: iconDb);
+  ApplicationState createState() => ApplicationState();
 }
 
 class ApplicationState extends State<MainApp> {
-  ApplicationState({this.iconDb});
-
-  final IconDatabase iconDb;
-
   @override
   Widget build(BuildContext context) 
   {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SafeArea(child: Scaffold(body: IconField(iconDb: iconDb,))),
+      home: SafeArea(child: Scaffold(body: VisualFieldWidget())),
     );
   }
 }
