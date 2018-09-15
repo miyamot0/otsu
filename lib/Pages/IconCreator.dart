@@ -14,7 +14,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../Controls/PreviewIcon.dart';
 import '../Controls/CustomFloatingButtonLocation.dart';
 import '../Controls/AnimatedMenu.dart';
-import '../Dialogs/DialogWrapper.dart';
+import '../Dialogs/DialogIconLabel.dart';
 import '../Models/EmbeddedIconModel.dart';
 
 final bool outputToTerminal = true;
@@ -143,7 +143,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
     debugPrint("_showInputDialog()");
     return await showDialog<String>(
       context: context,
-      child: new DialogWrapper(assetText: assetText),
+      child: new DialogIconLabel(assetText: assetText),
     );
   }  
 
