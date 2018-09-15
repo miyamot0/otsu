@@ -581,6 +581,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   }
 
   /// Emit speech
+  /// 
+  /// 
   void emitSpeech() async {
     print("emitSpeech()");
 
@@ -594,7 +596,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         {
           if (x.key.currentState.isInPlay)
           {
-            await speakerObjectReference.speak(x.label);
+            await speakerObjectReference.speak(x.key.currentState.label);
 
             if (boardSettings.checkIsAutoDeselecting == true)
             {
@@ -645,23 +647,23 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     return true;
   }
 
-  // Trigger editor for icons
+  /// Trigger editor for icons
+  /// 
+  /// 
   void triggerEditor(Widget widget) async {
+    debugPrint("_triggerIconEditor()");
+
     if (widget is ReactiveIconWidget)
     {
-      debugPrint("_triggerIconEditor()");
-      
       String newName = await Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) {
-              return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
+              return DialogEditorIcon(widget, _removeFromDatabase);
           }
       ));
 
       if (newName != null)
       {
-        debugPrint("_triggerIconEditor(): $newName");
-
           SavedIcon savedIcon = SavedIcon();
           savedIcon.id        = widget.id;
           savedIcon.iconName  = newName;
@@ -677,6 +679,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           savedIcon.isFolder  = false;
 
           await iconDb.update(savedIcon);
+
+          widget.key.currentState.setState(() {
+            widget.key.currentState.label = newName;
+          });
       }
     }
 
@@ -684,15 +690,36 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       debugPrint("_triggerIconEditor()");
       
-      Navigator.of(context).push(PageRouteBuilder(
+      String newName = await Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) {
               return DialogEditorFolder(widget, _removeFromDatabase);
           }
       ));
+
+      if (newName != null)
+      {
+          SavedIcon savedIcon = SavedIcon();
+          savedIcon.id        = widget.id;
+          savedIcon.iconName  = newName;
+          savedIcon.iconPath  = widget.assetPath;
+          savedIcon.x         = widget.key.currentState.currentPosition.dx;
+          savedIcon.y         = widget.key.currentState.currentPosition.dy;
+          savedIcon.embedded  = widget.key.currentState.isEmbbedded;
+          savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
+          savedIcon.scale     = widget.key.currentState.scale;
+          savedIcon.active    = widget.key.currentState.isInPlay;
+          savedIcon.isStored  = widget.key.currentState.isStored;
+          savedIcon.storedId  = -1;
+          savedIcon.isFolder  = true;
+
+          await iconDb.update(savedIcon);
+
+          widget.key.currentState.setState(() {
+            widget.key.currentState.label = newName;
+          });
+      }
     }
-
-
   }
 
   /// Navigate to folder contents
@@ -799,7 +826,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       Future.delayed(const Duration(seconds: 2)).then((_)
       {
-        print('asdf');
         moveIconToTop(null);
       });
 
