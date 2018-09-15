@@ -1,0 +1,28 @@
+name: otsu
+description: Development prototype for flutter-based AAC app
+
+version: 1.0.1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  image_picker: ^0.4.10
+  path_provider: ^0.4.1
+  date_format: ^1.0.5
+  shared_preferences: ^0.4.2
+  path: ^1.6.2
+  sqflite: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+   - images/
+   - json/
