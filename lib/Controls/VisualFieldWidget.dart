@@ -68,7 +68,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              assetPath: 'images/almond.png', 
                                              isInSingleMode: boardSettings.checkIsInSingleMode,
                                              isEmbbedded: true,
-                                             documentsFolder: dir,
                                              isStored: false, 
                                              isInPlay: true,
                                              scale: 1.0,
@@ -78,6 +77,16 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         
         speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));          
     });
+
+    childButtons.clear();
+
+    childButtons.add(_buildAddFolderButton());
+    childButtons.add(_buildAddIconButton());
+    childButtons.add(_buildSwitchModeButton());
+    childButtons.add(_buildAutoOutputModeButton()); 
+    childButtons.add(_buildAutoDeselectModeButton());      
+    childButtons.add(_buildResumeChildModeButton()); 
+
   }
 
   void moveIconToTop(ReactiveIconWidget widget) {
@@ -219,13 +228,17 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    childButtons.clear();
-    childButtons.add(_buildAddFolderButton());
-    childButtons.add(_buildAddIconButton());
-    childButtons.add(_buildSwitchModeButton());
-    childButtons.add(_buildAutoOutputModeButton()); 
-    childButtons.add(_buildAutoDeselectModeButton());      
-    childButtons.add(_buildResumeChildModeButton()); 
+
+    if (childButtons.length > 0)
+    {
+      childButtons.clear();
+      childButtons.add(_buildAddFolderButton());
+      childButtons.add(_buildAddIconButton());
+      childButtons.add(_buildSwitchModeButton());
+      childButtons.add(_buildAutoOutputModeButton()); 
+      childButtons.add(_buildAutoDeselectModeButton());      
+      childButtons.add(_buildResumeChildModeButton()); 
+    }
   
     animatedMenu = _buildAnimatedMenu(childButtons);
 
@@ -237,6 +250,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       stackElements: stackElements,
       animatedMenu: animatedMenu,
       boardSettings: boardSettings,
+      documentsDirectory: dir,
       child: VisualFieldBox(),
       key: GlobalKey(),
     );
@@ -354,14 +368,16 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 class InheritedVisualFieldState extends InheritedWidget {
   InheritedVisualFieldState({
     Key key,
-    this.background,
-    this.inDebugMode,
-    this.stackElements,
-    this.animatedMenu,
-    this.boardSettings,
+    @required this.documentsDirectory,
+    @required this.background,
+    @required this.inDebugMode,
+    @required this.stackElements,
+    @required this.animatedMenu,
+    @required this.boardSettings,
     Widget child,
   }) : super (key: key, child: child);
 
+  final String documentsDirectory;
   final Color background;
   final bool inDebugMode;
   final List<Widget> stackElements;

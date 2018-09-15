@@ -4,7 +4,7 @@ import '../Models/IconType.dart';
 import '../Controls/VisualFieldWidget.dart';
 
 class ReactiveIconWidget extends StatefulWidget {
-  final String label, assetPath, documentsFolder;
+  final String label, assetPath;
   final bool isInPlay, isEmbbedded, isInSingleMode, isStored;
   final double scale, defaultWidth;
   final Function moveToTop;
@@ -13,7 +13,6 @@ class ReactiveIconWidget extends StatefulWidget {
 
   ReactiveIconWidget({@required this.label, 
                       @required this.assetPath,
-                      @required this.documentsFolder,
                       @required this.isInPlay,
                       @required this.isEmbbedded,
                       @required this.isInSingleMode,
@@ -27,7 +26,6 @@ class ReactiveIconWidget extends StatefulWidget {
   @override
   ReactiveIconWidgetState createState() => ReactiveIconWidgetState(label: label, 
                                                                    assetPath: assetPath,
-                                                                   documentsFolder: documentsFolder,
                                                                    isInPlay: isInPlay, 
                                                                    isEmbbedded: isEmbbedded,
                                                                    isInSingleMode: isInSingleMode,
@@ -35,13 +33,15 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    moveToTop: moveToTop, 
                                                                    scale: scale,
                                                                    defaultWidth: defaultWidth,
-                                                                   currentPosition: initialPosition);  
+                                                                   currentPosition: initialPosition);
+
+  static ReactiveIconWidgetState of(BuildContext context) => context.ancestorStateOfType(const TypeMatcher<ReactiveIconWidgetState>());
 }
 
 class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   Function moveToTop;
 
-  String label, assetPath, documentsFolder;
+  String label, assetPath;
   bool isInPlay, isEmbbedded, isInSingleMode, isStored;
   Color color = Colors.white;
   Offset currentPosition;
@@ -51,7 +51,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   ReactiveIconWidgetState({
       this.label, 
       this.assetPath,
-      this.documentsFolder,
       this.isInPlay,
       this.isEmbbedded,
       this.isInSingleMode,
@@ -69,7 +68,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
         onPositionChanged: onPositionChanged,
         label: label,
         assetPath: assetPath,
-        documentsFolder: documentsFolder,
         isInPlay: isInPlay,
         isEmbbedded: isEmbbedded,
         isInSingleMode: isInSingleMode,
@@ -170,6 +168,8 @@ class IconBox extends StatelessWidget {
     final inheritedFieldState = InheritedVisualFieldState.of(context);
 
     print("in field mode: ${inheritedFieldState.inDebugMode}");
+
+    // docs directory is here 
 
     final screenInformation = MediaQuery.of(context);
 
