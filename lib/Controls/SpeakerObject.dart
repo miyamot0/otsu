@@ -7,8 +7,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-final bool outputToTerminal = false;
-
 class SpeakerObject extends StatefulWidget {
   final Function emitSpeech;
   final Function toggleDebug;
@@ -21,7 +19,7 @@ class SpeakerObject extends StatefulWidget {
   /// 
   /// 
   Future<Null> speak(String output) async {
-    debugPrint("speak: $output");
+    //debugPrint("speak: $output");
     var sendMap = <String, dynamic> { 'output' : output }; 
 
     try {
@@ -129,11 +127,5 @@ class SpeakerObjectState extends State<SpeakerObject> {
     {
       image = imageBase;
     });
-  }
-
-  void debugPrint(String toTerminal) {
-    if (outputToTerminal == false) return;
-
-    print("Speaker Object: $toTerminal");
   }
 }

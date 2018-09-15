@@ -85,7 +85,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildSaveButton() {
-    debugPrint("_buildSaveButton()");
+    //debugPrint("_buildSaveButton()");
     return AnimatedMenuItem(
       hasLabel: true,
       labelText: "Add Current Icon to Board",
@@ -114,7 +114,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildEditLabelButton() {
-    debugPrint("_buildEditLabelButton()");
+    //debugPrint("_buildEditLabelButton()");
     return AnimatedMenuItem(
       hasLabel: true,
       labelText: "Edit Current Label",
@@ -143,7 +143,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   /// 
   /// 
   Future<String> _showInputDialog() async {
-    debugPrint("_showInputDialog()");
+    //debugPrint("_showInputDialog()");
     return await showDialog<String>(
       context: context,
       child: new DialogIconLabel(assetText: assetText),
@@ -154,7 +154,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   ///
   ///
   void _loadImages() async {
-    debugPrint("_loadImages()");
+    //debugPrint("_loadImages()");
 
     var folderAssets = 
     [
@@ -193,7 +193,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   /// 
   /// 
   void _changeImage(String assetName) {
-    debugPrint("_changeImage()");
+    //debugPrint("_changeImage()");
 
     setState(() 
     {
@@ -227,7 +227,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   ///
   ///
   Column _buildPreview() {
-    debugPrint("_buildPreview()");
+    //debugPrint("_buildPreview()");
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -240,7 +240,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   ///
   ///
   Expanded _buildCategoryGridview() {
-    debugPrint("_buildCategoryGridview()");    
+    //debugPrint("_buildCategoryGridview()");    
     return new Expanded(
       child: new SafeArea(
         top: false,
@@ -261,7 +261,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   /// 
   /// 
   Row _buildPhotoGallery(BuildContext context) {
-    debugPrint("_buildPhotoGallery()");
+    //debugPrint("_buildPhotoGallery()");
 
     final mediaQueryData = MediaQuery.of(context);
     previewSize = Size(mediaQueryData.size.width / 3, mediaQueryData.size.width / 3);
@@ -288,14 +288,5 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
         ),
       ],
     );
-  }
-
-  /// Debug print
-  /// 
-  /// 
-  void debugPrint(String output) {
-    if (outputToTerminal == false) return;
-
-    print("FolderCreator: $output");
   }
 }

@@ -118,7 +118,7 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
   /// 
   /// 
   Future<String> _showInputDialog() async {
-    debugPrint("_showInputDialog()");
+    //debugPrint("_showInputDialog()");
     return await showDialog<String>(
       context: context,
       child: new DialogIconLabel(assetText: widget.iconWidget.key.currentState.label),

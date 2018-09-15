@@ -124,7 +124,7 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
   /// 
   /// 
   Future<String> _showInputDialog() async {
-    debugPrint("_showInputDialog()");
+    //debugPrint("_showInputDialog()");
     return await showDialog<String>(
       context: context,
       child: new DialogIconLabel(assetText: widget.folderWidget.key.currentState.label),

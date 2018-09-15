@@ -69,7 +69,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void loadFromDatabase() async {
-    print("loadFromDatabase()");
     dir = (await getApplicationDocumentsDirectory()).path;
 
     iconDb = new IconDatabase();
@@ -154,7 +153,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   Future<bool> _isIconOverlappingWithFolder(ReactiveIconWidget widget) async {
-    print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
+    //print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
 
     var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
                                 .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
@@ -196,7 +195,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void moveIconToTop(Widget widget) async {
-    print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
+    //print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
 
     ReactiveIconWidget iconHolder;
     if (widget == null)
@@ -359,7 +358,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _removeFromDatabase(Widget widget) async {
-    print("_removeFromStack(Widget widget)");
+    //print("_removeFromStack(Widget widget)");
 
     if (widget is ReactiveIconWidget)
     {
@@ -397,7 +396,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           setState(() {
             boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
 
-            print("autoSpeaking Delegate: Status = ${boardSettings.checkIsAutoSpeaking}");
+            //print("autoSpeaking Delegate: Status = ${boardSettings.checkIsAutoSpeaking}");
           });
 
           await iconDb.saveSettings(boardSettings);
@@ -423,7 +422,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           setState(() {
             boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
 
-            print("autoDeselect Delegate: Status = ${boardSettings.checkIsAutoDeselecting}");
+            //print("autoDeselect Delegate: Status = ${boardSettings.checkIsAutoDeselecting}");
           });
 
           await iconDb.saveSettings(boardSettings);
@@ -449,7 +448,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           setState(() {
             boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
 
-            print("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
+            //print("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
 
             moveIconToTop(null);
           });
@@ -522,7 +521,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// This disables debug mode (hides buttons)
   void _resumeChildMode() async {
-    print('_resumeChildMode()');
+    //print('_resumeChildMode()');
 
     setState(() {
       inDebugMode = false;
@@ -553,7 +552,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void toggleDebugMode() {
-    print("toggleDebugMode()");
+    //print("toggleDebugMode()");
 
     setState(() {
       inDebugMode = true;
@@ -584,12 +583,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void emitSpeech() async {
-    print("emitSpeech()");
+    //print("emitSpeech()");
 
     if (boardSettings.checkIsInSingleMode == true)
     {
-      print("emitSpeech() single mode");
-
       for (var x in stackElements) 
       {
         if (x is ReactiveIconWidget)
@@ -610,15 +607,11 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
     else
     {
-      print("emitSpeech() frame mode");
-
       var tempList = <ReactiveIconWidget>[];
       var outputString = "";
 
       for (var x in stackElements) 
         if (x is ReactiveIconWidget && x.key.currentState.isInPlay) tempList.add(x);
-
-      print("tempList length = ${tempList.length}");
 
       if (tempList.length > 0)
       {

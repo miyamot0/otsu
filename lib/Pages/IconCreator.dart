@@ -17,8 +17,6 @@ import '../Controls/AnimatedMenu.dart';
 import '../Dialogs/DialogIconLabel.dart';
 import '../Models/EmbeddedIconModel.dart';
 
-final bool outputToTerminal = true;
-
 class IconCreatorScreen extends StatefulWidget {
   final String documentsDirectory;
 
@@ -65,7 +63,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuWidget _buildAnimatedMenu() {
-    debugPrint("_buildAnimatedMenu()");
+    //debugPrint("_buildAnimatedMenu()");
 
     if (animatedMenuWiget == null)
     {
@@ -92,7 +90,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildSaveButton() {
-    debugPrint("_buildSaveButton()");
+    //debugPrint("_buildSaveButton()");
     return AnimatedMenuItem(
       hasLabel: true,
       labelText: "Add Current Icon to Board",
@@ -115,7 +113,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildEditLabelButton() {
-    debugPrint("_buildEditLabelButton()");
+    //debugPrint("_buildEditLabelButton()");
     return AnimatedMenuItem(
       hasLabel: true,
       labelText: "Edit Current Label",
@@ -142,7 +140,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   Future<String> _showInputDialog() async {
-    debugPrint("_showInputDialog()");
+    //debugPrint("_showInputDialog()");
     return await showDialog<String>(
       context: context,
       child: new DialogIconLabel(assetText: assetText),
@@ -153,7 +151,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildPhotoIconButton() {
-    debugPrint("_buildPhotoIconButton()");
+    //debugPrint("_buildPhotoIconButton()");
     return AnimatedMenuItem(
       hasLabel: true,
       labelText: "Take a Photo",
@@ -179,7 +177,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildImageIconButton() {
-    debugPrint("_buildImageIconButton()");
+    //debugPrint("_buildImageIconButton()");
     return AnimatedMenuItem(
       hasLabel: true,
       labelText: "Load a Stored Image",
@@ -205,7 +203,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   void _createLocalCopy(File image) async {
-    debugPrint("_createLocalCopy()");
+    //debugPrint("_createLocalCopy()");
     String stamp = formatDate(DateTime.now(), [yyyy,'.',mm,'.',dd,'.',HH,'.',nn,'.',ss]);
     String filename = "$stamp.png";
 
@@ -233,7 +231,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   void _loadImages(String category) async {
-    debugPrint("_loadImages()");
+    //debugPrint("_loadImages()");
     String distancesText = await _loadCategoriesJson(category);
     jsonAssets = json.decode(distancesText) as List;
 
@@ -261,7 +259,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   void _changeImage(String assetName) {
-    debugPrint("_changeImage()");
+    //debugPrint("_changeImage()");
 
     setState(() {
       List<String> splitString = assetName.split(".png");
@@ -294,7 +292,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   Column _buildPreview() {
-    debugPrint("_buildPreview()");
+    //debugPrint("_buildPreview()");
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -307,7 +305,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   InputDecorator _buildDropDown() {
-    debugPrint("_buildDropDown()");
+    //debugPrint("_buildDropDown()");
     return InputDecorator(
       decoration: InputDecoration(
         labelText: 'Select an Icon Category', 
@@ -346,7 +344,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   Expanded _buildCategoryGridview() {
-    debugPrint("_buildCategoryGridview()");
+    //debugPrint("_buildCategoryGridview()");
     return new Expanded(
       child: new SafeArea(
         top: false,
@@ -367,7 +365,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   Row _buildPhotoGallery(BuildContext context) {
-    debugPrint("_buildPhotoGallery()");
+    //debugPrint("_buildPhotoGallery()");
 
     final mediaQueryData = MediaQuery.of(context);
     previewSize = Size(mediaQueryData.size.width / 3, mediaQueryData.size.width / 3);
@@ -395,11 +393,5 @@ class _IconCreatorState extends State<IconCreatorScreen> {
         ),
       ],
     );
-  }
-
-  void debugPrint(String output) {
-    if (outputToTerminal == false) return;
-
-    print("IconCreator: $output");
   }
 }

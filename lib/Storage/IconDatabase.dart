@@ -25,8 +25,6 @@ final String isStoredTag    = "isstoredcolumn";
 final String storedIdTag    = "storedidcolumn";
 final String isFolderTag    = "isfoldercolumn";
 
-final bool outputToTerminal = true;
-
 class BoardSettings {
   bool checkIsInSingleMode;
   bool checkIsAutoSpeaking;
@@ -160,25 +158,25 @@ class IconDatabase
 
     if (savedIcon.id == null) {
       savedIcon.id = await db.insert(tableIcon, savedIcon.toMap());
-      debugPrint("insert... id: ${savedIcon.id}");
+      //debugPrint("insert... id: ${savedIcon.id}");
 
       return savedIcon;
     }
 
     int count = Sqflite.firstIntValue(await db.rawQuery("SELECT COUNT(*) FROM $tableIcon WHERE $idTag = ?", [savedIcon.id]));
-    debugPrint("Database: for id ${savedIcon.id}, there were $count matches");
+    //debugPrint("Database: for id ${savedIcon.id}, there were $count matches");
 
     if (count == 0)
     {
       savedIcon.id = await db.insert(tableIcon, savedIcon.toMap());
 
-      debugPrint("insert... id: ${savedIcon.id}");      
+      //debugPrint("insert... id: ${savedIcon.id}");      
     }
     else
     {
       savedIcon.id = await db.update(tableIcon, savedIcon.toMap());
 
-      debugPrint("update... id: ${savedIcon.id}");
+      //debugPrint("update... id: ${savedIcon.id}");
     }
 
     return savedIcon;
@@ -238,7 +236,7 @@ class IconDatabase
   }
 
   Future<int> update(SavedIcon savedIcon) async {
-    debugPrint("Update: id: ${savedIcon.id}");
+    //debugPrint("Update: id: ${savedIcon.id}");
     
     return await db.update(tableIcon, savedIcon.toMap(), where: "$idTag = ?", whereArgs: [savedIcon.id]);
   }
@@ -249,9 +247,4 @@ class IconDatabase
 
   Future close() async => db.close();
 
-  void debugPrint(String toTerminal) {
-    if (outputToTerminal == false) return;
-
-    print("Icon Database: $toTerminal");
-  }
 }
