@@ -179,32 +179,10 @@ class IconBox extends StatelessWidget {
                                      decoration: TextDecoration.none, 
                                      fontSize: 20.0);
 
-  Color getColor(InheritedIconState iconState, InheritedVisualFieldState fieldState, MediaQueryData mediaQuery) {
-    if (fieldState.boardSettings.checkIsInSingleMode == true)
-    {
-      return iconState.isInPlay ? Colors.greenAccent : Colors.white;
-    }
-    else
-    {
-      if (iconState.currentPosition.dy <= (mediaQuery.size.height * 0.25) && 
-          iconState.currentPosition.dx <= (mediaQuery.size.width  * 0.80)) 
-      {
-        return Colors.greenAccent;
-      }
-      else 
-      {
-        return Colors.white;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final inheritedIconState = InheritedIconState.of(context);
     final inheritedFieldState = InheritedVisualFieldState.of(context);
-    final mediaQueryData = MediaQuery.of(context);
-
-    
 
     // docs directory is here 
 
@@ -235,7 +213,7 @@ class IconBox extends StatelessWidget {
     var item = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
                          height: inheritedIconState.scale * inheritedIconState.defaultWidth,
                          decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                   color: getColor(inheritedIconState, inheritedFieldState, mediaQueryData)),
+                                                   color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
                          child: Column(children: [Expanded(child: centerColumn,)]),);
 
     var avatar = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
