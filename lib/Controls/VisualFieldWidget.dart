@@ -3,10 +3,12 @@ import 'package:path_provider/path_provider.dart';
 
 import '../Controls/AnimatedMenu.dart';
 import '../Controls/ReactiveIconWidget.dart';
+import '../Controls/ReactiveFolderWidget.dart';
 import '../Controls/SpeakerObject.dart';
 import '../Controls/StripObject.dart';
 
 import '../Dialogs/DialogEditorIcon.dart';
+import '../Dialogs/DialogEditorFolder.dart';
 
 import '../Models/IconType.dart';
 import '../Models/EmbeddedIconModel.dart';
@@ -69,11 +71,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     List<SavedIcon> icons = await iconDb.getSavedIcons();
 
-    print(icons.length);
+    print("Icons in db: ${icons.length}");
 
     setState(() {
+      for (var i = 0; i < icons.length; i++) {
 
-        for (var i = 0; i < icons.length; i++) {
+        if (icons[i].isFolder == false)
+        {
           stackElements.add(ReactiveIconWidget(label: icons[i].iconName,
                                               iconType: IconType.Icon,
                                               assetPath: icons[i].iconPath, 
@@ -88,40 +92,31 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                               moveToTop: moveIconToTop,
                                               id: icons[i].id,
                                               storedId: icons[i].storedId,
-                                              initialPosition: Offset(icons[i].x, icons[i].y),));          
+                                              initialPosition: Offset(icons[i].x, icons[i].y),));
+        }
+        else
+        {
+          stackElements.add(ReactiveFolderWidget(label: icons[i].iconName,
+                                              iconType: IconType.Folder,
+                                              assetPath: icons[i].iconPath, 
+                                              isInSingleMode: boardSettings.checkIsInSingleMode,
+                                              isEmbbedded: icons[i].embedded,
+                                              isStored: icons[i].isStored, 
+                                              launchEditor: _triggerFolderEditor,
+                                              openFolderDialog: _navigateToFolderContentDialog,
+                                              isInPlay: false,
+                                              isPinnedToLocation: icons[i].pinned,
+                                              scale: icons[i].scale,
+                                              defaultWidth: 200.0,
+                                              moveToTop: moveIconToTop,
+                                              id: icons[i].id,
+                                              initialPosition: Offset(icons[i].x, icons[i].y),));
         }
 
-        /*
-        stackElements.add(ReactiveIconWidget(label: "almost hack",
-                                             iconType: IconType.Icon,
-                                             assetPath: 'images/almond.png', 
-                                             isInSingleMode: boardSettings.checkIsInSingleMode,
-                                             isEmbbedded: true,
-                                             isStored: false, 
-                                             isInPlay: false,
-                                             isPinnedToLocation: false,
-                                             launchEditor: _triggerIconEditor,
-                                             scale: 1.0,
-                                             defaultWidth: 200.0,
-                                             moveToTop: moveIconToTop,//todo
-                                             initialPosition: Offset(100.0, 100.0),));
 
-        stackElements.add(ReactiveIconWidget(label: "almost hack",
-                                             iconType: IconType.Icon,
-                                             assetPath: 'images/almond.png', 
-                                             isInSingleMode: boardSettings.checkIsInSingleMode,
-                                             isEmbbedded: true,
-                                             isStored: false, 
-                                             isInPlay: false,
-                                             isPinnedToLocation: false,
-                                             launchEditor: _triggerIconEditor,
-                                             scale: 1.0,
-                                             defaultWidth: 200.0,
-                                             moveToTop: moveIconToTop,//todo
-                                             initialPosition: Offset(200.0, 120.0),));
-        */
+      }
         
-        speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));          
+      speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));
     });
 
     childButtons.clear();
@@ -205,6 +200,31 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
 
     iconDb.saveSettings(boardSettings);
+  }
+
+  /// Remove from stack
+  /// 
+  /// 
+  _removeFromDatabase(Widget widget) async {
+    print("_removeFromStack(Widget widget)");
+
+    if (widget is ReactiveIconWidget)
+    {
+      await iconDb.delete(widget.id);
+
+      setState(() {
+        stackElements.remove(widget);
+      });
+    }
+
+    if (widget is ReactiveFolderWidget)
+    {
+       await iconDb.deleteFolder(widget.id);
+
+      setState(() {
+        stackElements.remove(widget);
+      });
+    }
   }
 
   /// Build auto output button
@@ -391,9 +411,99 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) {
-              return DialogEditorIcon(widget);
+              return DialogEditorIcon(widget, _removeFromDatabase);
           }
       ));
+  }
+
+  _triggerFolderEditor(ReactiveFolderWidget widget) {
+      debugPrint("_triggerIconEditor()");
+      
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) {
+              return DialogEditorFolder(widget, _removeFromDatabase);
+          }
+      ));
+  }
+
+  /// Navigate to folder contents
+  _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
+    debugPrint("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
+
+      var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
+
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return _buildFolderPopupDialog(folderWidget, storedIcons);
+        },
+      );
+  }
+
+  /// TODO: assign size (square, based on %age height)
+  /// TODO: query stored icons
+  /// TODO: display in grid view
+  AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
+    debugPrint("_buildFolderPopupDialog, length = ${storedIcons.length}");
+
+    List<Container> imgs = [];
+
+    for (SavedIcon storedIcon in storedIcons)
+    {
+        imgs.add(new Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 1.0),
+            color: Colors.white,
+          ),
+          child: GestureDetector(child: new Image.asset(storedIcon.iconPath),
+                                  onTap: () {
+                                    _restoreIconFromStorage(storedIcon);
+
+                                    Navigator.pop(context);
+                                  },),            
+        ));
+    }
+
+    return AlertDialog(title: Center(child: Text(folderWidget.key.currentState.label)),
+                       content: Container(child: new GridView.count(crossAxisCount: 3,
+                                                                    mainAxisSpacing: 4.0,
+                                                                    crossAxisSpacing: 4.0,
+                                                                    padding: const EdgeInsets.all(4.0),
+                                                                    childAspectRatio: 1.0,
+                                                                    children: imgs,),
+                                          width: 500.0,
+                                          height: 500.0,),
+                                          ); 
+  }
+
+  /// Restore image from storage
+  _restoreIconFromStorage(SavedIcon savedIcon) async {
+    debugPrint("_restoreIconFromStorage(SavedIcon savedIcon)");
+
+    savedIcon.isStored = false;
+    savedIcon.storedId = -1;
+
+    await iconDb.update(savedIcon);
+
+    setState(() {
+      stackElements.add(ReactiveIconWidget(label: savedIcon.iconName,
+                                          iconType: IconType.Icon,
+                                          assetPath: savedIcon.iconPath, 
+                                          isInSingleMode: boardSettings.checkIsInSingleMode,
+                                          isEmbbedded: savedIcon.embedded,
+                                          isStored: savedIcon.isStored, 
+                                          isInPlay: false,
+                                          isPinnedToLocation: savedIcon.pinned,
+                                          launchEditor: _triggerIconEditor,
+                                          scale: savedIcon.scale,
+                                          defaultWidth: 200.0,
+                                          moveToTop: moveIconToTop,
+                                          id: savedIcon.id,
+                                          storedId: savedIcon.storedId,
+                                          initialPosition: Offset(savedIcon.x, savedIcon.y),));           
+    });
   }
 
   @override
@@ -461,7 +571,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             child: Icon(Icons.folder_open),
             onPressed: () async {
               debugPrint("TODO: Folder selection options");
-              /*
 
               SavedIcon savedIcon = SavedIcon();
               savedIcon.id        = null;
@@ -479,25 +588,24 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
               SavedIcon insert = await iconDb.insert(savedIcon);
 
-              FolderWidget holder2 = FolderWidget(text: savedIcon.iconName, 
-                                                  initialOffset: new Offset(savedIcon.x, savedIcon.y), 
-                                                  assetPath: savedIcon.iconPath, 
-                                                  repositionCallback: _bringToTop,
-                                                  deleteCallback: _removeFromDatabase,
-                                                  editCallback: _triggerFolderEditor,
-                                                  openDialogCallback: _navigateToFolderContentDialog,
-                                                  showEditOptions: inDebugMode ? true : false,
-                                                  isPinned: false,
-                                                  isEmbbedded: true,
-                                                  scale: 1.0,
-                                                  documentsFolder: dir,
-                                                  inPlay: false,
-                                                  id: insert.id);
-
-              setState(() {
-                _stackElements.add(holder2);                              
+              setState(() 
+              {
+                stackElements.add(ReactiveFolderWidget(label: insert.iconName,
+                                                    iconType: IconType.Folder,
+                                                    assetPath: insert.iconPath, 
+                                                    isInSingleMode: boardSettings.checkIsInSingleMode,
+                                                    isEmbbedded: insert.embedded,
+                                                    isStored: insert.isStored, 
+                                                    launchEditor: _triggerFolderEditor,
+                                                    openFolderDialog: _navigateToFolderContentDialog,
+                                                    isInPlay: false,
+                                                    isPinnedToLocation: insert.pinned,
+                                                    scale: insert.scale,
+                                                    defaultWidth: 200.0,
+                                                    moveToTop: moveIconToTop,
+                                                    id: insert.id,
+                                                    initialPosition: Offset(insert.x, insert.y),));
               });
-              */
             },
         ));
   }
@@ -542,32 +650,24 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     SavedIcon insert = await iconDb.insert(savedIcon);
 
-    /*
-    IconWidget holder;
-
     setState(() 
     {
-      holder = IconWidget(text: result.iconText,  
-                                initialOffset: new Offset(savedIcon.x, savedIcon.y), 
-                                assetPath: savedIcon.iconPath, 
-                                repositionCallback: _bringToTop,
-                                deleteCallback: _removeFromDatabase,
-                                showEditOptions: inDebugMode,
-                                editCallback: _triggerIconEditor,
-                                scale: savedIcon.scale,
-                                isPinned: savedIcon.pinned,
-                                isEmbbedded: savedIcon.embedded,
-                                documentsFolder: dir,
-                                inPlay: false,
-                                isInSingleMode: boardSettings.checkIsInSingleMode,
-                                id: insert.id,
-                                storedId: savedIcon.storedId,);
-      
-      _stackElements.add(holder);
+      stackElements.add(ReactiveIconWidget(label: insert.iconName,
+                                          iconType: IconType.Icon,
+                                          assetPath: insert.iconPath, 
+                                          isInSingleMode: boardSettings.checkIsInSingleMode,
+                                          isEmbbedded: insert.embedded,
+                                          isStored: insert.isStored, 
+                                          isInPlay: false,
+                                          isPinnedToLocation: insert.pinned,
+                                          launchEditor: _triggerIconEditor,
+                                          scale: insert.scale,
+                                          defaultWidth: 200.0,
+                                          moveToTop: moveIconToTop,
+                                          id: insert.id,
+                                          storedId: insert.storedId,
+                                          initialPosition: Offset(insert.x, insert.y),));
     });
-    */
-
-    //_refreshIconSelections();
   }
 
   /// Build menu

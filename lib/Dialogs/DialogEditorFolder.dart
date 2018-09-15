@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../Controls/FolderWidget.dart';
-import '../Models/ModificationType.dart';
+import '../Controls/ReactiveFolderWidget.dart';
 
 class DialogEditorFolder extends StatefulWidget {
-  final FolderWidget folderWidget;
+  final ReactiveFolderWidget folderWidget;
+  final Function deleteCallback;
 
-  DialogEditorFolder(this.folderWidget);
+  DialogEditorFolder(this.folderWidget, this.deleteCallback);
 
   @override
   DialogEditorFolderState createState() => new DialogEditorFolderState();
@@ -22,7 +22,11 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
         child: new Text("Increase Size"), 
         onPressed: () {
           print("onPressed - Increase()");
-          widget.folderWidget.state.modifyWidget(ModifyAction.Grow, silent: true);
+
+          widget.folderWidget.key.currentState.setState(() {
+            widget.folderWidget.key.currentState.scale = widget.folderWidget.key.currentState.scale * 1.05;
+          });
+
         }, 
         splashColor: Colors.redAccent);
   }
@@ -35,7 +39,10 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
         child: new Text("Decrease Size"), 
         onPressed: () {
           print("onPressed - Decrease()");
-          widget.folderWidget.state.modifyWidget(ModifyAction.Shrink, silent: true);
+
+          widget.folderWidget.key.currentState.setState(() {
+            widget.folderWidget.key.currentState.scale = widget.folderWidget.key.currentState.scale * 0.95;
+          });
         }, 
         splashColor: Colors.redAccent);
   }
@@ -48,7 +55,10 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
         child: new Text("Fix/Unfix Position"), 
         onPressed: () {
           print("onPressed - Pin()");
-          widget.folderWidget.state.modifyWidget(ModifyAction.Pin, silent: true);
+
+          widget.folderWidget.key.currentState.setState(() {
+            widget.folderWidget.key.currentState.isPinnedToLocation = !widget.folderWidget.key.currentState.isPinnedToLocation;
+          });
         }, 
         splashColor: Colors.redAccent);
   }
@@ -74,7 +84,8 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
         child: new Text("Delete Element"), 
         onPressed: () {
           print("onPressed - Delete()");
-          widget.folderWidget.state.modifyWidget(ModifyAction.Delete, silent: true);
+
+          widget.deleteCallback(widget.folderWidget);
 
           Navigator.pop(context);
         }, 
@@ -90,7 +101,9 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
         onPressed: () {
           print("onPressed - Default Size()");
 
-          widget.folderWidget.state.modifyWidget(ModifyAction.Default, silent: true);
+          widget.folderWidget.key.currentState.setState(() {
+            widget.folderWidget.key.currentState.scale = 1.0;
+          });
         }, 
         splashColor: Colors.redAccent);
   }
@@ -144,7 +157,7 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
 
     var columnContent = Column(children: [
             Row(children: <Widget>[
-              Expanded(child: Padding(child: Text("Editing Widget: ${widget.folderWidget.text}", style: defaultStyle,), padding: EdgeInsets.all(5.0),), ),
+              Expanded(child: Padding(child: Text("Editing Widget: ${widget.folderWidget.label}", style: defaultStyle,), padding: EdgeInsets.all(5.0),), ),
               Align(child: closeIcon, alignment: Alignment.topRight,)
             ],
             ),

@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import '../Models/IconType.dart';
 import '../Controls/VisualFieldWidget.dart';
 
-class ReactiveIconWidget extends StatefulWidget {
+class ReactiveFolderWidget extends StatefulWidget {
   final String label, assetPath;
   final bool isInPlay, isEmbbedded, isInSingleMode, isStored, isPinnedToLocation;
   final double scale, defaultWidth;
-  final Function moveToTop, launchEditor;
+  final Function moveToTop, launchEditor, openFolderDialog;
   final Offset initialPosition;
   final IconType iconType;
-  final int id, storedId;
+  final int id;
 
-  final GlobalKey<ReactiveIconWidgetState> key = GlobalKey<ReactiveIconWidgetState>();
+  final GlobalKey<ReactiveFolderWidgetState> key = GlobalKey<ReactiveFolderWidgetState>();
 
-  ReactiveIconWidget({@required this.label, 
+  ReactiveFolderWidget({@required this.label, 
                       @required this.assetPath,
                       @required this.isInPlay,
                       @required this.isEmbbedded,
@@ -23,15 +23,15 @@ class ReactiveIconWidget extends StatefulWidget {
                       @required this.isPinnedToLocation,
                       @required this.moveToTop,
                       @required this.launchEditor,
+                      @required this.openFolderDialog,
                       @required this.iconType,
                       @required this.scale,
                       @required this.defaultWidth,
                       @required this.id,
-                      @required this.storedId,
                       @required this.initialPosition}) : super(key: GlobalKey());
 
   @override
-  ReactiveIconWidgetState createState() => ReactiveIconWidgetState(label: label, 
+  ReactiveFolderWidgetState createState() => ReactiveFolderWidgetState(label: label, 
                                                                    assetPath: assetPath,
                                                                    isInPlay: isInPlay, 
                                                                    isEmbbedded: isEmbbedded,
@@ -40,44 +40,26 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    isPinnedToLocation: isPinnedToLocation,
                                                                    moveToTop: moveToTop, 
                                                                    launchEditor: launchEditor,
+                                                                   openFolderDialog: openFolderDialog,
                                                                    scale: scale,
                                                                    defaultWidth: defaultWidth,
                                                                    currentPosition: initialPosition,
                                                                    key: key);
 
-  static InheritedIconState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedIconState) as InheritedIconState;
-
-  double xIcon1, xIcon2, xFolder1, xFolder2;
-  double yIcon1, yIcon2, yFolder1, yFolder2;
-
-  // Check of 
-  bool intersectsWith(Size size, Offset offset) {
-    xIcon1 = offset.dx;
-    xIcon2 = offset.dx + size.width;
-
-    yIcon1 = offset.dy;
-    yIcon2 = offset.dy + size.height;
-
-    xFolder1 = key.currentState.currentPosition.dx;
-    xFolder2 = key.currentState.currentPosition.dx + key.currentState.defaultWidth;
-
-    yFolder1 = key.currentState.currentPosition.dy;
-    yFolder2 = key.currentState.currentPosition.dy + key.currentState.defaultWidth;
-        
-    return ((xFolder2 >= xIcon1 && xFolder1 <= xIcon2) && (yFolder2 >= yIcon1 && yFolder1 <= yIcon2));
-  }
+  static InheritedFolderState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedFolderState) as InheritedFolderState;
 }
 
-class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
+class ReactiveFolderWidgetState extends State<ReactiveFolderWidget> {
   Function moveToTop;
   Function launchEditor;
+  Function openFolderDialog;
   String label, assetPath;
   bool isInPlay, isEmbbedded, isInSingleMode, isStored, isPinnedToLocation;
   Offset currentPosition;
   double defaultWidth = 200.0;
   double scale;
 
-  ReactiveIconWidgetState({
+  ReactiveFolderWidgetState({
       Key key,
       this.label, 
       this.assetPath,
@@ -88,13 +70,14 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
       this.isPinnedToLocation,
       this.moveToTop,
       this.launchEditor,
+      this.openFolderDialog,
       this.scale,
       this.defaultWidth,
       this.currentPosition});
 
   @override
   Widget build(BuildContext context) {
-      return InheritedIconState(
+      return InheritedFolderState(
         onTap: onTap,
         onPositionChanged: onPositionChanged,
         label: label,
@@ -102,6 +85,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
         isInPlay: isInPlay,
         isEmbbedded: isEmbbedded,
         isInSingleMode: isInSingleMode,
+        openFolderDialog: fireDialog,
         isStored: isStored,
         currentPosition: currentPosition,
         defaultWidth: defaultWidth,
@@ -125,6 +109,15 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
     });
   }
 
+  void fireDialog() {
+    print("fireDialog()");
+
+    setState(() {
+      openFolderDialog(widget);
+    });
+
+  }
+
   void onPositionChanged(Offset position) {
     print("onPositionChanged(Offset position): ${this.label}");
     setState(() {
@@ -135,12 +128,13 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   }
 }
 
-class InheritedIconState extends InheritedWidget {
-  InheritedIconState({
+class InheritedFolderState extends InheritedWidget {
+  InheritedFolderState({
     Key key,
     this.onTap,
     this.onPositionChanged,
     this.launchEditor,
+    this.openFolderDialog,
     this.label,
     this.assetPath,
     this.documentsFolder,
@@ -161,6 +155,7 @@ class InheritedIconState extends InheritedWidget {
   final Function onTap;
   final Function onPositionChanged;
   final Function launchEditor;
+  final Function openFolderDialog;
   final String label;
   final String assetPath;
   final String documentsFolder;
@@ -174,7 +169,7 @@ class InheritedIconState extends InheritedWidget {
   final bool isStored;
 
   @override
-  bool updateShouldNotify(InheritedIconState oldWidget) {
+  bool updateShouldNotify(InheritedFolderState oldWidget) {
     return isInPlay != oldWidget.isInPlay || 
            currentPosition != oldWidget.currentPosition || 
            showEditOptions != oldWidget.showEditOptions || 
@@ -182,8 +177,8 @@ class InheritedIconState extends InheritedWidget {
            isPinnedToLocation != oldWidget.isPinnedToLocation;
   }
 
-  static InheritedIconState of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(InheritedIconState);
+  static InheritedFolderState of(BuildContext context) {
+    return context.inheritFromWidgetOfExactType(InheritedFolderState);
   }
 }
 
@@ -201,7 +196,7 @@ class IconBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inheritedIconState = InheritedIconState.of(context);
+    final inheritedFolderState = InheritedFolderState.of(context);
     final inheritedFieldState = InheritedVisualFieldState.of(context);
 
     // docs directory is here 
@@ -209,7 +204,7 @@ class IconBox extends StatelessWidget {
     final screenInformation = MediaQuery.of(context);
 
     var settingsIcon =  GestureDetector(behavior: HitTestBehavior.opaque,
-                                          onTap: () => inheritedIconState.onTap(),
+                                          onTap: () => inheritedFolderState.onTap(),
                                           child: Align(child: Icon(Icons.edit,),
                                                       alignment: Alignment.centerRight,),);
 
@@ -218,33 +213,33 @@ class IconBox extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.end,
                               verticalDirection: VerticalDirection.up,);
 
-    var imgAsset = Image.asset(inheritedIconState.assetPath,
-                               height: (inheritedIconState.scale * inheritedIconState.defaultWidth) * 0.7,
+    var imgAsset = Image.asset(inheritedFolderState.assetPath,
+                               height: (inheritedFolderState.scale * inheritedFolderState.defaultWidth) * 0.7,
                                fit: BoxFit.cover);
 
     var centerColumn = Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
                                 Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
-                                Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedIconState.label, style: defaultStyle)), flex: 2)
+                                Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedFolderState.label, style: defaultStyle)), flex: 2)
                               ]
                             );
 
-    var item = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                         height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                         decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                   color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
+    var item = Container(width: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+                         height: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+                         decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedFolderState.isPinnedToLocation ? 5.0 : 3.0),
+                                                   color: inheritedFolderState.isInPlay ? Colors.greenAccent : Colors.white),
                          child: Column(children: [Expanded(child: centerColumn,)]),);
 
-    var avatar = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                           height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-                           decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                     color: inheritedIconState.isInSingleMode ? Colors.greenAccent : Colors.white),
+    var avatar = Container(width: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+                           height: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+                           decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedFolderState.isPinnedToLocation ? 5.0 : 3.0),
+                                                     color: inheritedFolderState.isInSingleMode ? Colors.greenAccent : Colors.white),
                            child: Column(children: [Expanded(child: centerColumn,)]),);
 
     var draggable = new Draggable(
         feedback: avatar,
-        maxSimultaneousDrags: 1,
+        maxSimultaneousDrags: inheritedFolderState.isPinnedToLocation ? 0 : 1,
         ignoringFeedbackSemantics: false,
         child: item,
         childWhenDragging: new Opacity(opacity: 0.0, child: item),
@@ -262,34 +257,35 @@ class IconBox extends StatelessWidget {
           var newY = offset.dy;
 
           newX = (newX < 0.0) ? 0.0 : newX;
-          newX = (newX + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.width) ? 
-            screenInformation.size.width - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newX;
+          newX = (newX + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.width) ? 
+            screenInformation.size.width - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newX;
 
           newY = (newY < 0.0) ? 0.0 : newY;
-          newY = (newY + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.height) ? 
-            screenInformation.size.height - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newY;        
+          newY = (newY + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.height) ? 
+            screenInformation.size.height - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newY;        
           
-          inheritedIconState.onPositionChanged(Offset(newX, newY));
+          inheritedFolderState.onPositionChanged(Offset(newX, newY));
         });
 
-    if (inheritedIconState.isPinnedToLocation == true)
+    if (inheritedFieldState.inDebugMode == false)
     {
       return new Positioned(
-        left: inheritedIconState.currentPosition.dx, 
+        left: inheritedFolderState.currentPosition.dx, 
         key: GlobalKey(),
-        top: inheritedIconState.currentPosition.dy,         
+        top: inheritedFolderState.currentPosition.dy,         
         child: GestureDetector(child: item,
                                onTap: () 
                                {
-                                 debugPrint("onTap: Widget pinned");
-                                 inheritedIconState.onPositionChanged(Offset(inheritedIconState.currentPosition.dx, inheritedIconState.currentPosition.dy));
+                                 print("onTap: Folder Pressed (TODO: Open dialog)");
+                                 inheritedFolderState.openFolderDialog();
+                                 //inheritedFolderState.onPositionChanged(Offset(inheritedFolderState.currentPosition.dx, inheritedFolderState.currentPosition.dy));
                                }));
     }
 
     return new Positioned(
-      left: inheritedIconState.currentPosition.dx, 
+      left: inheritedFolderState.currentPosition.dx, 
       key: GlobalKey(),
-      top: inheritedIconState.currentPosition.dy, 
+      top: inheritedFolderState.currentPosition.dy, 
       child: draggable);
   }
 }

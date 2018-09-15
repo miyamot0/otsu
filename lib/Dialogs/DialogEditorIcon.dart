@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../Controls/ReactiveIconWidget.dart';
-import '../Models/ModificationType.dart';
 
 class DialogEditorIcon extends StatefulWidget {
   final ReactiveIconWidget iconWidget;
+  final Function deleteCallback;
 
-  DialogEditorIcon(this.iconWidget);
+  DialogEditorIcon(this.iconWidget, this.deleteCallback);
 
   @override
   DialogEditorIconState createState() => new DialogEditorIconState();
@@ -84,7 +84,8 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         child: new Text("Delete Element"), 
         onPressed: () {
           print("onPressed - Delete()");
-          //widget.iconWidget.state.modifyWidget(ModifyAction.Delete, silent: true);
+
+          widget.deleteCallback(widget.iconWidget);
 
           Navigator.pop(context);
         }, 
