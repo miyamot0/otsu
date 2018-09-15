@@ -60,7 +60,8 @@ class SpeakerObjectState extends State<SpeakerObject> {
         'images/speaker.png',
         color: Colors.black,
         height: width,
-        fit: BoxFit.cover);
+        fit: BoxFit.cover
+      );
     }
 
     if (imageActive == null)
@@ -69,30 +70,31 @@ class SpeakerObjectState extends State<SpeakerObject> {
         'images/speaker.png',
         color: Colors.greenAccent,
         height: width,
-        fit: BoxFit.cover);
+        fit: BoxFit.cover
+      );
     }
 
     // default up to cached standard one
     image = imageBase;
 
     return Positioned(
-            left: mediaQueryData.size.width - width - padding,
-            top:  padding,
-            child: GestureDetector(
-              onTapDown: pressSpeechEmitterTest,
-              onTapUp: releaseSpeechEmitterTest,
-              onTapCancel: cancelActionRedraw,
-              child: Container(
-                width: width,
-                height: width,
-                child: Align(
-                  alignment: Alignment.center,
-                  child: image
-                ),
-                decoration: box
-              ),
-            ),
-          ); 
+      left: mediaQueryData.size.width - width - padding,
+      top:  padding,
+      child: GestureDetector(
+        onTapDown: pressSpeechEmitterTest,
+        onTapUp: releaseSpeechEmitterTest,
+        onTapCancel: cancelActionRedraw,
+        child: Container(
+          width: width,
+          height: width,
+          child: Align(
+            alignment: Alignment.center,
+            child: image
+          ),
+          decoration: box
+        ),
+      ),
+    ); 
   }
 
   void cancelActionRedraw() {

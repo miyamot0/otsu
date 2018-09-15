@@ -50,29 +50,68 @@ class PreviewBox extends StatelessWidget {
       imgAsset = Image.asset(
         assetPath,
         height: size.height * 0.7,
-        fit: BoxFit.cover);
+        fit: BoxFit.cover
+      );
     }
     else if (isEmbedded == false)
     {
       imgAsset = Image.asset(
         "$documentsDirectory/$assetPath",
         height: size.height * 0.7,
-        fit: BoxFit.cover);
+        fit: BoxFit.cover
+      );
     }
 
-    Column centerColumn = Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                 children: [
-                                  Flexible(child: showEditOptions ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
-                                  Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
-                                  Flexible(child: Align(alignment: Alignment.center, child: Text(label, style: defaultStyle)), flex: 2)
-                                ]
-                              );
+    Column centerColumn = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Flexible(
+          child: showEditOptions ? 
+            topRow : 
+            Opacity(
+              child: topRow, 
+              opacity: 0.0,
+            ), 
+          flex: 1,
+        ),
+        Flexible(
+          child: Align(
+            alignment: Alignment.center, 
+            child: imgAsset,
+          ), 
+          flex: 6,
+        ),
+        Flexible(
+          child: Align(
+            alignment: Alignment.center, 
+            child: Text(
+              label, 
+              style: defaultStyle,
+            ),
+          ), 
+          flex: 2,
+        ),
+      ]
+    );
 
-    return new Container(width: size.width,
-                         height: size.height,
-                         key: GlobalKey(),
-                         decoration: BoxDecoration(border: Border.all(color: Colors.black, width: isPinnedToLocation ? 5.0 : 3.0),
-                                                   color: backgroundColor),
-                         child: Column(children: [Expanded(child: centerColumn,)]),);
+    return new Container(
+      width: size.width,
+      height: size.height,
+      key: GlobalKey(),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black, 
+          width: isPinnedToLocation ? 5.0 : 3.0
+        ),
+        color: backgroundColor,
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: centerColumn,
+          ),
+        ],
+      ),
+    );
   }
 }

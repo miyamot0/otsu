@@ -52,11 +52,11 @@ class ReactiveFolderWidget extends StatefulWidget {
 
   static InheritedFolderState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedFolderState) as InheritedFolderState;
 
-  double xIcon1, xIcon2, xFolder1, xFolder2;
-  double yIcon1, yIcon2, yFolder1, yFolder2;
-
   // Check of 
   bool intersectsWith(double size, Offset offset) {
+    double xIcon1, xIcon2, xFolder1, xFolder2;
+    double yIcon1, yIcon2, yFolder1, yFolder2;
+
     xIcon1 = offset.dx;
     xIcon2 = offset.dx + size;
 

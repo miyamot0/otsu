@@ -23,15 +23,15 @@ class PreviewIcon extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return PreviewBox(
-        size: previewSize,
-        label: text,
-        assetPath: assetPath,
-        opacity: currentOpacity,
-        isPinnedToLocation: isPinnedToCurrentLocation,
-        showEditOptions: showingEditOptions,
-        isEmbedded: isEmbedded,
-        documentsDirectory: documentsDirectory,
-        editFunction: () {},
-        backgroundColor: backgroundColor);    
+      size: previewSize,
+      label: text,
+      assetPath: assetPath,
+      opacity: currentOpacity,
+      isPinnedToLocation: isPinnedToCurrentLocation,
+      showEditOptions: showingEditOptions,
+      isEmbedded: isEmbedded,
+      documentsDirectory: documentsDirectory,
+      editFunction: () {},
+      backgroundColor: backgroundColor);
   }
 }

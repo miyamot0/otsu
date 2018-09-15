@@ -54,7 +54,10 @@ class DialogIconLabelState extends State<DialogIconLabel> {
         actions: <Widget>[
           new FlatButton(
             child: const Text('Update'),
-            onPressed: () => Navigator.pop(context, myController.text)
+            onPressed: () => Navigator.pop(
+              context, 
+              myController.text
+            ),
           ),
         ],
       )
@@ -69,7 +72,9 @@ class TextControllerCustom extends TextEditingController {
   {
     value = value.copyWith(
       text: text,
-      selection: TextSelection.collapsed(offset: text.length),
+      selection: TextSelection.collapsed(
+        offset: text.length
+      ),
       composing: TextRange.empty
     );
   }
