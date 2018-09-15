@@ -7,7 +7,7 @@ class ReactiveIconWidget extends StatefulWidget {
   final String label, assetPath;
   final bool isInPlay, isEmbbedded, isInSingleMode, isStored;
   final double scale, defaultWidth;
-  final Function moveToTop;
+  final Function moveToTop, launchEditor;
   final Offset initialPosition;
   final IconType iconType;
   GlobalKey<ReactiveIconWidgetState> key = GlobalKey<ReactiveIconWidgetState>();
@@ -18,7 +18,8 @@ class ReactiveIconWidget extends StatefulWidget {
                       @required this.isEmbbedded,
                       @required this.isInSingleMode,
                       @required this.isStored,
-                      @required this.moveToTop, 
+                      @required this.moveToTop,
+                      @required this.launchEditor,
                       @required this.iconType,
                       @required this.scale,
                       @required this.defaultWidth,
@@ -32,6 +33,7 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    isInSingleMode: isInSingleMode,
                                                                    isStored: isStored,
                                                                    moveToTop: moveToTop, 
+                                                                   launchEditor: launchEditor,
                                                                    scale: scale,
                                                                    defaultWidth: defaultWidth,
                                                                    currentPosition: initialPosition,
@@ -42,6 +44,7 @@ class ReactiveIconWidget extends StatefulWidget {
 
 class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   Function moveToTop;
+  Function launchEditor;
   String label, assetPath;
   bool isInPlay, isEmbbedded, isInSingleMode, isStored;
   Offset currentPosition;
@@ -56,7 +59,8 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
       this.isEmbbedded,
       this.isInSingleMode,
       this.isStored,
-      this.moveToTop, 
+      this.moveToTop,
+      this.launchEditor,
       this.scale,
       this.defaultWidth,
       this.currentPosition});
@@ -74,6 +78,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
         isStored: isStored,
         currentPosition: currentPosition,
         defaultWidth: defaultWidth,
+        
         scale: scale,        
         child: IconTree(),
         key: GlobalKey(),
@@ -84,7 +89,10 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
     print('onTap(): ${this.label}');
 
     setState(() {
-      isInPlay = !isInPlay;
+      launchEditor(widget);
+
+      //isInPlay = !isInPlay;
+      // launch editor
 
       //color = (isInPlay == true) ? Colors.greenAccent : Colors.white;
     });
@@ -105,6 +113,7 @@ class InheritedIconState extends InheritedWidget {
     Key key,
     this.onTap,
     this.onPositionChanged,
+    this.launchEditor,
     this.label,
     this.assetPath,
     this.documentsFolder,
@@ -123,6 +132,7 @@ class InheritedIconState extends InheritedWidget {
   final Offset currentPosition, startingPosition;
   final Function onTap;
   final Function onPositionChanged;
+  final Function launchEditor;
   final String label;
   final String assetPath;
   final String documentsFolder;
@@ -140,7 +150,8 @@ class InheritedIconState extends InheritedWidget {
   bool updateShouldNotify(InheritedIconState oldWidget) {
     return isInPlay != oldWidget.isInPlay || 
            currentPosition != oldWidget.currentPosition || 
-           showEditOptions != oldWidget.showEditOptions;
+           showEditOptions != oldWidget.showEditOptions || 
+           scale != oldWidget.scale;
   }
 
   static InheritedIconState of(BuildContext context) {

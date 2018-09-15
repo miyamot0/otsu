@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../Controls/IconWidget.dart';
+import '../Controls/ReactiveIconWidget.dart';
 import '../Models/ModificationType.dart';
 
 class DialogEditorIcon extends StatefulWidget {
-  final IconWidget iconWidget;
+  final ReactiveIconWidget iconWidget;
 
   DialogEditorIcon(this.iconWidget);
 
@@ -22,7 +22,11 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         child: new Text("Increase Size"), 
         onPressed: () {
           print("onPressed - Increase()");
-          widget.iconWidget.state.modifyWidget(ModifyAction.Grow, silent: true);
+
+          widget.iconWidget.key.currentState.setState(() {
+            widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 1.05;
+          });
+
         }, 
         splashColor: Colors.redAccent);
   }
@@ -35,7 +39,10 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         child: new Text("Decrease Size"), 
         onPressed: () {
           print("onPressed - Decrease()");
-          widget.iconWidget.state.modifyWidget(ModifyAction.Shrink, silent: true);
+
+          widget.iconWidget.key.currentState.setState(() {
+            widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 0.95;
+          });
         }, 
         splashColor: Colors.redAccent);
   }
@@ -48,7 +55,7 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         child: new Text("Fix/Unfix Position"), 
         onPressed: () {
           print("onPressed - Pin()");
-          widget.iconWidget.state.modifyWidget(ModifyAction.Pin, silent: true);
+          //widget.iconWidget.state.modifyWidget(ModifyAction.Pin, silent: true);
         }, 
         splashColor: Colors.redAccent);
   }
@@ -74,7 +81,7 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         child: new Text("Delete Element"), 
         onPressed: () {
           print("onPressed - Delete()");
-          widget.iconWidget.state.modifyWidget(ModifyAction.Delete, silent: true);
+          //widget.iconWidget.state.modifyWidget(ModifyAction.Delete, silent: true);
 
           Navigator.pop(context);
         }, 
@@ -90,7 +97,9 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         onPressed: () {
           print("onPressed - Default Size()");
 
-          widget.iconWidget.state.modifyWidget(ModifyAction.Default, silent: true);
+          widget.iconWidget.key.currentState.setState(() {
+            widget.iconWidget.key.currentState.scale = 1.0;
+          });
         }, 
         splashColor: Colors.redAccent);
   }
@@ -144,7 +153,7 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
 
     var columnContent = Column(children: [
             Row(children: <Widget>[
-              Expanded(child: Padding(child: Text("Editing Widget: ${widget.iconWidget.text}", style: defaultStyle,), padding: EdgeInsets.all(5.0),), ),
+              Expanded(child: Padding(child: Text("Editing Widget: ${widget.iconWidget.key.currentState.label}", style: defaultStyle,), padding: EdgeInsets.all(5.0),), ),
               Align(child: closeIcon, alignment: Alignment.topRight,)
             ],
             ),

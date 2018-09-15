@@ -6,6 +6,8 @@ import '../Controls/ReactiveIconWidget.dart';
 import '../Controls/SpeakerObject.dart';
 import '../Controls/StripObject.dart';
 
+import '../Dialogs/DialogEditorIcon.dart';
+
 import '../Models/IconType.dart';
 
 import '../Storage/IconDatabase.dart';
@@ -73,6 +75,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              isEmbbedded: true,
                                              isStored: false, 
                                              isInPlay: false,
+                                             launchEditor: _triggerIconEditor,
                                              scale: 1.0,
                                              defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
@@ -85,6 +88,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              isEmbbedded: true,
                                              isStored: false, 
                                              isInPlay: false,
+                                             launchEditor: _triggerIconEditor,
                                              scale: 1.0,
                                              defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
@@ -315,6 +319,17 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       }
       */
     }
+  }
+
+  _triggerIconEditor(ReactiveIconWidget widget) {
+      debugPrint("_triggerIconEditor()");
+      
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) {
+              return DialogEditorIcon(widget);
+          }
+      ));
   }
 
   @override
