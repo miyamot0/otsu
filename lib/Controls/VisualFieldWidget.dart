@@ -28,7 +28,7 @@ class VisualFieldWidget extends StatefulWidget {
 }
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
-  bool inDebugMode = true;
+  bool inDebugMode = false;
   bool isInStartup = true;
 
   IconDatabase iconDb;  
@@ -136,7 +136,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
       }
         
-      speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));
+      speakerObjectReference.speak("").then((_) => print("TTS Module Loaded..."));
     });
 
     childButtons.clear();
@@ -304,7 +304,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _saveLatestStack(Widget widget) async {
-    debugPrint("_saveLatestStack() " + new DateTime.now().toString());
+    //debugPrint("_saveLatestStack() " + new DateTime.now().toString());
 
     if (iconDb == null) return;
 
@@ -629,7 +629,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   bool _isWithinStrip(ReactiveIconWidget icon) {
-    debugPrint("_isWithinStrip");
+    //debugPrint("_isWithinStrip");
 
     if (stripSizeLocal == null) return false;
 
@@ -644,7 +644,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void triggerEditor(Widget widget) async {
-    debugPrint("_triggerIconEditor()");
+    //debugPrint("_triggerIconEditor()");
 
     if (widget is ReactiveIconWidget)
     {
@@ -681,7 +681,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (widget is ReactiveFolderWidget)
     {
-      debugPrint("_triggerIconEditor()");
+      //debugPrint("_triggerIconEditor()");
       
       String newName = await Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
@@ -719,7 +719,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
-    debugPrint("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
+    //debugPrint("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
 
     var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
 
@@ -736,7 +736,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
-    debugPrint("_buildFolderPopupDialog, length = ${storedIcons.length}");
+    //debugPrint("_buildFolderPopupDialog, length = ${storedIcons.length}");
 
     List<Container> imgs = [];
 
@@ -779,7 +779,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _restoreIconFromStorage(SavedIcon savedIcon) async {
-    debugPrint("_restoreIconFromStorage(SavedIcon savedIcon)");
+    //debugPrint("_restoreIconFromStorage(SavedIcon savedIcon)");
 
     savedIcon.isStored = false;
     savedIcon.storedId = -1;
@@ -856,7 +856,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void toggleSentenceStrip() {
-    debugPrint("toggleSentenceStrip(): ${boardSettings == null}");
+    //debugPrint("toggleSentenceStrip(): ${boardSettings == null}");
 
     if (boardSettings == null) return;
 
@@ -875,7 +875,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToIconCreatorScreen(BuildContext context) async {
-    debugPrint("_navigateToIconCreatorScreen()");
+    //debugPrint("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
 
     if (result == null) return;
@@ -920,7 +920,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderCreatorScreen(BuildContext context) async {
-    debugPrint("_navigateToIconCreatorScreen()");
+    //debugPrint("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FolderCreatorScreen(dir)));
 
     if (result == null) return;
