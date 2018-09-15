@@ -40,7 +40,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   void initState() {
     print("initState()");
     sentenceStripReference = StripObject(padding: 10.0);
-      stackElements.add(sentenceStripReference);
 
     speakerObjectReference = SpeakerObject(emitSpeech, toggleDebugMode);
       stackElements.add(speakerObjectReference);
@@ -58,6 +57,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     await iconDb.open();
 
     boardSettings = await iconDb.loadSettings();
+
+    if (boardSettings.checkIsInSingleMode == false) {
+      stackElements.add(sentenceStripReference);      
+    }
 
     List<SavedIcon> icons = await iconDb.getSavedIcons();
 
@@ -115,15 +118,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           });
         }
       }
+
+      stackElements.remove(widget);
+      stackElements.add(widget);
+
+      widget.key.currentState.setState(() {
+        widget.key.currentState.isInPlay = true;
+      });
+
+      if (boardSettings.checkIsAutoSpeaking) {
+        emitSpeech();
+      }
     }
 
-    stackElements.remove(widget);
-    stackElements.add(widget);
-
-
-    widget.key.currentState.setState(() {
-      widget.key.currentState.isInPlay = true;
-    });
     //int index = stackElements.indexOf(widget);
 
     //widget.
@@ -229,25 +236,16 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// This disables debug mode (hides buttons)
   _resumeChildMode() {
     print('_resumeChildMode()');
+
     setState(() {
       inDebugMode = false;
-
-      /*
-      for (int i = 0; i < _stackElements.length; i++)
-      {
-          if (_stackElements[i] is IconWidget)
-          {
-            (_stackElements[i] as IconWidget).state.setEditing(false);
-          }
-          else if (_stackElements[i] is FolderWidget)
-          {
-            (_stackElements[i] as FolderWidget).state.setEditing(false);
-          }
-      }
-
-      _refreshIconSelections(blankAll: boardSettings.checkIsInSingleMode == true);
-      */
     });
+
+    if (boardSettings.checkIsInSingleMode == true) {
+      deselectAllIcons();
+    }
+    
+    // TODO strip
   }
 
   void toggleDebugMode() {
@@ -258,8 +256,65 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     });
   }
 
-  void emitSpeech() {
+  void deselectAllIcons() {
+    for (var x in stackElements) 
+    {
+      if (x is ReactiveIconWidget)
+      {
+        if (x.key.currentState.isInPlay == true)
+        {
+          x.key.currentState.setState(() {
+            x.key.currentState.isInPlay = false;
+          });
+        }
+      }
+    }
+  }
+
+  void emitSpeech() async {
     print("emitSpeech()");
+
+    if (boardSettings.checkIsInSingleMode == true)
+    {
+      print("emitSpeech() single mode");
+      for (var x in stackElements) 
+      {
+        if (x is ReactiveIconWidget)
+        {
+          if (x.key.currentState.isInPlay)
+          {
+            await speakerObjectReference.speak(x.label);
+
+            if (boardSettings.checkIsAutoDeselecting == true)
+            {
+              deselectAllIcons();
+
+              return;
+            }
+          }
+        }
+      }
+    }
+    else
+    {
+      /*
+      var tempList = <IconWidget>[];
+      var outputString = "";
+
+      for (var x in _stackElements) 
+        if (x is IconWidget && _isWithinStrip(x)) tempList.add(x);
+
+      if (tempList.length > 0)
+      {
+        tempList.sort((a, b) => a.currentPosition.dx.compareTo(b.currentPosition.dx));
+
+        for (var icon in tempList)
+          outputString = outputString + " " + icon.text;
+        
+        await speakerObjectReference.speak(outputString);
+      }
+      */
+    }
   }
 
   @override

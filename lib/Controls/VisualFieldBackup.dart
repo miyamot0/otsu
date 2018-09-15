@@ -224,6 +224,7 @@ class VisualFieldState extends State<VisualField> {
 
       triggerOnFirstLoad = false;
     }
+    
   }
 
   /// Rebuild menu
