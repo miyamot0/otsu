@@ -77,7 +77,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     boardSettings = await iconDb.loadSettings();
 
-    if (boardSettings.checkIsInSingleMode == false) {
+    if (boardSettings.checkIsInSingleMode == false) 
+    {
       stackElements.add(sentenceStripReference);      
     }
 
@@ -477,54 +478,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       hasLabel: true,
       labelText: "Add a Folder",
       labelColor: Colors.black,
-      
       currentButton: FloatingActionButton(
         backgroundColor: Colors.amber,
         heroTag: "addFolderTag",
         mini: false,
         child: Icon(Icons.folder_open),
         onPressed: () => _navigateToFolderCreatorScreen(context),
-        /*
-        async {
-          print("TODO: Folder selection options");
-
-          SavedIcon savedIcon = SavedIcon();
-          savedIcon.id        = null;
-          savedIcon.iconName  = "Folder 1";
-          savedIcon.iconPath  = "images/FolderOpenRed.png";
-          savedIcon.x         = 500.0;
-          savedIcon.y         = 500.0;
-          savedIcon.embedded  = true;
-          savedIcon.pinned    = false;
-          savedIcon.scale     = 1.0;
-          savedIcon.active    = false;
-          savedIcon.isStored  = false;
-          savedIcon.storedId  = -1;
-          savedIcon.isFolder  = true;
-
-          SavedIcon insert = await iconDb.insert(savedIcon);
-
-          setState(() 
-          {
-            stackElements.add(ReactiveFolderWidget(label: insert.iconName,
-                                                    iconType: IconType.Folder,
-                                                    assetPath: insert.iconPath, 
-                                                    isInSingleMode: boardSettings.checkIsInSingleMode,
-                                                    isEmbbedded: insert.embedded,
-                                                    isStored: insert.isStored, 
-                                                    launchEditor: triggerEditor,
-                                                    openFolderDialog: _navigateToFolderContentDialog,
-                                                    isInPlay: false,
-                                                    isPinnedToLocation: insert.pinned,
-                                                    scale: insert.scale,
-                                                    defaultWidth: 200.0,
-                                                    moveToTop: moveIconToTop,
-                                                    id: insert.id,
-                                                    initialPosition: Offset(insert.x, insert.y),));
-          });
-        },
-        */
-      )
+      ),
     );
   }
 
@@ -536,14 +496,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       hasLabel: true,
       labelText: "Add an Icon",
       labelColor: Colors.black,
-      
       currentButton: FloatingActionButton(
         backgroundColor: Colors.green,
         heroTag: "addIconTag",
         mini: false,
         child: Icon(Icons.add_a_photo),
         onPressed: () => _navigateToIconCreatorScreen(context),
-      )
+      ),
     );
   }
 
