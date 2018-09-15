@@ -55,7 +55,10 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         child: new Text("Fix/Unfix Position"), 
         onPressed: () {
           print("onPressed - Pin()");
-          //widget.iconWidget.state.modifyWidget(ModifyAction.Pin, silent: true);
+
+          widget.iconWidget.key.currentState.setState(() {
+            widget.iconWidget.key.currentState.isPinnedToLocation = !widget.iconWidget.key.currentState.isPinnedToLocation;
+          });
         }, 
         splashColor: Colors.redAccent);
   }

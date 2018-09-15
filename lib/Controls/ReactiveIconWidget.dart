@@ -5,12 +5,13 @@ import '../Controls/VisualFieldWidget.dart';
 
 class ReactiveIconWidget extends StatefulWidget {
   final String label, assetPath;
-  final bool isInPlay, isEmbbedded, isInSingleMode, isStored;
+  final bool isInPlay, isEmbbedded, isInSingleMode, isStored, isPinnedToLocation;
   final double scale, defaultWidth;
   final Function moveToTop, launchEditor;
   final Offset initialPosition;
   final IconType iconType;
-  GlobalKey<ReactiveIconWidgetState> key = GlobalKey<ReactiveIconWidgetState>();
+
+  final GlobalKey<ReactiveIconWidgetState> key = GlobalKey<ReactiveIconWidgetState>();
 
   ReactiveIconWidget({@required this.label, 
                       @required this.assetPath,
@@ -18,6 +19,7 @@ class ReactiveIconWidget extends StatefulWidget {
                       @required this.isEmbbedded,
                       @required this.isInSingleMode,
                       @required this.isStored,
+                      @required this.isPinnedToLocation,
                       @required this.moveToTop,
                       @required this.launchEditor,
                       @required this.iconType,
@@ -32,6 +34,7 @@ class ReactiveIconWidget extends StatefulWidget {
                                                                    isEmbbedded: isEmbbedded,
                                                                    isInSingleMode: isInSingleMode,
                                                                    isStored: isStored,
+                                                                   isPinnedToLocation: isPinnedToLocation,
                                                                    moveToTop: moveToTop, 
                                                                    launchEditor: launchEditor,
                                                                    scale: scale,
@@ -46,7 +49,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   Function moveToTop;
   Function launchEditor;
   String label, assetPath;
-  bool isInPlay, isEmbbedded, isInSingleMode, isStored;
+  bool isInPlay, isEmbbedded, isInSingleMode, isStored, isPinnedToLocation;
   Offset currentPosition;
   double defaultWidth = 200.0;
   double scale;
@@ -59,6 +62,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
       this.isEmbbedded,
       this.isInSingleMode,
       this.isStored,
+      this.isPinnedToLocation,
       this.moveToTop,
       this.launchEditor,
       this.scale,
@@ -78,7 +82,7 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
         isStored: isStored,
         currentPosition: currentPosition,
         defaultWidth: defaultWidth,
-        
+        isPinnedToLocation: isPinnedToLocation,        
         scale: scale,        
         child: IconTree(),
         key: GlobalKey(),
@@ -123,6 +127,7 @@ class InheritedIconState extends InheritedWidget {
     this.isStored,
     this.defaultWidth,
     this.showEditOptions,
+    this.isPinnedToLocation,
     this.currentPosition,
     this.startingPosition,
     this.scale,
@@ -138,20 +143,20 @@ class InheritedIconState extends InheritedWidget {
   final String documentsFolder;
   final double defaultWidth;
   final double scale;
-  final bool isPinnedToLocation = false;
+  final bool isPinnedToLocation;
   final bool isInPlay;
   final bool showEditOptions;
   final bool isEmbbedded; 
   final bool isInSingleMode;
   final bool isStored;
 
-
   @override
   bool updateShouldNotify(InheritedIconState oldWidget) {
     return isInPlay != oldWidget.isInPlay || 
            currentPosition != oldWidget.currentPosition || 
            showEditOptions != oldWidget.showEditOptions || 
-           scale != oldWidget.scale;
+           scale != oldWidget.scale || 
+           isPinnedToLocation != oldWidget.isPinnedToLocation;
   }
 
   static InheritedIconState of(BuildContext context) {
@@ -216,7 +221,7 @@ class IconBox extends StatelessWidget {
 
     var draggable = new Draggable(
         feedback: avatar,
-        maxSimultaneousDrags: 1,//widget.isPinned ? 0 : 1,
+        maxSimultaneousDrags: 1,
         ignoringFeedbackSemantics: false,
         child: item,
         childWhenDragging: new Opacity(opacity: 0.0, child: item),
@@ -243,6 +248,20 @@ class IconBox extends StatelessWidget {
           
           inheritedIconState.onPositionChanged(Offset(newX, newY));
         });
+
+    if (inheritedIconState.isPinnedToLocation == true)
+    {
+      return new Positioned(
+        left: inheritedIconState.currentPosition.dx, 
+        key: GlobalKey(),
+        top: inheritedIconState.currentPosition.dy,         
+        child: GestureDetector(child: item,
+                               onTap: () 
+                               {
+                                 debugPrint("onTap: Widget pinned");
+                                 inheritedIconState.onPositionChanged(Offset(inheritedIconState.currentPosition.dx, inheritedIconState.currentPosition.dy));
+                               }));
+    }
 
     return new Positioned(
       left: inheritedIconState.currentPosition.dx, 
