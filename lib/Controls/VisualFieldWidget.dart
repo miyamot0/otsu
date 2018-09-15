@@ -27,22 +27,23 @@ class VisualFieldWidget extends StatefulWidget {
 }
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
-  IconDatabase iconDb;
-
   bool inDebugMode = true;
-  Color background = Colors.orangeAccent;
+  bool isInStartup = true;
 
+  IconDatabase iconDb;  
   BoardSettings boardSettings;
 
-  var stackElements = <Widget>[];
-
   AnimatedMenuWidget animatedMenu;
-  final childButtons = List<AnimatedMenuItem>();
-
   StripObject sentenceStripReference;
   SpeakerObject speakerObjectReference;
 
+  Color background = Colors.orangeAccent;
+
+  Size stripSizeLocal;
   String dir;
+
+  final stackElements = <Widget>[];
+  final childButtons = List<AnimatedMenuItem>();
 
   @override
   void initState() {
@@ -184,6 +185,44 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
 
     ReactiveIconWidget iconHolder;
+    if (widget == null)
+    {
+      if (boardSettings.checkIsInSingleMode == true)
+      {
+        for (var i = 0; i < stackElements.length; i++)
+        {
+          // Skip if not an icon
+          if (!(stackElements[i] is ReactiveIconWidget)) continue;
+
+          iconHolder = stackElements[i] as ReactiveIconWidget;
+
+          if (iconHolder != widget && iconHolder.key.currentState.isInPlay == true)
+          {
+            iconHolder.key.currentState.setState(() {
+              iconHolder.key.currentState.isInPlay = false;
+            });
+          }
+        }        
+      }
+      else
+      {
+        for (var i = 0; i < stackElements.length; i++)
+        {
+          // Skip if not an icon
+          if (!(stackElements[i] is ReactiveIconWidget)) continue;
+
+          iconHolder = stackElements[i] as ReactiveIconWidget;
+
+          iconHolder.key.currentState.setState(() 
+          {
+              iconHolder.key.currentState.isInPlay = _isWithinStrip(iconHolder);
+          });
+        }
+      }
+
+      return;
+    }
+
 
     // Is the icon at the top of the stack overlapping with a folder?
     if (widget is ReactiveIconWidget && await _isIconOverlappingWithFolder(widget) == true)
@@ -396,6 +435,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
 
             print("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
+
+            moveIconToTop(null);
           });
 
           await iconDb.saveSettings(boardSettings);
@@ -441,7 +482,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         mini: false,
         child: Icon(Icons.folder_open),
         onPressed: () async {
-          debugPrint("TODO: Folder selection options");
+          print("TODO: Folder selection options");
 
           SavedIcon savedIcon = SavedIcon();
           savedIcon.id        = null;
@@ -547,6 +588,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void deselectAllIcons() {
+
+    // TODO strip
     for (var x in stackElements) 
     {
       if (x is ReactiveIconWidget)
@@ -617,13 +660,11 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   bool _isWithinStrip(ReactiveIconWidget icon) {
     debugPrint("_isWithinStrip");
 
-    if (sentenceStripReference.key.currentState.stripSize == null) return false;
+    if (stripSizeLocal == null) return false;
 
-    if (icon.key.currentState.currentPosition.dy > 
-      (sentenceStripReference.key.currentState.stripSize.height + sentenceStripReference.padding)) return false;
+    if (icon.key.currentState.currentPosition.dy > stripSizeLocal.height) return false;
 
-    if (icon.key.currentState.currentPosition.dx > 
-      (sentenceStripReference.key.currentState.stripSize.width + sentenceStripReference.padding))  return false;
+    if (icon.key.currentState.currentPosition.dx > stripSizeLocal.width)  return false;
 
     return true;
   }
@@ -745,6 +786,23 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (stripSizeLocal == null)
+    {
+      var mediaQueryData = MediaQuery.of(context);
+      stripSizeLocal = Size((mediaQueryData.size.width - (20.0)) * 0.8, (mediaQueryData.size.height - (20.0)) * 0.25);      
+    }
+
+    if (isInStartup == true)
+    {
+      Future.delayed(const Duration(seconds: 2)).then((_)
+      {
+        print('asdf');
+        moveIconToTop(null);
+      });
+
+      isInStartup = false;
+    }
 
     if (childButtons.length > 0)
     {
