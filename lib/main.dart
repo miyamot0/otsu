@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'Controls/VisualField.dart';
+import 'Controls/VisualFieldWidget.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([

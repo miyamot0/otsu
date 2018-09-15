@@ -76,15 +76,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
                                              initialPosition: Offset(100.0, 100.0),));
-
-        childButtons.add(_buildAddFolderButton());
-        childButtons.add(_buildAddIconButton());
-        childButtons.add(_buildSwitchModeButton());
-        childButtons.add(_buildAutoOutputModeButton()); 
-        childButtons.add(_buildAutoDeselectModeButton());      
-        childButtons.add(_buildResumeChildModeButton()); 
-      
-        animatedMenu = _buildAnimatedMenu(childButtons);
         
         speakerObjectReference.speak("").then((_) => debugPrint("TTS Module Loaded..."));          
     });
@@ -95,19 +86,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     stackElements.remove(widget);
     stackElements.add(widget);
-  }
-
-  /// Rebuild menu
-  /// 
-  /// 
-  _rebuildMenus() {    
-    setState(() {
-      animatedMenu.childButtons[2].labelText = boardSettings.checkIsInSingleMode == true ? "Change to Frame Mode" : "Change to Icon Mode";
-      animatedMenu.childButtons[3].labelText = boardSettings.checkIsAutoSpeaking == true ? "Change to Manual Mode" : "Change to Autospeak Mode";
-      animatedMenu.childButtons[4].labelText = boardSettings.checkIsAutoDeselecting == true ? "Disable Auto-Deselect" : "Enable Auto-Deselect";
-
-      animatedMenu.updateState();
-    });
   }
 
   /// Build auto output button
@@ -128,14 +106,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                 boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
 
                 debugPrint("autoSpeaking Delegate: Status = ${boardSettings.checkIsAutoSpeaking}");
-
-                /*
-                // Blank them only if going into single mode
-                _refreshIconSelections(blankAll: boardSettings.checkIsInSingleMode == true);
-                _saveLatestStack(null);
-                */
-
-                _rebuildMenus();
               });
             },
         ));
@@ -165,8 +135,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                 _refreshIconSelections(blankAll: boardSettings.checkIsInSingleMode == true);
                 _saveLatestStack(null);
                 */
-
-                _rebuildMenus();
               });
             },
         ));
@@ -187,17 +155,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             child: Icon(Icons.border_all),
             onPressed: () {
               setState(() {
-                boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;   
+                boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
 
                 debugPrint("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
-
-                /*
-                // Blank them only if going into single mode
-                _refreshIconSelections(blankAll: boardSettings.checkIsInSingleMode == true);
-                _saveLatestStack(null);
-                */
-
-                _rebuildMenus();
               });
             },
         ));
@@ -252,6 +212,25 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     setState(() {
       inDebugMode = true;
     });
+  }
+
+  /// Toggle visibility of strip
+  /// 
+  /// 
+  void toggleSentenceStrip() {
+    debugPrint("toggleSentenceStrip(): ${boardSettings == null}");
+
+    if (boardSettings == null) return;
+
+    if (boardSettings.checkIsInSingleMode == true && stackElements.contains(sentenceStripReference))
+    {
+      stackElements.remove(sentenceStripReference);
+    }
+
+    if (boardSettings.checkIsInSingleMode == false && !stackElements.contains(sentenceStripReference))
+    {
+      stackElements.insert(0, sentenceStripReference);
+    }
   }
 
   /// Build icon button 
@@ -347,7 +326,20 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
+
+      childButtons.clear();
+      childButtons.add(_buildAddFolderButton());
+      childButtons.add(_buildAddIconButton());
+      childButtons.add(_buildSwitchModeButton());
+      childButtons.add(_buildAutoOutputModeButton()); 
+      childButtons.add(_buildAutoDeselectModeButton());      
+      childButtons.add(_buildResumeChildModeButton()); 
+    
+      animatedMenu = _buildAnimatedMenu(childButtons);
+
+      toggleSentenceStrip();
+      
       return InheritedVisualFieldState(
         background: background,
         inDebugMode: inDebugMode,
@@ -379,7 +371,10 @@ class InheritedVisualFieldState extends InheritedWidget {
 
   @override
   bool updateShouldNotify(InheritedVisualFieldState oldWidget) {
-    return inDebugMode != oldWidget.inDebugMode;
+    return inDebugMode != oldWidget.inDebugMode ||
+           boardSettings.checkIsInSingleMode != oldWidget.boardSettings.checkIsInSingleMode ||
+           boardSettings.checkIsAutoDeselecting != oldWidget.boardSettings.checkIsAutoDeselecting ||
+           boardSettings.checkIsAutoSpeaking != oldWidget.boardSettings.checkIsAutoSpeaking;
   }
 
   static InheritedVisualFieldState of(BuildContext context) {
