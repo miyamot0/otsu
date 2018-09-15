@@ -1,3 +1,7 @@
+/// Shawn Gilroy - 2018, MIT - Licensed
+///
+///
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';

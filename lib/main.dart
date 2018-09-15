@@ -1,3 +1,7 @@
+/// Shawn Gilroy - 2018, MIT - Licensed
+///
+///
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

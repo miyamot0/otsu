@@ -1,3 +1,7 @@
+/// Shawn Gilroy - 2018, MIT - Licensed
+///
+///
+
 class EmbeddedIconModel {
   final iconText;
   final assetLocation;

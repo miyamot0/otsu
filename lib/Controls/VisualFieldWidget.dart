@@ -1,3 +1,7 @@
+/// Shawn Gilroy - 2018, MIT - Licensed
+///
+///
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';

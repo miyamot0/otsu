@@ -1,3 +1,7 @@
+/// Shawn Gilroy - 2018, MIT - Licensed
+///
+///
+
 import 'package:flutter/material.dart';
 
 import '../Models/IconType.dart';
@@ -97,11 +101,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
 
     setState(() {
       launchEditor(widget);
-
-      //isInPlay = !isInPlay;
-      // launch editor
-
-      //color = (isInPlay == true) ? Colors.greenAccent : Colors.white;
     });
   }
 
@@ -183,8 +182,6 @@ class IconBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final inheritedIconState = InheritedIconState.of(context);
     final inheritedFieldState = InheritedVisualFieldState.of(context);
-
-    // docs directory is here 
 
     final screenInformation = MediaQuery.of(context);
 

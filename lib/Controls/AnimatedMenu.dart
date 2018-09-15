@@ -1,10 +1,11 @@
-// based on:
-
-//https://github.com/tiagojencmartins/unicornspeeddial
+/// Shawn Gilroy - 2018, MIT - Licensed
+///
+///
+/// based on:
+/// https://github.com/tiagojencmartins/unicornspeeddial
 
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
-import 'package:flutter/material.dart';
 
 class AnimatedMenuOrientation {
   static const HORIZONTAL = 0;
