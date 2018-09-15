@@ -69,7 +69,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              isInSingleMode: boardSettings.checkIsInSingleMode,
                                              isEmbbedded: true,
                                              isStored: false, 
-                                             isInPlay: true,
+                                             isInPlay: false,
                                              scale: 1.0,
                                              defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
@@ -81,7 +81,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
                                              isInSingleMode: boardSettings.checkIsInSingleMode,
                                              isEmbbedded: true,
                                              isStored: false, 
-                                             isInPlay: true,
+                                             isInPlay: false,
                                              scale: 1.0,
                                              defaultWidth: 200.0,
                                              moveToTop: moveIconToTop,//todo
@@ -108,7 +108,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       for (var i = 0; i < stackElements.length; i++)
       {
-        if (stackElements[i] is ReactiveIconWidget)
+        if (stackElements[i] is ReactiveIconWidget && stackElements[i] != widget)
         {
           (stackElements[i] as ReactiveIconWidget).key.currentState.setState(() {
             (stackElements[i] as ReactiveIconWidget).key.currentState.isInPlay = false;

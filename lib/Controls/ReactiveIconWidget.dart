@@ -165,8 +165,6 @@ class IconBox extends StatelessWidget {
     final inheritedIconState = InheritedIconState.of(context);
     final inheritedFieldState = InheritedVisualFieldState.of(context);
 
-    print("in field mode: ${inheritedFieldState.inDebugMode}");
-
     // docs directory is here 
 
     final screenInformation = MediaQuery.of(context);
@@ -202,7 +200,7 @@ class IconBox extends StatelessWidget {
     var avatar = Container(width: inheritedIconState.scale * inheritedIconState.defaultWidth,
                            height: inheritedIconState.scale * inheritedIconState.defaultWidth,
                            decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedIconState.isPinnedToLocation ? 5.0 : 3.0),
-                                                     color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white),
+                                                     color: inheritedIconState.isInSingleMode ? Colors.greenAccent : Colors.white),
                            child: Column(children: [Expanded(child: centerColumn,)]),);
 
     var draggable = new Draggable(
@@ -211,7 +209,8 @@ class IconBox extends StatelessWidget {
         ignoringFeedbackSemantics: false,
         child: item,
         childWhenDragging: new Opacity(opacity: 0.0, child: item),
-        onDragStarted: () => print("onDragStarted: ..."),
+        onDragStarted: () {
+        },
         onDraggableCanceled: (velocity, offset) {
           if (offset.distance < 1)
           {
