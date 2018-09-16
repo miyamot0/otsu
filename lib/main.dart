@@ -8,13 +8,14 @@ import 'package:flutter/services.dart';
 import 'Controls/VisualFieldWidget.dart';
 
 void main() {
-  SystemChrome.setEnabledSystemUIOverlays([]).then((_) {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeRight, 
-    DeviceOrientation.landscapeLeft]).then((_)
+  SystemChrome.setEnabledSystemUIOverlays([]).then((_) 
   {
-    runApp(new MainApp());
-  }); 
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight, 
+      DeviceOrientation.landscapeLeft]).then((_)
+      {
+        runApp(new MainApp());
+      }); 
   });
 }
 

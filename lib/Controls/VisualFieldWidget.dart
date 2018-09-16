@@ -156,7 +156,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
                                 .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
-                                .where((w) => (w as ReactiveFolderWidget).intersectsWith(widget.key.currentState.defaultWidth, 
+                                .where((w) => (w as ReactiveFolderWidget).intersectsWith(widget.key.currentState.defaultWidth,
+                                                                                         widget.key.currentState.scale,
                                                                                          widget.key.currentState.currentPosition))
                                 .toList();   
 
