@@ -121,29 +121,20 @@ class ReactiveFolderWidgetState extends State<ReactiveFolderWidget> {
   }
 
   void onTap() {
-    print('onTap(): ${this.label}');
-
+    //print('onTap(): ${this.label}');
     setState(() {
       launchEditor(widget);
-
-      //isInPlay = !isInPlay;
-      // launch editor
-
-      //color = (isInPlay == true) ? Colors.greenAccent : Colors.white;
     });
   }
 
   void fireDialog() {
-    print("fireDialog()");
-
     setState(() {
       openFolderDialog(widget);
     });
-
   }
 
   void onPositionChanged(Offset position) {
-    print("onPositionChanged(Offset position): ${this.label}");
+    //print("onPositionChanged(Offset position): ${this.label}");
     setState(() {
       currentPosition = position;
       
