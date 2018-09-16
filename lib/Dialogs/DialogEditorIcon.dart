@@ -93,9 +93,12 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       textColor: Colors.white, 
       child: new Text("Delete Element"), 
       onPressed: () {
-        widget.deleteCallback(widget.iconWidget);
 
-        Navigator.pop(context);
+        widget.iconWidget.key.currentState.controller.reverse().then((err) {
+          widget.deleteCallback(widget.iconWidget);
+
+          Navigator.pop(context);
+        });
       }, 
       splashColor: Colors.redAccent);
   }
