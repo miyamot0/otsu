@@ -40,7 +40,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   Color background = Colors.orangeAccent;
 
-  Size stripSizeLocal;
   String dir;
 
   final stackElements = <Widget>[];
@@ -69,6 +68,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void loadFromDatabase() async {
+    print("loadFromDatabase()");
     dir = (await getApplicationDocumentsDirectory()).path;
 
     iconDb = new IconDatabase();
@@ -153,7 +153,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   Future<bool> _isIconOverlappingWithFolder(ReactiveIconWidget widget) async {
-    //print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
+    print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
 
     var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
                                 .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
@@ -195,13 +195,15 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void moveIconToTop(Widget widget) async {
-    //print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
+    print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
 
     ReactiveIconWidget iconHolder;
     if (widget == null)
     {
       if (boardSettings.checkIsInSingleMode == true)
       {
+        print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+
         for (var i = 0; i < stackElements.length; i++)
         {
           // Skip if not an icon
@@ -219,6 +221,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       }
       else
       {
+        print("VisualFieldWidget: moveIconToTop() == In Frame Mode");
+
         for (var i = 0; i < stackElements.length; i++)
         {
           // Skip if not an icon
@@ -245,6 +249,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (boardSettings.checkIsInSingleMode == true)
     {
+      print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+
       for (var i = 0; i < stackElements.length; i++)
       {
         // Skip if not an icon
@@ -278,6 +284,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
     else if (boardSettings.checkIsInSingleMode == false)
     {
+      print("VisualFieldWidget: moveIconToTop() == Is In Frame Mode");
+
       for (var i = 0; i < stackElements.length; i++)
       {
         // Skip if not an icon
@@ -288,6 +296,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         iconHolder.key.currentState.setState(() 
         {
             iconHolder.key.currentState.isInPlay = _isWithinStrip(iconHolder);
+
+            print("Icon ${iconHolder.key.currentState.label} status = ${iconHolder.key.currentState.isInPlay}");
         });
       }
 
@@ -304,7 +314,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _saveLatestStack(Widget widget) async {
-    //debugPrint("_saveLatestStack() " + new DateTime.now().toString());
+    print("_saveLatestStack() " + new DateTime.now().toString());
 
     if (iconDb == null) return;
 
@@ -358,7 +368,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _removeFromDatabase(Widget widget) async {
-    //print("_removeFromStack(Widget widget)");
+    print("_removeFromStack(Widget widget)");
 
     if (widget is ReactiveIconWidget)
     {
@@ -521,7 +531,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// This disables debug mode (hides buttons)
   void _resumeChildMode() async {
-    //print('_resumeChildMode()');
+    print('_resumeChildMode()');
 
     setState(() {
       inDebugMode = false;
@@ -552,7 +562,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void toggleDebugMode() {
-    //print("toggleDebugMode()");
+    print("toggleDebugMode()");
 
     setState(() {
       inDebugMode = true;
@@ -583,7 +593,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void emitSpeech() async {
-    //print("emitSpeech()");
+    print("emitSpeech()");
 
     if (boardSettings.checkIsInSingleMode == true)
     {
@@ -629,13 +639,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   bool _isWithinStrip(ReactiveIconWidget icon) {
-    //debugPrint("_isWithinStrip");
+    print("_isWithinStrip");
 
-    if (stripSizeLocal == null) return false;
+    if (sentenceStripReference == null) return false;
 
-    if (icon.key.currentState.currentPosition.dy > stripSizeLocal.height) return false;
+    if (icon.key.currentState.currentPosition.dy > sentenceStripReference.key.currentState.stripSize.height) return false;
 
-    if (icon.key.currentState.currentPosition.dx > stripSizeLocal.width)  return false;
+    if (icon.key.currentState.currentPosition.dx > sentenceStripReference.key.currentState.stripSize.width)  return false;
 
     return true;
   }
@@ -644,7 +654,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void triggerEditor(Widget widget) async {
-    //debugPrint("_triggerIconEditor()");
+    print("_triggerIconEditor()");
 
     if (widget is ReactiveIconWidget)
     {
@@ -719,7 +729,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
-    //debugPrint("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
+    print("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
 
     var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
 
@@ -736,7 +746,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
-    //debugPrint("_buildFolderPopupDialog, length = ${storedIcons.length}");
+    print("_buildFolderPopupDialog, length = ${storedIcons.length}");
 
     List<Container> imgs = [];
 
@@ -779,7 +789,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _restoreIconFromStorage(SavedIcon savedIcon) async {
-    //debugPrint("_restoreIconFromStorage(SavedIcon savedIcon)");
+    print("_restoreIconFromStorage(SavedIcon savedIcon)");
 
     savedIcon.isStored = false;
     savedIcon.storedId = -1;
@@ -808,13 +818,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-    if (stripSizeLocal == null)
-    {
-      var mediaQueryData = MediaQuery.of(context);
-      stripSizeLocal = Size((mediaQueryData.size.width - (20.0)) * 0.8, (mediaQueryData.size.height - (20.0)) * 0.25);      
-    }
-
     if (isInStartup == true)
     {
       Future.delayed(const Duration(seconds: 2)).then((_)
@@ -856,17 +859,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void toggleSentenceStrip() {
-    //debugPrint("toggleSentenceStrip(): ${boardSettings == null}");
+    print("toggleSentenceStrip(): ${boardSettings == null}");
 
     if (boardSettings == null) return;
 
     if (boardSettings.checkIsInSingleMode == true && stackElements.contains(sentenceStripReference))
     {
+      print("toggleSentenceStrip() remove strip");
       stackElements.remove(sentenceStripReference);
     }
 
     if (boardSettings.checkIsInSingleMode == false && !stackElements.contains(sentenceStripReference))
     {
+      print("toggleSentenceStrip() add strip");
       stackElements.insert(0, sentenceStripReference);
     }
   }
@@ -875,7 +880,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToIconCreatorScreen(BuildContext context) async {
-    //debugPrint("_navigateToIconCreatorScreen()");
+    print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
 
     if (result == null) return;
@@ -920,7 +925,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderCreatorScreen(BuildContext context) async {
-    //debugPrint("_navigateToIconCreatorScreen()");
+    print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FolderCreatorScreen(dir)));
 
     if (result == null) return;
