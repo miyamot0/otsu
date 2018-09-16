@@ -1,29 +1,28 @@
 package com.example.otsu;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.WindowManager;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import io.flutter.app.FlutterActivity;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        GeneratedPluginRegistrant.registerWith(this);
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
-}
-
-/*
-public class MainActivity extends FlutterActivity implements TextToSpeech.OnInitListener {
     private static String CHANNEL = "com.example.otsu/tts";
 
     public TextToSpeech speaker;
     String toSpeak;
 
-    public MainActivity ref = this;
     private final String tag = "TTS";
 
     @Override
@@ -32,53 +31,45 @@ public class MainActivity extends FlutterActivity implements TextToSpeech.OnInit
         GeneratedPluginRegistrant.registerWith(this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        speaker = new TextToSpeech(ref, ref);
-
-        new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(new MethodChannel.MethodCallHandler() {
+        speaker = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
             @Override
-            public void onMethodCall(MethodCall methodCall, Result result) {
-                Map<String, Object> arguments =  methodCall.arguments();
-                Toast.makeText(getApplicationContext(),"Pre-text",Toast.LENGTH_SHORT).show();
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = speaker.setLanguage(Locale.US);
 
-                if (methodCall.method.equals("speak"))
-                {
-                    Toast.makeText(getApplicationContext(),"In call",Toast.LENGTH_SHORT).show();
+                    if (result==TextToSpeech.LANG_MISSING_DATA || result==TextToSpeech.LANG_NOT_SUPPORTED) {
+                        System.out.println("This Language is not supported");
+                    }
+                }
+                else {
+                    System.out.println("Initialization Failed");
+                }
+            }
+        });
 
-                    toSpeak = (String) arguments.get("from");
+        new MethodChannel(getFlutterView(), CHANNEL).setMethodCallHandler(
+            new MethodCallHandler() {
+                @Override
+                public void onMethodCall(MethodCall methodCall, Result result) {
 
-                    if (speaker == null)
+                    Map<String, Object> arguments =  methodCall.arguments();
+
+                    toSpeak = (String) arguments.get("output");
+
+                    if (methodCall.method.equals("speak"))
                     {
-                        Toast.makeText(getApplicationContext(),"Was Null",Toast.LENGTH_SHORT).show();
-
-                        //AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-                        //audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 20, 0);
-
+                        SpeakRoute(toSpeak);
                     }
                     else
                     {
-                        Toast.makeText(getApplicationContext(),"Was Not Null",Toast.LENGTH_SHORT).show();
-
-                        SpeakRoute(toSpeak);
+                        result.notImplemented();
                     }
-
-                    result.success(1);
                 }
-          }
-        });
+            }
+        );
     }
 
-    @Override
-    public void onInit(int i)
-    {
-        if (i == TextToSpeech.SUCCESS)
-        {
-            SpeakRoute(toSpeak);
-        }
-    }
-
-    private void SpeakRoute(String text)
-    {
+    private void SpeakRoute(String text) {
         if (speaker.isSpeaking()) return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -94,8 +85,6 @@ public class MainActivity extends FlutterActivity implements TextToSpeech.OnInit
     @SuppressWarnings("deprecation")
     private void ApiUnder20(String text)
     {
-        Toast.makeText(getApplicationContext(),"ApiUnder20",Toast.LENGTH_SHORT).show();
-
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
         speaker.speak(text, TextToSpeech.QUEUE_FLUSH, map);
@@ -104,10 +93,7 @@ public class MainActivity extends FlutterActivity implements TextToSpeech.OnInit
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void ApiOver21(String text)
     {
-        Toast.makeText(getApplicationContext(),"ApiOver21",Toast.LENGTH_SHORT).show();
-
         String utteranceId=this.hashCode() + "";
         speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
     }
 }
-*/

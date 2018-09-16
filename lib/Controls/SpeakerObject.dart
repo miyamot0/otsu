@@ -13,7 +13,7 @@ class SpeakerObject extends StatefulWidget {
 
   SpeakerObject(this.emitSpeech, this.toggleDebug);
 
-  static const platform = const MethodChannel('com.example.dragdropexample/tts');
+  static const platform = const MethodChannel('com.example.otsu/tts');
 
   /// Pipe text into platform-specific TTS
   /// 
