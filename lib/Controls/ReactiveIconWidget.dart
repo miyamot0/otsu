@@ -309,30 +309,10 @@ class IconBox extends StatelessWidget {
       );
     }
 
-    /*
-    Container avatar = Container(
-      width: inheritedIconState.scale * inheritedIconState.defaultWidth,
-      height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-      decoration: BoxDecoration(
-        border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,      
-        color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: centerColumn,
-          )
-        ]
-      ),
-    );
-    */
-
     Draggable draggable = new Draggable(
-      //feedback: avatar,
       feedback: item,
       maxSimultaneousDrags: controller.isAnimating ? 0 : 1,
       ignoringFeedbackSemantics: false,
-      //ignoringFeedbackSemantics: true,
       child: Opacity(
         child: item,
         opacity: opacity,

@@ -8,12 +8,14 @@ import 'package:flutter/services.dart';
 import 'Controls/VisualFieldWidget.dart';
 
 void main() {
+  SystemChrome.setEnabledSystemUIOverlays([]).then((_) {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight, 
     DeviceOrientation.landscapeLeft]).then((_)
   {
     runApp(new MainApp());
   }); 
+  });
 }
 
 class MainApp extends StatefulWidget {
@@ -28,7 +30,12 @@ class ApplicationState extends State<MainApp> {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       //showPerformanceOverlay: true,
-      home: SafeArea(child: Scaffold(body: VisualFieldWidget())),
+      home: SafeArea(
+        child: Scaffold(
+          body: VisualFieldWidget(),
+          resizeToAvoidBottomPadding: false,
+        ),
+      ),
     );
   }
 }
