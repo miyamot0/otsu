@@ -18,41 +18,43 @@ class ReactiveIconWidget extends StatefulWidget {
 
   final GlobalKey<ReactiveIconWidgetState> key = GlobalKey<ReactiveIconWidgetState>();
 
-  ReactiveIconWidget({@required this.label, 
-                      @required this.assetPath,
-                      @required this.isInPlay,
-                      @required this.isEmbbedded,
-                      @required this.isInSingleMode,
-                      @required this.isStored,
-                      @required this.isPinnedToLocation,
-                      @required this.moveToTop,
-                      @required this.launchEditor,
-                      @required this.iconType,
-                      @required this.scale,
-                      @required this.defaultWidth,
-                      @required this.id,
-                      @required this.storedId,
-                      @required this.initialPosition}) : super(key: GlobalKey());
+  ReactiveIconWidget({
+    @required this.label, 
+    @required this.assetPath,
+    @required this.isInPlay,
+    @required this.isEmbbedded,
+    @required this.isInSingleMode,
+    @required this.isStored,
+    @required this.isPinnedToLocation,
+    @required this.moveToTop,
+    @required this.launchEditor,
+    @required this.iconType,
+    @required this.scale,
+    @required this.defaultWidth,
+    @required this.id,
+    @required this.storedId,
+    @required this.initialPosition}) : super(key: GlobalKey());
 
   @override
-  ReactiveIconWidgetState createState() => ReactiveIconWidgetState(label: label, 
-                                                                   assetPath: assetPath,
-                                                                   isInPlay: isInPlay, 
-                                                                   isEmbbedded: isEmbbedded,
-                                                                   isInSingleMode: isInSingleMode,
-                                                                   isStored: isStored,
-                                                                   isPinnedToLocation: isPinnedToLocation,
-                                                                   moveToTop: moveToTop, 
-                                                                   launchEditor: launchEditor,
-                                                                   scale: scale,
-                                                                   defaultWidth: defaultWidth,
-                                                                   currentPosition: initialPosition,
-                                                                   key: key);
+  ReactiveIconWidgetState createState() => ReactiveIconWidgetState(
+    label: label, 
+    assetPath: assetPath,
+    isInPlay: isInPlay, 
+    isEmbbedded: isEmbbedded,
+    isInSingleMode: isInSingleMode,
+    isStored: isStored,
+    isPinnedToLocation: isPinnedToLocation,
+    moveToTop: moveToTop, 
+    launchEditor: launchEditor,
+    scale: scale,
+    defaultWidth: defaultWidth,
+    currentPosition: initialPosition,
+    key: key);
 
   static InheritedIconState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedIconState) as InheritedIconState;
 }
 
-class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
+class ReactiveIconWidgetState extends State<ReactiveIconWidget> with SingleTickerProviderStateMixin{
   Function moveToTop;
   Function launchEditor;
   String label, assetPath;
@@ -61,39 +63,72 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> {
   double defaultWidth = 200.0;
   double scale;
 
+  AnimationController controller;
+
   ReactiveIconWidgetState({
-      Key key,
-      this.label, 
-      this.assetPath,
-      this.isInPlay,
-      this.isEmbbedded,
-      this.isInSingleMode,
-      this.isStored,
-      this.isPinnedToLocation,
-      this.moveToTop,
-      this.launchEditor,
-      this.scale,
-      this.defaultWidth,
-      this.currentPosition});
+    Key key,
+    this.label, 
+    this.assetPath,
+    this.isInPlay,
+    this.isEmbbedded,
+    this.isInSingleMode,
+    this.isStored,
+    this.isPinnedToLocation,
+    this.moveToTop,
+    this.launchEditor,
+    this.scale,
+    this.defaultWidth,
+    this.currentPosition});
+
+	@override
+	void initState(){
+	  super.initState();
+
+	  controller = new AnimationController(
+		  duration: const Duration(milliseconds: 500), 
+		  vsync: this,
+      lowerBound: 0.0,
+      upperBound: 1.0,
+	  );
+
+	  controller.addListener(()
+    {
+		  setState((){});
+	  });
+
+	  controller.forward();
+	}
+
+	@override
+	void dispose(){
+
+	  controller.dispose();
+	  super.dispose();
+	}
 
   @override
   Widget build(BuildContext context) {
-      return InheritedIconState(
-        onTap: onTap,
-        onPositionChanged: onPositionChanged,
-        label: label,
-        assetPath: assetPath,
-        isInPlay: isInPlay,
-        isEmbbedded: isEmbbedded,
-        isInSingleMode: isInSingleMode,
-        isStored: isStored,
-        currentPosition: currentPosition,
-        defaultWidth: defaultWidth,
-        isPinnedToLocation: isPinnedToLocation,        
-        scale: scale,        
-        child: IconTree(),
-        key: GlobalKey(),
-      );
+    IconBox box = IconBox(
+      opacity: controller.value,
+      controller: controller,
+    );
+
+    return InheritedIconState(
+      onTap: onTap,
+      onPositionChanged: onPositionChanged,
+      label: label,
+      assetPath: assetPath,
+      isInPlay: isInPlay,
+      isEmbbedded: isEmbbedded,
+      isInSingleMode: isInSingleMode,
+      isStored: isStored,
+      currentPosition: currentPosition,
+      defaultWidth: defaultWidth,
+      isPinnedToLocation: isPinnedToLocation,
+      scale: scale,
+      child: box,
+      key: GlobalKey(),
+    );
   }
 
   /// Launch editor
@@ -173,13 +208,6 @@ class InheritedIconState extends InheritedWidget {
   }
 }
 
-class IconTree extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return IconBox();
-  }
-}
-
 class IconBox extends StatelessWidget {
   static const defaultStyle = TextStyle(
     color: Colors.black,
@@ -203,6 +231,11 @@ class IconBox extends StatelessWidget {
     color: Colors.black, 
     width: 5.0
   );
+
+  final double opacity;
+  final AnimationController controller;
+
+  IconBox({this.opacity, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -276,6 +309,7 @@ class IconBox extends StatelessWidget {
       );
     }
 
+    /*
     Container avatar = Container(
       width: inheritedIconState.scale * inheritedIconState.defaultWidth,
       height: inheritedIconState.scale * inheritedIconState.defaultWidth,
@@ -291,14 +325,18 @@ class IconBox extends StatelessWidget {
         ]
       ),
     );
-
-
+    */
 
     Draggable draggable = new Draggable(
-      feedback: avatar,
-      maxSimultaneousDrags: 1,
+      //feedback: avatar,
+      feedback: item,
+      maxSimultaneousDrags: controller.isAnimating ? 0 : 1,
       ignoringFeedbackSemantics: false,
-      child: item,
+      //ignoringFeedbackSemantics: true,
+      child: Opacity(
+        child: item,
+        opacity: opacity,
+      ),
       childWhenDragging: new Opacity(
         opacity: 0.0, 
         child: item
@@ -329,9 +367,9 @@ class IconBox extends StatelessWidget {
     );
 
     return new Positioned(
-      left: inheritedIconState.currentPosition.dx, 
+      left: inheritedIconState.currentPosition.dx,
       key: GlobalKey(),
-      top: inheritedIconState.currentPosition.dy, 
+      top: inheritedIconState.currentPosition.dy,
       child: draggable);
   }
 }

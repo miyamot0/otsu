@@ -68,7 +68,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void loadFromDatabase() async {
-    print("loadFromDatabase()");
+    //print("loadFromDatabase()");
     dir = (await getApplicationDocumentsDirectory()).path;
 
     iconDb = new IconDatabase();
@@ -85,7 +85,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     setState(() {
       for (var i = 0; i < icons.length; i++) {
-
         if (icons[i].isFolder == false)
         {
           if (icons[i].isStored == true) continue;
@@ -153,7 +152,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   Future<bool> _isIconOverlappingWithFolder(ReactiveIconWidget widget) async {
-    print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
+    //print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
 
     var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
                                 .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
@@ -181,8 +180,16 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
         await iconDb.update(savedIcon);
 
-        setState(() {
-          stackElements.remove(widget);          
+        //setState(() 
+        //{
+        //  stackElements.remove(widget);          
+        //});
+
+        widget.key.currentState.controller.reverse().then((err) {
+        setState(() 
+          {
+            stackElements.remove(widget);          
+          });
         });
 
         return true;
@@ -195,14 +202,14 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void moveIconToTop(Widget widget) async {
-    print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
+    //print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
 
     ReactiveIconWidget iconHolder;
     if (widget == null)
     {
       if (boardSettings.checkIsInSingleMode == true)
       {
-        print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+        //print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
 
         for (var i = 0; i < stackElements.length; i++)
         {
@@ -211,17 +218,15 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
           iconHolder = stackElements[i] as ReactiveIconWidget;
 
-          if (iconHolder != widget && iconHolder.key.currentState.isInPlay == true)
+          iconHolder.key.currentState.setState(() 
           {
-            iconHolder.key.currentState.setState(() {
-              iconHolder.key.currentState.isInPlay = false;
-            });
-          }
+            iconHolder.key.currentState.isInPlay = false;
+          });
         }        
       }
       else
       {
-        print("VisualFieldWidget: moveIconToTop() == In Frame Mode");
+        //print("VisualFieldWidget: moveIconToTop() == In Frame Mode");
 
         for (var i = 0; i < stackElements.length; i++)
         {
@@ -249,7 +254,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (boardSettings.checkIsInSingleMode == true)
     {
-      print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+      //print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
 
       for (var i = 0; i < stackElements.length; i++)
       {
@@ -260,31 +265,35 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
         if (iconHolder != widget && iconHolder.key.currentState.isInPlay == true)
         {
-          iconHolder.key.currentState.setState(() {
+          iconHolder.key.currentState.setState(() 
+          {
             iconHolder.key.currentState.isInPlay = false;
           });
         }
       }
 
-      setState(() {
+      setState(() 
+      {
         stackElements.remove(widget);
         stackElements.add(widget);
       });
 
       if (widget is ReactiveIconWidget)
       {
-        widget.key.currentState.setState(() {
+        widget.key.currentState.setState(() 
+        {
           widget.key.currentState.isInPlay = true;
         });
 
-        if (boardSettings.checkIsAutoSpeaking) {
+        if (boardSettings.checkIsAutoSpeaking) 
+        {
           emitSpeech();
         }
       }
     }
     else if (boardSettings.checkIsInSingleMode == false)
     {
-      print("VisualFieldWidget: moveIconToTop() == Is In Frame Mode");
+      //print("VisualFieldWidget: moveIconToTop() == Is In Frame Mode");
 
       for (var i = 0; i < stackElements.length; i++)
       {
@@ -297,11 +306,12 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         {
             iconHolder.key.currentState.isInPlay = _isWithinStrip(iconHolder);
 
-            print("Icon ${iconHolder.key.currentState.label} status = ${iconHolder.key.currentState.isInPlay}");
+            //print("Icon ${iconHolder.key.currentState.label} status = ${iconHolder.key.currentState.isInPlay}");
         });
       }
 
-      setState(() {
+      setState(() 
+      {
         stackElements.remove(widget);
         stackElements.add(widget);
       });    
@@ -314,7 +324,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _saveLatestStack(Widget widget) async {
-    print("_saveLatestStack() " + new DateTime.now().toString());
+    //print("_saveLatestStack() " + new DateTime.now().toString());
 
     if (iconDb == null) return;
 
@@ -368,13 +378,14 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _removeFromDatabase(Widget widget) async {
-    print("_removeFromStack(Widget widget)");
+    //print("_removeFromStack(Widget widget)");
 
     if (widget is ReactiveIconWidget)
     {
       await iconDb.delete(widget.id);
 
-      setState(() {
+      setState(() 
+      {
         stackElements.remove(widget);
       });
     }
@@ -383,7 +394,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
        await iconDb.deleteFolder(widget.id);
 
-      setState(() {
+      setState(() 
+      {
         stackElements.remove(widget);
       });
     }
@@ -403,7 +415,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         mini: false,
         child: Icon(Icons.volume_up),
         onPressed: () async {
-          setState(() {
+          setState(() 
+          {
             boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
 
             //print("autoSpeaking Delegate: Status = ${boardSettings.checkIsAutoSpeaking}");
@@ -429,7 +442,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         mini: false,
         child: Icon(Icons.fingerprint),
         onPressed: () async {
-          setState(() {
+          setState(() 
+          {
             boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
 
             //print("autoDeselect Delegate: Status = ${boardSettings.checkIsAutoDeselecting}");
@@ -455,7 +469,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         mini: false,
         child: Icon(Icons.border_all),
         onPressed: () async {
-          setState(() {
+          setState(() 
+          {
             boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
 
             //print("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
@@ -859,19 +874,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void toggleSentenceStrip() {
-    print("toggleSentenceStrip(): ${boardSettings == null}");
+    //print("toggleSentenceStrip(): ${boardSettings == null}");
 
     if (boardSettings == null) return;
 
     if (boardSettings.checkIsInSingleMode == true && stackElements.contains(sentenceStripReference))
     {
-      print("toggleSentenceStrip() remove strip");
+      //print("toggleSentenceStrip() remove strip");
       stackElements.remove(sentenceStripReference);
     }
 
     if (boardSettings.checkIsInSingleMode == false && !stackElements.contains(sentenceStripReference))
     {
-      print("toggleSentenceStrip() add strip");
+      //print("toggleSentenceStrip() add strip");
       stackElements.insert(0, sentenceStripReference);
     }
   }
@@ -880,7 +895,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToIconCreatorScreen(BuildContext context) async {
-    print("_navigateToIconCreatorScreen()");
+    //print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
 
     if (result == null) return;
@@ -925,7 +940,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderCreatorScreen(BuildContext context) async {
-    print("_navigateToIconCreatorScreen()");
+    //print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FolderCreatorScreen(dir)));
 
     if (result == null) return;
