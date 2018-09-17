@@ -7,11 +7,6 @@
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
-class AnimatedMenuOrientation {
-  static const HORIZONTAL = 0;
-  static const VERTICAL = 1;
-}
-
 class AnimatedMenuItem extends FloatingActionButton {
   final FloatingActionButton currentButton;
   String labelText;
@@ -22,20 +17,16 @@ class AnimatedMenuItem extends FloatingActionButton {
   final bool labelHasShadow;
   final bool hasLabel;
 
-  Function test = () {
-      
-  };
-
-  AnimatedMenuItem(
-      {this.currentButton,
-        this.labelText,
-        this.labelFontSize = 14.0,
-        this.labelColor,
-        this.labelBackgroundColor,
-        this.labelShadowColor,
-        this.labelHasShadow = true,
-        this.hasLabel = false})
-      : assert(currentButton != null);
+  AnimatedMenuItem({
+    this.currentButton,
+    this.labelText,
+    this.labelFontSize = 14.0,
+    this.labelColor,
+    this.labelBackgroundColor,
+    this.labelShadowColor,
+    this.labelHasShadow = true,
+    this.hasLabel = false})
+  : assert(currentButton != null);
 
   Widget returnLabel() {
     return Container(
@@ -79,21 +70,21 @@ class AnimatedMenuWidget extends StatefulWidget {
   final bool isLeft;
   Function updateState;
 
-  AnimatedMenuWidget(
-      {this.parentButton,
-        this.parentButtonBackground,
-        this.childButtons,
-        this.onMainButtonPressed,
-        this.orientation = 1,
-        this.hasBackground = true,
-        this.backgroundColor = Colors.white30,
-        this.parentHeroTag = "parent",
-        this.finalButtonIcon,
-        this.animationDuration = 180,
-        this.childPadding = 4.0,
-        this.isLeft = false,
-        this.hasNotch = false})
-      : assert(parentButton != null);
+  AnimatedMenuWidget({
+    this.parentButton,
+    this.parentButtonBackground,
+    this.childButtons,
+    this.onMainButtonPressed,
+    this.orientation = 1,
+    this.hasBackground = true,
+    this.backgroundColor = Colors.white30,
+    this.parentHeroTag = "parent",
+    this.finalButtonIcon,
+    this.animationDuration = 180,
+    this.childPadding = 4.0,
+    this.isLeft = false,
+    this.hasNotch = false})
+  : assert(parentButton != null);
 
   _AnimatedMenuWidget createState() => _AnimatedMenuWidget();
 }
@@ -107,16 +98,22 @@ class _AnimatedMenuWidget extends State<AnimatedMenuWidget> with TickerProviderS
   @override
   void initState() {
     this._animationController = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: widget.animationDuration));
+      vsync: this,
+      duration: Duration(
+        milliseconds: widget.animationDuration
+      )
+    );
 
-    this._parentController = AnimationController(vsync: this, 
-                                                 duration: Duration(milliseconds: 200));
+    this._parentController = AnimationController(
+      vsync: this, 
+      duration: Duration(milliseconds: 200),
+      value: 1.0
+    );
 
     super.initState();
 
     widget.updateState = () {
-        setState(() {});
+      setState(() {});
     };
   }
 
@@ -137,197 +134,201 @@ class _AnimatedMenuWidget extends State<AnimatedMenuWidget> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    // Start dismissed
-    this._animationController.reverse();
-
-    var hasChildButtons = widget.childButtons != null && widget.childButtons.length > 0;
-
-    this._parentController.forward();
-
-    /*
-    if (!this._parentController.isAnimating) {
-      if (this._parentController.isCompleted) {
-        this._parentController.forward().then((s) {
-          this._parentController.reverse().then((e) {
-            this._parentController.forward();
-          });
-        });
-      }
-      if (this._parentController.isDismissed) {
-        this._parentController.reverse().then((s) {
-          this._parentController.forward();
-        });
-      }
-    }
-    */
-
-    var mainFAB = AnimatedBuilder(
-        animation: this._parentController,
-        builder: (BuildContext context, Widget child) {
-          return Transform(
-              transform: new Matrix4.diagonal3(vector.Vector3(
-                  _parentController.value,
-                  _parentController.value,
-                  _parentController.value)),
-              alignment: FractionalOffset.center,
-              child: FloatingActionButton(
-                  isExtended: false,
-                  heroTag: widget.parentHeroTag,
-                  backgroundColor: widget.parentButtonBackground,
-                  onPressed: () {
-                    mainActionButtonOnPressed();
-                    if (widget.onMainButtonPressed != null) {
-                      widget.onMainButtonPressed();
-                    }
-                  },
-                  child: !hasChildButtons
-                      ? widget.parentButton
-                      : AnimatedBuilder(
-                      animation: this._animationController,
-                      builder: (BuildContext context, Widget child) {
-                        return Transform(
-                          transform: new Matrix4.rotationZ(this._animationController.value * 0.8),
-                          alignment: FractionalOffset.center,
-                          child: new Icon(
-                              this._animationController.isDismissed
-                                  ? widget.parentButton.icon
-                                  : widget.finalButtonIcon == null
-                                  ? Icons.close
-                                  : widget.finalButtonIcon.icon),
-                        );
-                      })));
-        });
-
-    if (hasChildButtons) {
-      var mainFloatingButton = AnimatedBuilder(
-          animation: this._animationController,
-          builder: (BuildContext context, Widget child) {
-            return Transform.rotate(
-                angle: this._animationController.value * 0.8, child: mainFAB);
-          });
-
-      var childButtonsList = widget.childButtons == null ||
-          widget.childButtons.length == 0
-          ? List<Widget>()
-          : List.generate(widget.childButtons.length, (index) {
-
-            var intervalValue = index == 0 ? 0.9 : ((widget.childButtons.length - index) / widget.childButtons.length) - 0.2;
-
-            intervalValue = intervalValue < 0.0 ? (1 / index) * 0.5 : intervalValue;
-
-            var childFAB = FloatingActionButton(
-                onPressed: () {
-                  if (widget.childButtons[index].currentButton.onPressed != null) 
-                  {
-                    widget.childButtons[index].currentButton.onPressed();
-                  }
-
-                  this._animationController.reverse();
-                },
-                child: widget.childButtons[index].currentButton.child,
-                heroTag: widget.childButtons[index].currentButton.heroTag,
-                backgroundColor: widget.childButtons[index].currentButton.backgroundColor,
-                mini: true,
-                tooltip: widget.childButtons[index].currentButton.tooltip,
-                key: widget.childButtons[index].currentButton.key,
-                elevation: widget.childButtons[index].currentButton.elevation,
-                foregroundColor: widget.childButtons[index].currentButton.foregroundColor,
-                highlightElevation: widget.childButtons[index].currentButton.highlightElevation,
-                isExtended: widget.childButtons[index].currentButton.isExtended,
-                shape: widget.childButtons[index].currentButton.shape);
-
-            return Positioned(
-
-              left: (!widget.isLeft) ? null : widget.orientation == AnimatedMenuOrientation.VERTICAL
-                  ? 8.0
-                  : ((widget.childButtons.length - index) * 55.0) + 15,
-              right: (widget.isLeft) ? null : widget.orientation == AnimatedMenuOrientation.VERTICAL
-                  ? 8.0
-                  : ((widget.childButtons.length - index) * 55.0) + 15,
-              bottom: widget.orientation == AnimatedMenuOrientation.VERTICAL
-                  ? ((widget.childButtons.length - index) * 55.0) + 15
-                  : 8.0,
-              child: 
-                !widget.isLeft ? 
-                  Row(children: [
-                    ScaleTransition(
-                        scale: CurvedAnimation(
-                          parent: this._animationController,
-                          curve: Interval(intervalValue, 1.0, curve: Curves.linear),
-                        ),
-                        alignment: FractionalOffset.center,
-                        child: (!widget.childButtons[index].hasLabel) ||
-                            widget.orientation == AnimatedMenuOrientation.HORIZONTAL ? Container() : Container(
-                            padding: EdgeInsets.only(right: widget.childPadding),
-                            child: widget.childButtons[index].returnLabel())),
-                    ScaleTransition(
-                        scale: CurvedAnimation(
-                          parent: this._animationController,
-                          curve:
-                          Interval(intervalValue, 1.0, curve: Curves.linear),
-                        ),
-                        alignment: FractionalOffset.center,
-                        child: childFAB)
-                  ]) :
-                    Row(children: [
-                      ScaleTransition(
-                          scale: CurvedAnimation(
-                            parent: this._animationController,
-                            curve:
-                            Interval(intervalValue, 1.0, curve: Curves.linear),
-                          ),
-                          alignment: FractionalOffset.center,
-                          child: childFAB),                      
-                      ScaleTransition(
-                          scale: CurvedAnimation(
-                            parent: this._animationController,
-                            curve: Interval(intervalValue, 1.0, curve: Curves.linear),
-                          ),
-                          alignment: FractionalOffset.center,
-                          child: (!widget.childButtons[index].hasLabel) ||
-                              widget.orientation == AnimatedMenuOrientation.HORIZONTAL ? Container() : Container(
-                              padding: EdgeInsets.only(left: widget.childPadding),
-                              child: widget.childButtons[index].returnLabel())),
-
-                    ])                  
-                  ,
-            );
-      });
-
-      var unicornDialWidget = Container(
-          height: double.infinity,
-          child: Stack(
-              alignment: FractionalOffset.bottomRight,
-              overflow: Overflow.visible,
-              children: childButtonsList.toList()
-                ..add(Positioned(
-                    right: null, bottom: null, child: mainFloatingButton))));
-
-      var modal = ScaleTransition(
-          scale: CurvedAnimation(
-            parent: this._animationController,
-            curve: Interval(1.0, 1.0, curve: Curves.linear),
+    AnimatedBuilder mainFAB = AnimatedBuilder(
+      animation: this._parentController,
+      builder: (BuildContext context, Widget child) {
+        return Transform(
+          transform: new Matrix4.diagonal3(
+            vector.Vector3(
+              _parentController.value,
+              _parentController.value,
+              _parentController.value
+            )
           ),
           alignment: FractionalOffset.center,
-          child: GestureDetector(
-              onTap: mainActionButtonOnPressed,
-              child: Container(
-                color: widget.backgroundColor,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-              )));
+          child: FloatingActionButton(
+            isExtended: false,
+            heroTag: widget.parentHeroTag,
+            backgroundColor: widget.parentButtonBackground,
+            onPressed: () 
+            {
+              mainActionButtonOnPressed();
+
+              if (widget.onMainButtonPressed != null) 
+              {
+                widget.onMainButtonPressed();
+              }
+            },
+            child: AnimatedBuilder(
+              animation: this._animationController,
+              builder: (BuildContext context, Widget child) {
+                return Transform(
+                  transform: new Matrix4.rotationZ(
+                    this._animationController.value * 0.8
+                  ),
+                  alignment: FractionalOffset.center,
+                  child: new Icon(
+                    this._animationController.isDismissed
+                      ? widget.parentButton.icon
+                      : widget.finalButtonIcon == null
+                      ? Icons.close
+                      : widget.finalButtonIcon.icon
+                    ),
+                );
+              })
+            )
+          );
+      });
+
+      AnimatedBuilder mainFloatingButton = AnimatedBuilder(
+        animation: this._animationController,
+        builder: (BuildContext context, Widget child) {
+          return Transform.rotate(
+            angle: this._animationController.value * 0.8, 
+            child: mainFAB,
+          );
+        });
+
+      List<Widget> childButtonsList = List.generate(widget.childButtons.length, (index) {
+        double intervalValue = index == 0 ? 0.9 : ((widget.childButtons.length - index) / widget.childButtons.length) - 0.2;
+        intervalValue = intervalValue < 0.0 ? (1 / index) * 0.5 : intervalValue;
+
+        FloatingActionButton childFAB = FloatingActionButton(
+          onPressed: () 
+          {
+            if (widget.childButtons[index].currentButton.onPressed != null) 
+            {
+              widget.childButtons[index].currentButton.onPressed();
+            }
+
+            this._animationController.reverse();
+          },
+          child: widget.childButtons[index].currentButton.child,
+          heroTag: widget.childButtons[index].currentButton.heroTag,
+          backgroundColor: widget.childButtons[index].currentButton.backgroundColor,
+          mini: true,
+          tooltip: widget.childButtons[index].currentButton.tooltip,
+          key: widget.childButtons[index].currentButton.key,
+          elevation: widget.childButtons[index].currentButton.elevation,
+          foregroundColor: widget.childButtons[index].currentButton.foregroundColor,
+          highlightElevation: widget.childButtons[index].currentButton.highlightElevation,
+          isExtended: widget.childButtons[index].currentButton.isExtended,
+          shape: widget.childButtons[index].currentButton.shape,
+        );
+
+        return Positioned(
+          left: (!widget.isLeft) ? null : 8.0,
+          right: (widget.isLeft) ? null : 8.0,
+          bottom: ((widget.childButtons.length - index) * 55.0) + 15,
+          child: !widget.isLeft ?
+            Row(children: [
+              ScaleTransition(
+                  scale: CurvedAnimation(
+                    parent: this._animationController,
+                    curve: Interval(
+                      intervalValue, 1.0, 
+                      curve: Curves.linear,
+                    ),
+                  ),
+                  alignment: FractionalOffset.center,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      right: widget.childPadding,
+                    ),
+                    child: widget.childButtons[index].returnLabel(),
+                  ),
+                ),
+              ScaleTransition(
+                scale: CurvedAnimation(
+                  parent: this._animationController,
+                  curve:
+                  Interval(
+                    intervalValue, 1.0, 
+                    curve: Curves.linear,
+                  ),
+                ),
+                alignment: FractionalOffset.center,
+                child: childFAB)
+            ]) :
+            Row(children: [
+              ScaleTransition(
+                scale: CurvedAnimation(
+                  parent: this._animationController,
+                  curve:
+                  Interval(
+                    intervalValue, 1.0, 
+                    curve: Curves.linear,
+                  ),
+                ),
+                alignment: FractionalOffset.center,
+                child: childFAB,
+              ),
+              ScaleTransition(
+                scale: CurvedAnimation(
+                  parent: this._animationController,
+                  curve: Interval(
+                    intervalValue, 1.0, 
+                    curve: Curves.linear,
+                  ),
+                ),
+                alignment: FractionalOffset.center,
+                child: Container(
+                  padding: EdgeInsets.only(
+                    left: widget.childPadding,
+                  ),
+                  child: widget.childButtons[index].returnLabel(),
+                ),
+              ),
+            ]),
+        );
+      });
+
+      Container mainMenuWidget = Container(
+        height: double.infinity,
+        child: Stack(
+          alignment: FractionalOffset.bottomRight,
+          overflow: Overflow.visible,
+          children: childButtonsList.toList()
+            ..add(Positioned(
+                right: null,
+                bottom: null,
+                child: mainFloatingButton,
+              ),
+            ),
+          ),
+        );
+
+      ScaleTransition modal = ScaleTransition(
+        scale: CurvedAnimation(
+          parent: this._animationController,
+          curve: Interval(
+            1.0, 1.0, 
+            curve: Curves.linear,
+          ),
+        ),
+        alignment: FractionalOffset.center,
+        child: GestureDetector(
+          onTap: mainActionButtonOnPressed,
+          child: Container(
+            color: widget.backgroundColor,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+          ),
+        ),
+      );
 
       return widget.hasBackground
-          ? Stack(
+        ? Stack(
           alignment: Alignment.topCenter,
           overflow: Overflow.visible,
           children: [
-            Positioned(right:-16.0, bottom: -16.0, child: modal),
-            unicornDialWidget
+            Positioned(
+              right:-16.0,
+              bottom: -16.0,
+              child: modal,
+            ),
+            mainMenuWidget,
           ])
-          : unicornDialWidget;
-    }
-
-    return mainFAB;
+        : mainMenuWidget;
   }
 }

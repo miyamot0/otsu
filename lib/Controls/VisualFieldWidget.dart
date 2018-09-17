@@ -28,7 +28,7 @@ class VisualFieldWidget extends StatefulWidget {
 }
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
-  bool inDebugMode = false;
+  bool inDebugMode = true;
   bool isInStartup = true;
 
   IconDatabase iconDb;  
@@ -990,7 +990,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     return AnimatedMenuWidget(
       backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
       parentButtonBackground: Colors.redAccent,
-      orientation: AnimatedMenuOrientation.VERTICAL,
       parentButton: Icon(Icons.settings),
       hasBackground: false,
       isLeft: false,

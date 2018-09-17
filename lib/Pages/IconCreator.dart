@@ -76,7 +76,6 @@ class _IconCreatorState extends State<IconCreatorScreen> {
 
       animatedMenuWiget = AnimatedMenuWidget(backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
                                             parentButtonBackground: Colors.redAccent,
-                                            orientation: AnimatedMenuOrientation.VERTICAL,
                                             parentButton: Icon(Icons.edit),                                            
                                             hasBackground: false,
                                             isLeft: true,                                                          
