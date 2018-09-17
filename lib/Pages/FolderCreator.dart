@@ -65,8 +65,6 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
     if (animatedMenuWiget == null)
     {
       animatedMenuWiget = AnimatedMenuWidget(
-        backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-        parentButtonBackground: Colors.redAccent,
         parentButton: Icon(Icons.edit),
         isLeft: true,
         childButtons: [
@@ -85,9 +83,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   AnimatedMenuItem _buildSaveButton() {
     //debugPrint("_buildSaveButton()");
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Add Current Icon to Board",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.green,
         heroTag: "addIconBoardTag",
@@ -114,9 +110,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
   AnimatedMenuItem _buildEditLabelButton() {
     //debugPrint("_buildEditLabelButton()");
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Edit Current Label",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
         heroTag: "editLabelTag",

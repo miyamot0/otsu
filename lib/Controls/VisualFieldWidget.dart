@@ -407,9 +407,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   AnimatedMenuItem _buildAutoOutputModeButton() {
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: boardSettings.checkIsAutoSpeaking == true ? "Change to Manual Mode" : "Change to Autospeak Mode",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         heroTag: "autoTag",
@@ -434,9 +432,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   AnimatedMenuItem _buildAutoDeselectModeButton() {
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: boardSettings.checkIsAutoDeselecting == true ? "Disable Auto-Deselect" : "Enable Auto-Deselect",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.red,
         heroTag: "deselectTag",
@@ -461,9 +457,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   AnimatedMenuItem _buildSwitchModeButton() {
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: boardSettings.checkIsInSingleMode == true ? "Change to Frame Mode" : "Change to Icon Mode",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepOrange,
         heroTag: "frameTag",
@@ -490,9 +484,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   AnimatedMenuItem _buildResumeChildModeButton() {
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Resume Child Mode",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
         heroTag: "resumeTag",
@@ -512,9 +504,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   AnimatedMenuItem _buildAddFolderButton() {
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Add a Folder",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.amber,
         heroTag: "addFolderTag",
@@ -530,9 +520,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   AnimatedMenuItem _buildAddIconButton() {
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Add an Icon",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.green,
         heroTag: "addIconTag",
@@ -988,8 +976,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   AnimatedMenuWidget _buildAnimatedMenu(List<Widget> buttons) {
     return AnimatedMenuWidget(
-      backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-      parentButtonBackground: Colors.redAccent,
       parentButton: Icon(Icons.settings),
       isLeft: false,
       childButtons: buttons

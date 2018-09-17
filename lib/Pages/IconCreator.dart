@@ -75,8 +75,6 @@ class _IconCreatorState extends State<IconCreatorScreen> {
       buttons.add(_buildPhotoIconButton());
 
       animatedMenuWiget = AnimatedMenuWidget(
-        backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-        parentButtonBackground: Colors.redAccent,
         parentButton: Icon(Icons.edit),
         isLeft: true,
         childButtons: buttons,
@@ -92,9 +90,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   AnimatedMenuItem _buildSaveButton() {
     //debugPrint("_buildSaveButton()");
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Add Current Icon to Board",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.green,
         heroTag: "addIconBoardTag",
@@ -118,9 +114,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   AnimatedMenuItem _buildEditLabelButton() {
     //debugPrint("_buildEditLabelButton()");
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Edit Current Label",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
         heroTag: "editLabelTag",
@@ -156,9 +150,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   AnimatedMenuItem _buildPhotoIconButton() {
     //debugPrint("_buildPhotoIconButton()");
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Take a Photo",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepOrange,
         heroTag: "addPhotoTag",
@@ -182,9 +174,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   AnimatedMenuItem _buildImageIconButton() {
     //debugPrint("_buildImageIconButton()");
     return AnimatedMenuItem(
-      hasLabel: true,
       labelText: "Load a Stored Image",
-      labelColor: Colors.black,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.grey,
         heroTag: "addImageTag",
