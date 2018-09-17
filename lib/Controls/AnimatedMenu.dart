@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 
 class AnimatedMenuItem extends FloatingActionButton {
   final FloatingActionButton currentButton;
+  final bool autoDismiss;
   String labelText;
 
   AnimatedMenuItem(
   {
-    this.currentButton,
-    this.labelText,
+    @required this.currentButton,
+    @required this.labelText,
+    this.autoDismiss = false,
   }) : assert(currentButton != null);
 
   Widget returnLabel() {
@@ -145,6 +147,8 @@ class _AnimatedMenuWidget extends State<AnimatedMenuWidget> with TickerProviderS
           {
             widget.childButtons[index].currentButton.onPressed();
           }
+
+          if (widget.childButtons[index].autoDismiss == false) return;
 
           this._animationController.reverse();
         },

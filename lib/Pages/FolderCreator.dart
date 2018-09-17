@@ -84,6 +84,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
     //debugPrint("_buildSaveButton()");
     return AnimatedMenuItem(
       labelText: "Add Current Icon to Board",
+      autoDismiss: true,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.green,
         heroTag: "addIconBoardTag",
@@ -111,6 +112,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
     //debugPrint("_buildEditLabelButton()");
     return AnimatedMenuItem(
       labelText: "Edit Current Label",
+      autoDismiss: true,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
         heroTag: "editLabelTag",

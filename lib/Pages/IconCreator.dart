@@ -91,6 +91,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
     //debugPrint("_buildSaveButton()");
     return AnimatedMenuItem(
       labelText: "Add Current Icon to Board",
+      autoDismiss: true,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.green,
         heroTag: "addIconBoardTag",
@@ -115,6 +116,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
     //debugPrint("_buildEditLabelButton()");
     return AnimatedMenuItem(
       labelText: "Edit Current Label",
+      autoDismiss: true,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
         heroTag: "editLabelTag",
@@ -151,6 +153,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
     //debugPrint("_buildPhotoIconButton()");
     return AnimatedMenuItem(
       labelText: "Take a Photo",
+      autoDismiss: true,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.deepOrange,
         heroTag: "addPhotoTag",
@@ -175,6 +178,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
     //debugPrint("_buildImageIconButton()");
     return AnimatedMenuItem(
       labelText: "Load a Stored Image",
+      autoDismiss: true,
       currentButton: FloatingActionButton(
         backgroundColor: Colors.grey,
         heroTag: "addImageTag",
