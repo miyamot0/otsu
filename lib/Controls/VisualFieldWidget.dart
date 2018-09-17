@@ -413,7 +413,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         heroTag: "autoTag",
         mini: false,
         child: Icon(Icons.volume_up),
-        onPressed: () async {
+        onPressed: () async 
+        {
           setState(() 
           {
             boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
@@ -438,7 +439,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         heroTag: "deselectTag",
         mini: false,
         child: Icon(Icons.fingerprint),
-        onPressed: () async {
+        onPressed: () async 
+        {
           setState(() 
           {
             boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
@@ -463,7 +465,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         heroTag: "frameTag",
         mini: false,
         child: Icon(Icons.border_all),
-        onPressed: () async {
+        onPressed: () async 
+        {
           setState(() 
           {
             boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
@@ -665,7 +668,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       String newName = await Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) {
-              return DialogEditorIcon(widget, _removeFromDatabase);
+              return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
           }
       ));
 
@@ -697,12 +700,14 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       //debugPrint("_triggerIconEditor()");
       
-      String newName = await Navigator.of(context).push(PageRouteBuilder(
+      String newName = await Navigator.of(context).push(
+        PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) {
-              return DialogEditorFolder(widget, _removeFromDatabase);
+              return DialogEditorFolder(widget, _removeFromDatabase, _saveLatestStack);
           }
-      ));
+        )
+      );
 
       if (newName != null)
       {
@@ -777,16 +782,25 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       ));
     }
 
-    return AlertDialog(title: Center(child: Text(folderWidget.key.currentState.label)),
-                       content: Container(child: new GridView.count(crossAxisCount: 3,
-                                                                    mainAxisSpacing: 4.0,
-                                                                    crossAxisSpacing: 4.0,
-                                                                    padding: const EdgeInsets.all(4.0),
-                                                                    childAspectRatio: 1.0,
-                                                                    children: imgs,),
-                                          width: 500.0,
-                                          height: 500.0,),
-                                          );
+    return AlertDialog(
+      title: Center(
+        child: Text(
+          folderWidget.key.currentState.label
+        ),
+      ),
+      content: Container(
+        child: new GridView.count(
+          crossAxisCount: 3,
+          mainAxisSpacing: 4.0,
+          crossAxisSpacing: 4.0,
+          padding: const EdgeInsets.all(4.0),
+          childAspectRatio: 1.0,
+          children: imgs,
+        ),
+      width: 500.0,
+      height: 500.0,
+      ),
+    );
   }
 
   /// Restore image from storage
@@ -800,7 +814,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     await iconDb.update(savedIcon);
 
-    setState(() {
+    setState(()
+    {
       stackElements.add(ReactiveIconWidget(label: savedIcon.iconName,
                                           iconType: IconType.Icon,
                                           assetPath: savedIcon.iconPath, 

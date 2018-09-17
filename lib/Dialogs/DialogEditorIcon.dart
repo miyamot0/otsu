@@ -11,10 +11,12 @@ import '../Dialogs/DialogIconLabel.dart';
 class DialogEditorIcon extends StatefulWidget {
   final ReactiveIconWidget iconWidget;
   final Function deleteCallback;
+  final Function saveCallback;
 
   DialogEditorIcon(
     this.iconWidget, 
     this.deleteCallback,
+    this.saveCallback,
   );
 
   @override
@@ -29,10 +31,12 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white,
       child: new Text("Increase Size"), 
-      onPressed: () {
+      onPressed: () async {
         widget.iconWidget.key.currentState.setState(() {
           widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 1.05;
         });
+
+        await widget.saveCallback(widget.iconWidget);
       }, 
       splashColor: Colors.redAccent);
   }
@@ -43,10 +47,12 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Decrease Size"), 
-      onPressed: () {
+      onPressed: () async {
         widget.iconWidget.key.currentState.setState(() {
           widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 0.95;
         });
+
+        await widget.saveCallback(widget.iconWidget);
       }, 
       splashColor: Colors.redAccent);
   }
@@ -57,10 +63,12 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Fix/Unfix Position"), 
-      onPressed: () {
+      onPressed: () async {
         widget.iconWidget.key.currentState.setState(() {
           widget.iconWidget.key.currentState.isPinnedToLocation = !widget.iconWidget.key.currentState.isPinnedToLocation;
         });
+
+        await widget.saveCallback(widget.iconWidget);
       }, 
       splashColor: Colors.redAccent);
   }
@@ -80,6 +88,8 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         {
           widget.iconWidget.key.currentState.label = newText;  
         });
+
+        await widget.saveCallback(widget.iconWidget);
 
         Navigator.pop(context, newText);
       },
@@ -109,10 +119,12 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Default Size"), 
-      onPressed: () {
+      onPressed: () async {
         widget.iconWidget.key.currentState.setState(() {
           widget.iconWidget.key.currentState.scale = 1.0;
         });
+
+        await widget.saveCallback(widget.iconWidget);
       }, 
       splashColor: Colors.redAccent);
   }

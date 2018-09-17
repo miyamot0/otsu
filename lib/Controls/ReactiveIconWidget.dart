@@ -283,7 +283,8 @@ class IconBox extends StatelessWidget {
           child: Align(
             alignment: Alignment.center, 
             child: imgAsset,
-          ), flex: 6,
+          ), 
+          flex: 6,
         ),
         Flexible(
           child: Align(
@@ -293,7 +294,8 @@ class IconBox extends StatelessWidget {
               style: defaultStyle,
             ),
           ), 
-        flex: 2),
+          flex: 2
+        ),
       ]
     );
 

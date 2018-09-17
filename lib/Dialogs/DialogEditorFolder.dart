@@ -11,10 +11,12 @@ import '../Dialogs/DialogIconLabel.dart';
 class DialogEditorFolder extends StatefulWidget {
   final ReactiveFolderWidget folderWidget;
   final Function deleteCallback;
+  final Function saveCallback;
 
   DialogEditorFolder(
     this.folderWidget, 
-    this.deleteCallback
+    this.deleteCallback,
+    this.saveCallback,
   );
 
   @override
@@ -29,10 +31,12 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white,
       child: new Text("Increase Size"), 
-      onPressed: () {
+      onPressed: () async {
         widget.folderWidget.key.currentState.setState(() {
           widget.folderWidget.key.currentState.scale = widget.folderWidget.key.currentState.scale * 1.05;
         });
+
+        await widget.saveCallback(widget.folderWidget);
       }, 
       splashColor: Colors.redAccent,
     );
@@ -44,10 +48,12 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Decrease Size"), 
-      onPressed: () {
+      onPressed: () async {
         widget.folderWidget.key.currentState.setState(() {
           widget.folderWidget.key.currentState.scale = widget.folderWidget.key.currentState.scale * 0.95;
         });
+
+        await widget.saveCallback(widget.folderWidget);
       }, 
       splashColor: Colors.redAccent,
     );
@@ -59,10 +65,12 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Fix/Unfix Position"), 
-      onPressed: () {
+      onPressed: () async {
         widget.folderWidget.key.currentState.setState(() {
           widget.folderWidget.key.currentState.isPinnedToLocation = !widget.folderWidget.key.currentState.isPinnedToLocation;
         });
+
+        await widget.saveCallback(widget.folderWidget);
       }, 
       splashColor: Colors.redAccent,
     );
@@ -111,10 +119,12 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
       color: Theme.of(context).primaryColor, 
       textColor: Colors.white, 
       child: new Text("Default Size"), 
-      onPressed: () {
+      onPressed: () async {
         widget.folderWidget.key.currentState.setState(() {
           widget.folderWidget.key.currentState.scale = 1.0;
         });
+
+        await widget.saveCallback(widget.folderWidget);
       }, 
       splashColor: Colors.redAccent,
     );

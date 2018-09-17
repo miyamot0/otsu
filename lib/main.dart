@@ -30,7 +30,7 @@ class ApplicationState extends State<MainApp> {
   {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      //showPerformanceOverlay: true,
+      showPerformanceOverlay: false,
       home: SafeArea(
         child: Scaffold(
           body: VisualFieldWidget(),
