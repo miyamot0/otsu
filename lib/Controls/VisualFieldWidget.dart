@@ -28,7 +28,7 @@ class VisualFieldWidget extends StatefulWidget {
 }
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
-  bool inDebugMode = true;
+  bool inDebugMode = false;
   bool isInStartup = true;
 
   IconDatabase iconDb;  
@@ -538,7 +538,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// This disables debug mode (hides buttons)
   void _resumeChildMode() async {
-    print('_resumeChildMode()');
+    //print('_resumeChildMode()');
 
     setState(() {
       inDebugMode = false;
@@ -569,7 +569,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void toggleDebugMode() {
-    print("toggleDebugMode()");
+    //print("toggleDebugMode()");
 
     setState(() {
       inDebugMode = true;
@@ -600,7 +600,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void emitSpeech() async {
-    print("emitSpeech()");
+    //print("emitSpeech()");
 
     if (boardSettings.checkIsInSingleMode == true)
     {
@@ -646,7 +646,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   bool _isWithinStrip(ReactiveIconWidget icon) {
-    print("_isWithinStrip");
+    //print("_isWithinStrip");
 
     if (sentenceStripReference == null) return false;
 
@@ -661,7 +661,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void triggerEditor(Widget widget) async {
-    print("_triggerIconEditor()");
+    //print("_triggerIconEditor()");
 
     if (widget is ReactiveIconWidget)
     {
@@ -738,7 +738,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
-    print("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
+    //print("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
 
     var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
 
@@ -755,7 +755,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
-    print("_buildFolderPopupDialog, length = ${storedIcons.length}");
+    //print("_buildFolderPopupDialog, length = ${storedIcons.length}");
 
     List<Container> imgs = [];
 
@@ -807,7 +807,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _restoreIconFromStorage(SavedIcon savedIcon) async {
-    print("_restoreIconFromStorage(SavedIcon savedIcon)");
+    //print("_restoreIconFromStorage(SavedIcon savedIcon)");
 
     savedIcon.isStored = false;
     savedIcon.storedId = -1;
@@ -839,12 +839,12 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   Widget build(BuildContext context) {
     if (isInStartup == true)
     {
+      isInStartup = false;
+
       Future.delayed(const Duration(seconds: 2)).then((_)
       {
         moveIconToTop(null);
       });
-
-      isInStartup = false;
     }
 
     if (childButtons.length > 0)
