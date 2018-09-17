@@ -5,25 +5,30 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class CustomFloatingButtonLocation extends FloatingActionButtonLocation { 
+class CustomFloatingButtonLocation extends FloatingActionButtonLocation {
+
   const CustomFloatingButtonLocation(); 
 
   @override 
-  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) { 
-    final double endPadding = scaffoldGeometry.minInsets.left; 
-    final double fabX = kFloatingActionButtonMargin + endPadding; 
+  Offset getOffset(ScaffoldPrelayoutGeometry geometry) { 
+    final double end = geometry.minInsets.left; 
+    final double marginLeft = kFloatingActionButtonMargin + end; 
 
-    final double contentBottom = scaffoldGeometry.contentBottom; 
-    final double bottomSheetHeight = scaffoldGeometry.bottomSheetSize.height; 
-    final double fabHeight = scaffoldGeometry.floatingActionButtonSize.height; 
-    final double snackBarHeight = scaffoldGeometry.snackBarSize.height; 
+    final double contentBottom = geometry.contentBottom; 
+    final double bottomSheetHeight = geometry.bottomSheetSize.height; 
+    final double marginTop = geometry.floatingActionButtonSize.height; 
+    final double snackBarHeight = geometry.snackBarSize.height; 
 
-    double fabY = contentBottom - fabHeight - kFloatingActionButtonMargin; 
-    if (snackBarHeight > 0.0) 
-      fabY = math.min(fabY, contentBottom - snackBarHeight - fabHeight - kFloatingActionButtonMargin); 
-    if (bottomSheetHeight > 0.0) 
-      fabY = math.min(fabY, contentBottom - bottomSheetHeight - fabHeight / 2.0); 
+    double fabY = contentBottom - marginTop - kFloatingActionButtonMargin; 
+    if (snackBarHeight > 0.0)
+    {
+      fabY = math.min(fabY, contentBottom - snackBarHeight - marginTop - kFloatingActionButtonMargin); 
+    }
+    if (bottomSheetHeight > 0.0)
+    {
+      fabY = math.min(fabY, contentBottom - bottomSheetHeight - marginTop / 2.0); 
+    }
 
-    return new Offset(fabX, fabY); 
+    return new Offset(marginLeft, fabY); 
   } 
 } 
