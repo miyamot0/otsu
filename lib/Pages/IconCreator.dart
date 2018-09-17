@@ -74,12 +74,13 @@ class _IconCreatorState extends State<IconCreatorScreen> {
       buttons.add(_buildImageIconButton());
       buttons.add(_buildPhotoIconButton());
 
-      animatedMenuWiget = AnimatedMenuWidget(backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-                                            parentButtonBackground: Colors.redAccent,
-                                            parentButton: Icon(Icons.edit),                                            
-                                            hasBackground: false,
-                                            isLeft: true,                                                          
-                                            childButtons: buttons);
+      animatedMenuWiget = AnimatedMenuWidget(
+        backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
+        parentButtonBackground: Colors.redAccent,
+        parentButton: Icon(Icons.edit),
+        isLeft: true,
+        childButtons: buttons,
+      );
     }
 
     return animatedMenuWiget;
@@ -99,10 +100,13 @@ class _IconCreatorState extends State<IconCreatorScreen> {
         heroTag: "addIconBoardTag",
         mini: true,
         child: Icon(Icons.save_alt),
-        onPressed: () {
-          Navigator.pop(context, EmbeddedIconModel(assetLocation: assetPath, 
-                                                    iconText: assetText, 
-                                                    isEmbedded: isEmbedded,));
+        onPressed: ()
+        {
+          Navigator.pop(context, EmbeddedIconModel(
+            assetLocation: assetPath,
+            iconText: assetText,
+            isEmbedded: isEmbedded,
+          ));
         }
       ),
     );

@@ -55,10 +55,9 @@ class AnimatedMenuItem extends FloatingActionButton {
 }
 
 class AnimatedMenuWidget extends StatefulWidget {
-  final int orientation;
   final Icon parentButton;
   final Icon finalButtonIcon;
-  final bool hasBackground;
+  //final bool hasBackground;
   final Color parentButtonBackground;
   final List<AnimatedMenuItem> childButtons;
   final int animationDuration;
@@ -75,8 +74,6 @@ class AnimatedMenuWidget extends StatefulWidget {
     this.parentButtonBackground,
     this.childButtons,
     this.onMainButtonPressed,
-    this.orientation = 1,
-    this.hasBackground = true,
     this.backgroundColor = Colors.white30,
     this.parentHeroTag = "parent",
     this.finalButtonIcon,
@@ -317,18 +314,6 @@ class _AnimatedMenuWidget extends State<AnimatedMenuWidget> with TickerProviderS
         ),
       );
 
-      return widget.hasBackground
-        ? Stack(
-          alignment: Alignment.topCenter,
-          overflow: Overflow.visible,
-          children: [
-            Positioned(
-              right:-16.0,
-              bottom: -16.0,
-              child: modal,
-            ),
-            mainMenuWidget,
-          ])
-        : mainMenuWidget;
+      return mainMenuWidget;
   }
 }

@@ -68,7 +68,6 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
         backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
         parentButtonBackground: Colors.redAccent,
         parentButton: Icon(Icons.edit),
-        hasBackground: false,
         isLeft: true,
         childButtons: [
           _buildSaveButton(), 

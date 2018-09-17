@@ -991,7 +991,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
       parentButtonBackground: Colors.redAccent,
       parentButton: Icon(Icons.settings),
-      hasBackground: false,
       isLeft: false,
       childButtons: buttons
     );
