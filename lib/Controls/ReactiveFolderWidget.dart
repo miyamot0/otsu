@@ -18,21 +18,22 @@ class ReactiveFolderWidget extends StatefulWidget {
 
   final GlobalKey<ReactiveFolderWidgetState> key = GlobalKey<ReactiveFolderWidgetState>();
 
-  ReactiveFolderWidget({@required this.label, 
-                      @required this.assetPath,
-                      @required this.isInPlay,
-                      @required this.isEmbbedded,
-                      @required this.isInSingleMode,
-                      @required this.isStored,
-                      @required this.isPinnedToLocation,
-                      @required this.moveToTop,
-                      @required this.launchEditor,
-                      @required this.openFolderDialog,
-                      @required this.iconType,
-                      @required this.scale,
-                      @required this.defaultWidth,
-                      @required this.id,
-                      @required this.initialPosition}) : super(key: GlobalKey());
+  ReactiveFolderWidget({
+    @required this.label, 
+    @required this.assetPath,
+    @required this.isInPlay,
+    @required this.isEmbbedded,
+    @required this.isInSingleMode,
+    @required this.isStored,
+    @required this.isPinnedToLocation,
+    @required this.moveToTop,
+    @required this.launchEditor,
+    @required this.openFolderDialog,
+    @required this.iconType,
+    @required this.scale,
+    @required this.defaultWidth,
+    @required this.id,
+    @required this.initialPosition}) : super(key: GlobalKey());
 
   @override
   ReactiveFolderWidgetState createState() => ReactiveFolderWidgetState(
@@ -85,20 +86,20 @@ class ReactiveFolderWidgetState extends State<ReactiveFolderWidget> {
   double scale;
 
   ReactiveFolderWidgetState({
-      Key key,
-      this.label, 
-      this.assetPath,
-      this.isInPlay,
-      this.isEmbbedded,
-      this.isInSingleMode,
-      this.isStored,
-      this.isPinnedToLocation,
-      this.moveToTop,
-      this.launchEditor,
-      this.openFolderDialog,
-      this.scale,
-      this.defaultWidth,
-      this.currentPosition});
+    Key key,
+    this.label, 
+    this.assetPath,
+    this.isInPlay,
+    this.isEmbbedded,
+    this.isInSingleMode,
+    this.isStored,
+    this.isPinnedToLocation,
+    this.moveToTop,
+    this.launchEditor,
+    this.openFolderDialog,
+    this.scale,
+    this.defaultWidth,
+    this.currentPosition});
 
   @override
   Widget build(BuildContext context) {
