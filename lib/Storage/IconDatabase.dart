@@ -135,9 +135,9 @@ class IconDatabase
     bool checkIsAutoSpeaking    = settings.getBool('isAutoSpeaking');
     bool checkIsAutoDeselecting = settings.getBool('isAutoDeselecting');
 
-    checkIsInSingleMode     = checkIsInSingleMode     == null ? true : checkIsInSingleMode;
-    checkIsAutoSpeaking     = checkIsAutoSpeaking     == null ? true : checkIsAutoSpeaking;
-    checkIsAutoDeselecting  = checkIsAutoDeselecting  == null ? true : checkIsAutoDeselecting;    
+    checkIsInSingleMode     = checkIsInSingleMode     == null ? true  : checkIsInSingleMode;
+    checkIsAutoSpeaking     = checkIsAutoSpeaking     == null ? false : checkIsAutoSpeaking;
+    checkIsAutoDeselecting  = checkIsAutoDeselecting  == null ? true  : checkIsAutoDeselecting;    
 
     return BoardSettings(
       checkIsInSingleMode:    checkIsInSingleMode,
