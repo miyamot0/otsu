@@ -245,7 +245,12 @@ class IconBox extends StatelessWidget {
 
     GestureDetector settingsIcon =  GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => inheritedIconState.onTap(),
+      onTap: ()
+      {
+        if (!inheritedFieldState.inDebugMode) return;
+
+        inheritedIconState.onTap();
+      },
       child: editMarker,
     );
 
@@ -265,26 +270,49 @@ class IconBox extends StatelessWidget {
     Column centerColumn = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
-        Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
-        Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedIconState.label, style: defaultStyle)), flex: 2)
+        Flexible(
+          child: inheritedFieldState.inDebugMode ? 
+          topRow : 
+          Opacity(
+            child: topRow, 
+            opacity: 0.0,
+          ), 
+          flex: 1,
+        ),
+        Flexible(
+          child: Align(
+            alignment: Alignment.center, 
+            child: imgAsset,
+          ), flex: 6,
+        ),
+        Flexible(
+          child: Align(
+            alignment: Alignment.center, 
+            child: Text(
+              inheritedIconState.label, 
+              style: defaultStyle,
+            ),
+          ), 
+        flex: 2),
       ]
     );
 
-    Container item = Container(
-      width: inheritedIconState.scale * inheritedIconState.defaultWidth,
-      height: inheritedIconState.scale * inheritedIconState.defaultWidth,
-      decoration: BoxDecoration(
-        border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,      
-        color: inheritedIconState.isInPlay ? Colors.greenAccent : Colors.white
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: centerColumn,
-          )
-        ]
-      ),
+    ConstrainedBox item = ConstrainedBox(
+      constraints: new BoxConstraints(
+        minHeight:  inheritedIconState.scale * inheritedIconState.defaultWidth,
+        minWidth:   inheritedIconState.scale * inheritedIconState.defaultWidth,
+        maxHeight:  inheritedIconState.scale * inheritedIconState.defaultWidth,
+        maxWidth:   inheritedIconState.scale * inheritedIconState.defaultWidth,
+      ),      
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,      
+          color: inheritedIconState.isInPlay ? 
+            Colors.greenAccent : 
+            Colors.white
+        ),
+        child: Padding(child: centerColumn, padding: EdgeInsets.all(5.0),),
+      )
     );
 
     if (inheritedIconState.isPinnedToLocation == true)
