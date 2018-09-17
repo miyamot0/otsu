@@ -35,20 +35,21 @@ class ReactiveFolderWidget extends StatefulWidget {
                       @required this.initialPosition}) : super(key: GlobalKey());
 
   @override
-  ReactiveFolderWidgetState createState() => ReactiveFolderWidgetState(label: label, 
-                                                                   assetPath: assetPath,
-                                                                   isInPlay: isInPlay, 
-                                                                   isEmbbedded: isEmbbedded,
-                                                                   isInSingleMode: isInSingleMode,
-                                                                   isStored: isStored,
-                                                                   isPinnedToLocation: isPinnedToLocation,
-                                                                   moveToTop: moveToTop, 
-                                                                   launchEditor: launchEditor,
-                                                                   openFolderDialog: openFolderDialog,
-                                                                   scale: scale,
-                                                                   defaultWidth: defaultWidth,
-                                                                   currentPosition: initialPosition,
-                                                                   key: key);
+  ReactiveFolderWidgetState createState() => ReactiveFolderWidgetState(
+    label: label, 
+    assetPath: assetPath,
+    isInPlay: isInPlay, 
+    isEmbbedded: isEmbbedded,
+    isInSingleMode: isInSingleMode,
+    isStored: isStored,
+    isPinnedToLocation: isPinnedToLocation,
+    moveToTop: moveToTop, 
+    launchEditor: launchEditor,
+    openFolderDialog: openFolderDialog,
+    scale: scale,
+    defaultWidth: defaultWidth,
+    currentPosition: initialPosition,
+    key: key);
 
   static InheritedFolderState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedFolderState) as InheritedFolderState;
 
@@ -209,78 +210,107 @@ class IconBox extends StatelessWidget {
                                      decoration: TextDecoration.none, 
                                      fontSize: 20.0);
 
+  static const Align editMarker = Align(
+    child: Icon(
+      Icons.edit,
+      ),
+    alignment: Alignment.centerRight,
+  );
+
+  static Border thinBorder = Border.all(
+    color: Colors.black, 
+    width: 3.0
+  );
+
+  static Border thickBorder = Border.all(
+    color: Colors.black, 
+    width: 5.0
+  );
+
   @override
   Widget build(BuildContext context) {
-    final inheritedFolderState = InheritedFolderState.of(context);
-    final inheritedFieldState = InheritedVisualFieldState.of(context);
+    final InheritedFolderState inheritedFolderState = InheritedFolderState.of(context);
+    final InheritedVisualFieldState inheritedFieldState = InheritedVisualFieldState.of(context);
+    final MediaQueryData screenInformation = MediaQuery.of(context);
 
-    // docs directory is here 
+    GestureDetector settingsIcon =  GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => inheritedFolderState.onTap(),
+      child: editMarker,
+    );
 
-    final screenInformation = MediaQuery.of(context);
+    Row topRow = Row(
+      children: [settingsIcon],
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      verticalDirection: VerticalDirection.up,
+    );
 
-    var settingsIcon =  GestureDetector(behavior: HitTestBehavior.opaque,
-                                          onTap: () => inheritedFolderState.onTap(),
-                                          child: Align(child: Icon(Icons.edit,),
-                                                      alignment: Alignment.centerRight,),);
+    Image imgAsset = Image.asset(
+      inheritedFolderState.assetPath,
+      height: (inheritedFolderState.scale * inheritedFolderState.defaultWidth) * 0.7,
+      fit: BoxFit.cover,
+    );
 
-    var topRow = Row(children: [settingsIcon], 
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              verticalDirection: VerticalDirection.up,);
+    Column centerColumn = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
+        Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
+        Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedFolderState.label, style: defaultStyle)), flex: 2)
+      ]
+    );
 
-    var imgAsset = Image.asset(inheritedFolderState.assetPath,
-                               height: (inheritedFolderState.scale * inheritedFolderState.defaultWidth) * 0.7,
-                               fit: BoxFit.cover);
+    ConstrainedBox item = ConstrainedBox(
+      constraints: new BoxConstraints(
+        minHeight:  inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+        minWidth:   inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+        maxHeight:  inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+        maxWidth:   inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+      ),      
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: inheritedFolderState.isPinnedToLocation ? thickBorder : thinBorder,
+          color: inheritedFolderState.isInPlay ? 
+            Colors.greenAccent : 
+            Colors.white
+        ),
+        child: Padding(
+          child: centerColumn, 
+          padding: EdgeInsets.all(5.0),
+        ),
+      ),
+    );
 
-    var centerColumn = Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
-                                Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
-                                Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedFolderState.label, style: defaultStyle)), flex: 2)
-                              ]
-                            );
+    Draggable draggable = new Draggable(
+      maxSimultaneousDrags: inheritedFolderState.isPinnedToLocation ? 0 : 1,
+      child: item,
+      childWhenDragging: new Opacity(opacity: 0.0, child: item),
+      onDragStarted: () {},
+      feedback: item,
+      ignoringFeedbackSemantics: false,
+      onDraggableCanceled: (velocity, offset)
+      {
+        if (offset.distance < 1)
+        {
+          //print("onDraggableCanceled. Distance low, kill off event");
 
-    var item = Container(width: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-                         height: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-                         decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedFolderState.isPinnedToLocation ? 5.0 : 3.0),
-                                                   color: inheritedFolderState.isInPlay ? Colors.greenAccent : Colors.white),
-                         child: Column(children: [Expanded(child: centerColumn,)]),);
+          return;
+        }
 
-    var avatar = Container(width: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-                           height: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-                           decoration: BoxDecoration(border: Border.all(color: Colors.black, width: inheritedFolderState.isPinnedToLocation ? 5.0 : 3.0),
-                                                     color: inheritedFolderState.isInSingleMode ? Colors.greenAccent : Colors.white),
-                           child: Column(children: [Expanded(child: centerColumn,)]),);
+        double newX = offset.dx;
+        double newY = offset.dy;
 
-    var draggable = new Draggable(
-        feedback: avatar,
-        maxSimultaneousDrags: inheritedFolderState.isPinnedToLocation ? 0 : 1,
-        ignoringFeedbackSemantics: false,
-        child: item,
-        childWhenDragging: new Opacity(opacity: 0.0, child: item),
-        onDragStarted: () {
-        },
-        onDraggableCanceled: (velocity, offset) {
-          if (offset.distance < 1)
-          {
-            print("onDraggableCanceled. Distance low, kill off event");
+        newX = (newX < 0.0) ? 0.0 : newX;
+        newX = (newX + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.width) ? 
+          screenInformation.size.width - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newX;
 
-            return;
-          }
-
-          var newX = offset.dx;
-          var newY = offset.dy;
-
-          newX = (newX < 0.0) ? 0.0 : newX;
-          newX = (newX + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.width) ? 
-            screenInformation.size.width - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newX;
-
-          newY = (newY < 0.0) ? 0.0 : newY;
-          newY = (newY + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.height) ? 
-            screenInformation.size.height - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newY;        
-          
-          inheritedFolderState.onPositionChanged(Offset(newX, newY));
-        });
+        newY = (newY < 0.0) ? 0.0 : newY;
+        newY = (newY + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.height) ? 
+          screenInformation.size.height - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newY;        
+        
+        inheritedFolderState.onPositionChanged(Offset(newX, newY));
+      });
 
     if (inheritedFieldState.inDebugMode == false)
     {
@@ -288,19 +318,22 @@ class IconBox extends StatelessWidget {
         left: inheritedFolderState.currentPosition.dx, 
         key: GlobalKey(),
         top: inheritedFolderState.currentPosition.dy,         
-        child: GestureDetector(child: item,
-                               onTap: () 
-                               {
-                                 print("onTap: Folder Pressed (TODO: Open dialog)");
-                                 inheritedFolderState.openFolderDialog();
-                                 //inheritedFolderState.onPositionChanged(Offset(inheritedFolderState.currentPosition.dx, inheritedFolderState.currentPosition.dy));
-                               }));
+        child: GestureDetector(
+          child: item,
+          onTap: () 
+          {
+            //print("onTap: Folder Pressed (TODO: Open dialog)");
+            inheritedFolderState.openFolderDialog();
+            //inheritedFolderState.onPositionChanged(Offset(inheritedFolderState.currentPosition.dx, inheritedFolderState.currentPosition.dy));
+          }),
+        );
     }
 
     return new Positioned(
       left: inheritedFolderState.currentPosition.dx, 
       key: GlobalKey(),
       top: inheritedFolderState.currentPosition.dy, 
-      child: draggable);
+      child: draggable,
+    );
   }
 }
