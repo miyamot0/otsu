@@ -49,7 +49,8 @@ class ReactiveIconWidget extends StatefulWidget {
     scale: scale,
     defaultWidth: defaultWidth,
     currentPosition: initialPosition,
-    key: key);
+    key: key,
+  );
 
   static InheritedIconState of(BuildContext context) => context.inheritFromWidgetOfExactType(InheritedIconState) as InheritedIconState;
 }
@@ -78,7 +79,8 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> with SingleTicke
     this.launchEditor,
     this.scale,
     this.defaultWidth,
-    this.currentPosition});
+    this.currentPosition
+  });
 
 	@override
 	void initState(){
@@ -212,6 +214,7 @@ class IconBox extends StatelessWidget {
   static const defaultStyle = TextStyle(
     color: Colors.black,
     decoration: TextDecoration.none,
+    fontWeight: FontWeight.normal,
     fontSize: 20.0
   );
 

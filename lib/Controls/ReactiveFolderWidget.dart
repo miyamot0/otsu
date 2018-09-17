@@ -102,23 +102,23 @@ class ReactiveFolderWidgetState extends State<ReactiveFolderWidget> {
 
   @override
   Widget build(BuildContext context) {
-      return InheritedFolderState(
-        onTap: onTap,
-        onPositionChanged: onPositionChanged,
-        label: label,
-        assetPath: assetPath,
-        isInPlay: isInPlay,
-        isEmbbedded: isEmbbedded,
-        isInSingleMode: isInSingleMode,
-        openFolderDialog: fireDialog,
-        isStored: isStored,
-        currentPosition: currentPosition,
-        defaultWidth: defaultWidth,
-        isPinnedToLocation: isPinnedToLocation,        
-        scale: scale,        
-        child: IconTree(),
-        key: GlobalKey(),
-      );
+    return InheritedFolderState(
+      onTap: onTap,
+      onPositionChanged: onPositionChanged,
+      label: label,
+      assetPath: assetPath,
+      isInPlay: isInPlay,
+      isEmbbedded: isEmbbedded,
+      isInSingleMode: isInSingleMode,
+      openFolderDialog: fireDialog,
+      isStored: isStored,
+      currentPosition: currentPosition,
+      defaultWidth: defaultWidth,
+      isPinnedToLocation: isPinnedToLocation,        
+      scale: scale,        
+      child: IconTree(),
+      key: GlobalKey(),
+    );
   }
 
   void onTap() {
@@ -208,6 +208,7 @@ class IconTree extends StatelessWidget {
 class IconBox extends StatelessWidget {
   final defaultStyle = new TextStyle(color: Colors.black, 
                                      decoration: TextDecoration.none, 
+                                     fontWeight: FontWeight.normal,
                                      fontSize: 20.0);
 
   static const Align editMarker = Align(
