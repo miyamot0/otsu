@@ -29,7 +29,6 @@ class VisualFieldWidget extends StatefulWidget {
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
   bool inDebugMode = false;
-  bool isInStartup = true;
 
   IconDatabase iconDb;  
   BoardSettings boardSettings;
@@ -51,6 +50,24 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     speakerObjectReference = SpeakerObject(emitSpeech, toggleDebugMode);
       stackElements.add(speakerObjectReference);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+        if (Navigator.canPop(context)) 
+        {
+          Navigator.pop(context);
+        }
+
+        moveIconToTop(null);
+
+        await showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return _showStartupWindow();
+          },
+        );
+    });
 
     loadFromDatabase();
 
@@ -223,7 +240,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           {
             iconHolder.key.currentState.isInPlay = false;
           });
-        }        
+        }
       }
       else
       {
@@ -235,6 +252,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           if (!(stackElements[i] is ReactiveIconWidget)) continue;
 
           iconHolder = stackElements[i] as ReactiveIconWidget;
+
+          if (iconHolder.key.currentState == null) continue;
 
           iconHolder.key.currentState.setState(() 
           {
@@ -751,6 +770,37 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     );
   }
 
+  /// Show startup
+  /// 
+  /// 
+  AlertDialog _showStartupWindow() {
+    return AlertDialog(
+      title: Center(
+        child: Text(
+          "Project Name: Otsu (Version 0.1)"
+        ),
+      ),
+      content: Container(
+        //child: Text("This is the content"),
+        child: Wrap(
+          alignment: WrapAlignment.start,
+          children: <Widget> [
+            Text(
+              "This application is designed to be used alongside function-based communication training. The application provides Icon- (single icon output) and Frame-based output (sentence strip output). The board begins empty, but you can access the necessary settings for holding the SPEAKER for ~5 seconds. Once in this mode you may edit settings, add or adjust icons, and even change the nature of the communication response.",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.normal,
+                fontSize: 24.0,                
+              ),
+            ),
+          ],
+        ),
+      width: 500.0,
+      height: 500.0,
+      ),
+    );
+  }
+
   /// TODO: assign size (square, based on %age height)
   /// 
   /// 
@@ -816,37 +866,32 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     setState(()
     {
-      stackElements.add(ReactiveIconWidget(label: savedIcon.iconName,
-                                          iconType: IconType.Icon,
-                                          assetPath: savedIcon.iconPath, 
-                                          isInSingleMode: boardSettings.checkIsInSingleMode,
-                                          isEmbbedded: savedIcon.embedded,
-                                          isStored: savedIcon.isStored, 
-                                          isInPlay: false,
-                                          isPinnedToLocation: savedIcon.pinned,
-                                          launchEditor: triggerEditor,
-                                          scale: savedIcon.scale,
-                                          defaultWidth: 200.0,
-                                          moveToTop: moveIconToTop,
-                                          id: savedIcon.id,
-                                          storedId: savedIcon.storedId,
-                                          initialPosition: Offset(savedIcon.x, savedIcon.y),)
+      stackElements.add(ReactiveIconWidget(
+        label: savedIcon.iconName,
+        iconType: IconType.Icon,
+        assetPath: savedIcon.iconPath, 
+        isInSingleMode: boardSettings.checkIsInSingleMode,
+        isEmbbedded: savedIcon.embedded,
+        isStored: savedIcon.isStored, 
+        isInPlay: false,
+        isPinnedToLocation: savedIcon.pinned,
+        launchEditor: triggerEditor,
+        scale: savedIcon.scale,
+        defaultWidth: 200.0,
+        moveToTop: moveIconToTop,
+        id: savedIcon.id,
+        storedId: savedIcon.storedId,
+        initialPosition: Offset(
+          savedIcon.x, 
+          savedIcon.y,
+          ),
+        ),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isInStartup == true)
-    {
-      isInStartup = false;
-
-      Future.delayed(const Duration(seconds: 2)).then((_)
-      {
-        moveIconToTop(null);
-      });
-    }
-
     if (childButtons.length > 0)
     {
       childButtons.clear();
@@ -922,21 +967,27 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     setState(() 
     {
-      stackElements.add(ReactiveIconWidget(label: insert.iconName,
-                                          iconType: IconType.Icon,
-                                          assetPath: insert.iconPath, 
-                                          isInSingleMode: boardSettings.checkIsInSingleMode,
-                                          isEmbbedded: insert.embedded,
-                                          isStored: insert.isStored, 
-                                          isInPlay: false,
-                                          isPinnedToLocation: insert.pinned,
-                                          launchEditor: triggerEditor,
-                                          scale: insert.scale,
-                                          defaultWidth: 200.0,
-                                          moveToTop: moveIconToTop,
-                                          id: insert.id,
-                                          storedId: insert.storedId,
-                                          initialPosition: Offset(insert.x, insert.y),));
+      stackElements.add(ReactiveIconWidget(
+        label: insert.iconName,
+        iconType: IconType.Icon,
+        assetPath: insert.iconPath, 
+        isInSingleMode: boardSettings.checkIsInSingleMode,
+        isEmbbedded: insert.embedded,
+        isStored: insert.isStored, 
+        isInPlay: false,
+        isPinnedToLocation: insert.pinned,
+        launchEditor: triggerEditor,
+        scale: insert.scale,
+        defaultWidth: 200.0,
+        moveToTop: moveIconToTop,
+        id: insert.id,
+        storedId: insert.storedId,
+        initialPosition: Offset(
+          insert.x, 
+          insert.y,
+          ),
+        ),
+      );
     });
   }
 
