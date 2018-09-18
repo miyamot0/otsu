@@ -29,7 +29,6 @@ class VisualFieldWidget extends StatefulWidget {
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
   bool inDebugMode = true;
-  bool isInStartup = false;
 
   IconDatabase iconDb;  
   BoardSettings boardSettings;
@@ -766,7 +765,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         ),
       ),
       content: Container(
-        //child: Text("This is the content"),
         child: Wrap(
           alignment: WrapAlignment.start,
           children: <Widget> [
@@ -887,30 +885,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       childButtons.add(_buildAutoDeselectModeButton());      
       childButtons.add(_buildResumeChildModeButton()); 
     }
-
-    /*
-    if (isInStartup == true)
-    {
-      isInStartup = false;
-
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-
-          if (!Navigator.canPop(context)) 
-          {
-            await showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) {
-                return _showStartupWindow();
-              },
-            );
-          }
-
-          //moveIconToTop(null);
-
-      });
-    }
-    */
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
         moveIconToTop(null);
