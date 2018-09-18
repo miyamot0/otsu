@@ -207,10 +207,13 @@ class IconTree extends StatelessWidget {
 }
 
 class IconBox extends StatelessWidget {
-  final defaultStyle = new TextStyle(color: Colors.black, 
-                                     decoration: TextDecoration.none, 
-                                     fontWeight: FontWeight.normal,
-                                     fontSize: 20.0);
+  final defaultStyle = new TextStyle(
+    color: Colors.black, 
+    decoration: TextDecoration.none, 
+    fontWeight: FontWeight.normal,
+    fontSize: 20.0,
+    inherit: false,
+  );
 
   static const Align editMarker = Align(
     child: Icon(

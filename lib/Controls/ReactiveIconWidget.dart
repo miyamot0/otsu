@@ -215,7 +215,8 @@ class IconBox extends StatelessWidget {
     color: Colors.black,
     decoration: TextDecoration.none,
     fontWeight: FontWeight.normal,
-    fontSize: 20.0
+    fontSize: 20.0,
+    inherit: false,
   );
 
   static const Align editMarker = Align(
