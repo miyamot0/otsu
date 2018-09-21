@@ -226,14 +226,17 @@ class IconBox extends StatelessWidget {
     alignment: Alignment.centerRight,
   );
 
+  static const double thinBorderWidth  = 3.0;
+  static const double thickBorderWidth = 5.0;
+
   static Border thinBorder = Border.all(
     color: Colors.black, 
-    width: 3.0
+    width: thinBorderWidth,
   );
 
   static Border thickBorder = Border.all(
     color: Colors.black, 
-    width: 5.0
+    width: thickBorderWidth,
   );
 
   final double opacity;
@@ -245,7 +248,6 @@ class IconBox extends StatelessWidget {
   Widget build(BuildContext context) {
     InheritedIconState inheritedIconState = InheritedIconState.of(context);
     InheritedVisualFieldState inheritedFieldState = InheritedVisualFieldState.of(context);
-    MediaQueryData screenInformation = MediaQuery.of(context);
 
     GestureDetector settingsIcon =  GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -369,12 +371,12 @@ class IconBox extends StatelessWidget {
         var newY = offset.dy;
 
         newX = (newX < 0.0) ? 0.0 : newX;
-        newX = (newX + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.width) ? 
-          screenInformation.size.width - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newX;
+        newX = (newX + (inheritedIconState.scale * inheritedIconState.defaultWidth) > inheritedFieldState.boardSize.width) ? 
+          inheritedFieldState.boardSize.width - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newX;
 
         newY = (newY < 0.0) ? 0.0 : newY;
-        newY = (newY + (inheritedIconState.scale * inheritedIconState.defaultWidth) > screenInformation.size.height) ? 
-          screenInformation.size.height - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newY;        
+        newY = (newY + (inheritedIconState.scale * inheritedIconState.defaultWidth) > inheritedFieldState.boardSize.height) ? 
+          inheritedFieldState.boardSize.height - (inheritedIconState.scale * inheritedIconState.defaultWidth) : newY;        
         
         inheritedIconState.onPositionChanged(Offset(newX, newY));
       }

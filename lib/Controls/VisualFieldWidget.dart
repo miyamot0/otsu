@@ -24,7 +24,7 @@ class VisualFieldWidget extends StatefulWidget {
   VisualFieldWidget() : super(key: GlobalKey());
 
   @override
-  VisualFieldWidgetState createState() => VisualFieldWidgetState();  
+  VisualFieldWidgetState createState() => VisualFieldWidgetState();
 }
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
@@ -202,7 +202,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void moveIconToTop(Widget widget) async {
-    //print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
+    print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
 
     if (boardSettings == null) return;
 
@@ -211,7 +211,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       if (boardSettings.checkIsInSingleMode == true)
       {
-        //print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+        print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
 
         for (var i = 0; i < stackElements.length; i++)
         {
@@ -258,7 +258,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (boardSettings.checkIsInSingleMode == true)
     {
-      //print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+      print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
 
       for (var i = 0; i < stackElements.length; i++)
       {
@@ -276,14 +276,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
       }
 
-      setState(() 
-      {
-        stackElements.remove(widget);
-        stackElements.add(widget);
-      });
-
       if (widget is ReactiveIconWidget)
       {
+        print("is getting changed");
+        
         widget.key.currentState.setState(() 
         {
           widget.key.currentState.isInPlay = true;
@@ -294,6 +290,12 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           emitSpeech();
         }
       }
+
+      setState(() 
+      {
+        stackElements.remove(widget);
+        stackElements.add(widget);
+      });
     }
     else if (boardSettings.checkIsInSingleMode == false)
     {
@@ -651,7 +653,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   bool _isWithinStrip(ReactiveIconWidget icon) {
     //print("_isWithinStrip");
 
-    if (sentenceStripReference == null) return false;
+    if (sentenceStripReference == null || 
+        sentenceStripReference.key.currentState == null ||
+        sentenceStripReference.key.currentState.stripSize == null) return false;
 
     if (icon.key.currentState.currentPosition.dy > sentenceStripReference.key.currentState.stripSize.height) return false;
 
@@ -887,7 +891,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (boardSettings != null && boardSettings.checkIsInSingleMode == false)
+      {
         moveIconToTop(null);
+      }
     });
   
     animatedMenu = _buildAnimatedMenu(childButtons);
@@ -901,6 +908,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       animatedMenu: animatedMenu,
       boardSettings: boardSettings,
       documentsDirectory: dir,
+      boardSize: MediaQuery.of(context).size,
       child: VisualFieldBox(),
       key: GlobalKey(),
     );
@@ -1047,6 +1055,7 @@ class InheritedVisualFieldState extends InheritedWidget {
     @required this.inDebugMode,
     @required this.stackElements,
     @required this.animatedMenu,
+    @required this.boardSize,
     @required this.boardSettings,
     Widget child,
   }) : super (key: key, child: child);
@@ -1056,6 +1065,7 @@ class InheritedVisualFieldState extends InheritedWidget {
   final bool inDebugMode;
   final List<Widget> stackElements;
   final AnimatedMenuWidget animatedMenu;
+  final Size boardSize;
   final BoardSettings boardSettings;
 
   @override

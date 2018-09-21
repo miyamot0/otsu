@@ -207,7 +207,7 @@ class IconTree extends StatelessWidget {
 }
 
 class IconBox extends StatelessWidget {
-  final defaultStyle = new TextStyle(
+  static const defaultStyle = TextStyle(
     color: Colors.black, 
     decoration: TextDecoration.none, 
     fontWeight: FontWeight.normal,
@@ -222,21 +222,23 @@ class IconBox extends StatelessWidget {
     alignment: Alignment.centerRight,
   );
 
+  static const double thinBorderWidth  = 3.0;
+  static const double thickBorderWidth = 5.0;
+
   static Border thinBorder = Border.all(
     color: Colors.black, 
-    width: 3.0
+    width: thinBorderWidth,
   );
 
   static Border thickBorder = Border.all(
     color: Colors.black, 
-    width: 5.0
+    width: thickBorderWidth,
   );
 
   @override
   Widget build(BuildContext context) {
     final InheritedFolderState inheritedFolderState = InheritedFolderState.of(context);
     final InheritedVisualFieldState inheritedFieldState = InheritedVisualFieldState.of(context);
-    final MediaQueryData screenInformation = MediaQuery.of(context);
 
     GestureDetector settingsIcon =  GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -307,12 +309,12 @@ class IconBox extends StatelessWidget {
         double newY = offset.dy;
 
         newX = (newX < 0.0) ? 0.0 : newX;
-        newX = (newX + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.width) ? 
-          screenInformation.size.width - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newX;
+        newX = (newX + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > inheritedFieldState.boardSize.width) ? 
+          inheritedFieldState.boardSize.width - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newX;
 
         newY = (newY < 0.0) ? 0.0 : newY;
-        newY = (newY + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > screenInformation.size.height) ? 
-          screenInformation.size.height - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newY;        
+        newY = (newY + (inheritedFolderState.scale * inheritedFolderState.defaultWidth) > inheritedFieldState.boardSize.height) ? 
+          inheritedFieldState.boardSize.height - (inheritedFolderState.scale * inheritedFolderState.defaultWidth) : newY;        
         
         inheritedFolderState.onPositionChanged(Offset(newX, newY));
       });
