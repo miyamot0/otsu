@@ -278,14 +278,12 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
       if (widget is ReactiveIconWidget)
       {
-        print("is getting changed");
-        
         widget.key.currentState.setState(() 
         {
           widget.key.currentState.isInPlay = true;
         });
 
-        if (boardSettings.checkIsAutoSpeaking) 
+        if (boardSettings.checkIsAutoSpeaking == true) 
         {
           emitSpeech();
         }
@@ -586,6 +584,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   void deselectAllIcons() {
 
+    print('deselectAllIcons');
     // TODO strip
     for (var x in stackElements) 
     {
@@ -609,26 +608,31 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (boardSettings.checkIsInSingleMode == true)
     {
+      //print("boardSettings.checkIsInSingleMode == true");
+
       for (var x in stackElements) 
       {
         if (x is ReactiveIconWidget)
         {
-          if (x.key.currentState.isInPlay)
+          if (x.key.currentState.isInPlay == true)
           {
-            await speakerObjectReference.speak(x.key.currentState.label);
+            //print('boardSettings.checkIsAutoDeselecting: ${boardSettings.checkIsAutoDeselecting}');
 
-            if (boardSettings.checkIsAutoDeselecting == true)
+            if (boardSettings.checkIsAutoDeselecting == true || boardSettings.checkIsAutoSpeaking == true)
             {
+              //print('boardSettings.checkIsAutoDeselecting == true');
               deselectAllIcons();
-
-              return;
             }
+
+            await speakerObjectReference.speak(x.key.currentState.label);
           }
         }
       }
     }
     else
     {
+      print("boardSettings.checkIsInSingleMode == false");
+
       var tempList = <ReactiveIconWidget>[];
       var outputString = "";
 
@@ -758,6 +762,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     );
   }
 
+  /*
+
   /// Show startup
   /// 
   /// 
@@ -777,7 +783,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 fontStyle: FontStyle.normal,
-                fontSize: 24.0,                
+                fontSize: 24.0,
               ),
             ),
           ],
@@ -787,6 +793,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       ),
     );
   }
+
+  */
 
   /// TODO: assign size (square, based on %age height)
   /// 
