@@ -12,7 +12,6 @@ import '../Controls/ReactiveFolderWidget.dart';
 import '../Controls/SpeakerObject.dart';
 import '../Controls/StripObject.dart';
 import '../Dialogs/DialogEditorIcon.dart';
-import '../Dialogs/DialogIconLabel.dart';
 import '../Dialogs/DialogEditorFolder.dart';
 import '../Models/IconType.dart';
 import '../Models/EmbeddedIconModel.dart';
@@ -47,18 +46,20 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   @override
   void initState() {
+    print("initState()");
     sentenceStripReference = StripObject(padding: 10.0);
 
-    speakerObjectReference = SpeakerObject(emitSpeech, toggleDebugMode);
+    speakerObjectReference = SpeakerObject(_emitSpeech, _toggleDebugMode);
       stackElements.add(speakerObjectReference);
 
-    loadFromDatabase();
+    _loadFromDatabase();
 
     super.initState();
   }
 
   @override
   void dispose() {
+    print("dispose()");
     iconDb.close();
 
     super.dispose();
@@ -67,8 +68,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Load icons from database
   /// 
   /// 
-  void loadFromDatabase() async {
-    //print("loadFromDatabase()");
+  void _loadFromDatabase() async {
+    print("loadFromDatabase()");
     dir = (await getApplicationDocumentsDirectory()).path;
 
     iconDb = new IconDatabase();
@@ -98,10 +99,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             isStored: icons[i].isStored, 
             isInPlay: false,
             isPinnedToLocation: icons[i].pinned,
-            launchEditor: triggerEditor,
+            launchEditor: _triggerEditor,
             scale: icons[i].scale,
             defaultWidth: 200.0,
-            moveToTop: moveIconToTop,
+            moveToTop: _moveIconToTop,
             id: icons[i].id,
             storedId: icons[i].storedId,
             initialPosition: Offset(
@@ -119,13 +120,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             isInSingleMode: boardSettings.checkIsInSingleMode,
             isEmbbedded: icons[i].embedded,
             isStored: icons[i].isStored, 
-            launchEditor: triggerEditor,
+            launchEditor: _triggerEditor,
             openFolderDialog: _navigateToFolderContentDialog,
             isInPlay: false,
             isPinnedToLocation: icons[i].pinned,
             scale: icons[i].scale,
             defaultWidth: 200.0,
-            moveToTop: moveIconToTop,
+            moveToTop: _moveIconToTop,
             id: icons[i].id,
             initialPosition: Offset(
               icons[i].x, 
@@ -134,7 +135,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           );
         }
       }
-        
+
+      icons.clear();
+      icons = null;
+
       speakerObjectReference.speak("").then((_) => print("TTS Module Loaded..."));
     });
 
@@ -148,11 +152,53 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     childButtons.add(_buildResumeChildModeButton()); 
   }
 
+  @override
+  Widget build(BuildContext context) {
+    print("build(BuildContext context)");
+
+    if (childButtons.length == 0)
+    {
+      print("childButtons.length == 0");
+
+      childButtons.clear();
+      childButtons.add(_buildAddFolderButton());
+      childButtons.add(_buildAddIconButton());
+      childButtons.add(_buildSwitchModeButton());
+      childButtons.add(_buildAutoOutputModeButton()); 
+      childButtons.add(_buildAutoDeselectModeButton());      
+      childButtons.add(_buildResumeChildModeButton()); 
+
+      animatedMenu = _buildAnimatedMenu(childButtons);
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      print("WidgetsBinding.instance.addPostFrameCallback(_)");
+      if (boardSettings != null && boardSettings.checkIsInSingleMode == false)
+      {
+        _moveIconToTop(null);
+      }
+    });
+  
+    _toggleSentenceStrip();
+    
+    return InheritedVisualFieldState(
+      background: background,
+      inDebugMode: inDebugMode,
+      stackElements: stackElements,
+      animatedMenu: animatedMenu,
+      boardSettings: boardSettings,
+      documentsDirectory: dir,
+      boardSize: MediaQuery.of(context).size,
+      child: VisualFieldBox(),
+      key: GlobalKey(),
+    );
+  }
+
   /// Is there an intersection between a folder and an icon?
   /// 
   /// 
   Future<bool> _isIconOverlappingWithFolder(ReactiveIconWidget widget) async {
-    //print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
+    print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
 
     var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
                                 .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
@@ -202,8 +248,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Move icons to top
   /// 
   /// 
-  void moveIconToTop(Widget widget) async {
-    print("VisualFieldWidget: moveIconToTop(TestIcon widget)");
+  void _moveIconToTop(Widget widget) async {
+    print("_moveIconToTop(TestIcon widget)");
 
     if (boardSettings == null) return;
 
@@ -212,7 +258,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       if (boardSettings.checkIsInSingleMode == true)
       {
-        print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+        print("VisualFieldWidget: _moveIconToTop() == IsInSingleMode");
 
         for (var i = 0; i < stackElements.length; i++)
         {
@@ -229,7 +275,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       }
       else
       {
-        //print("VisualFieldWidget: moveIconToTop() == In Frame Mode");
+        //print("VisualFieldWidget: _moveIconToTop() == In Frame Mode");
 
         for (var i = 0; i < stackElements.length; i++)
         {
@@ -259,7 +305,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (boardSettings.checkIsInSingleMode == true)
     {
-      print("VisualFieldWidget: moveIconToTop() == IsInSingleMode");
+      print("VisualFieldWidget: _moveIconToTop() == IsInSingleMode");
 
       for (var i = 0; i < stackElements.length; i++)
       {
@@ -286,7 +332,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
         if (boardSettings.checkIsAutoSpeaking == true) 
         {
-          emitSpeech();
+          _emitSpeech();
         }
       }
 
@@ -298,7 +344,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
     else if (boardSettings.checkIsInSingleMode == false)
     {
-      //print("VisualFieldWidget: moveIconToTop() == Is In Frame Mode");
+      //print("VisualFieldWidget: _moveIconToTop() == Is In Frame Mode");
 
       for (var i = 0; i < stackElements.length; i++)
       {
@@ -377,7 +423,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _removeFromDatabase(Widget widget) async {
-    //print("_removeFromStack(Widget widget)");
+    print("_removeFromStack(Widget widget)");
 
     if (widget is ReactiveIconWidget)
     {
@@ -400,143 +446,11 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
   }
 
-  /// Build auto output button
-  /// 
-  /// 
-  AnimatedMenuItem _buildAutoOutputModeButton() {
-    return AnimatedMenuItem(
-      labelText: boardSettings.checkIsAutoSpeaking == true ? "Change to Manual Mode" : "Change to Autospeak Mode",
-      currentButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        heroTag: "autoTag",
-        mini: false,
-        child: Icon(Icons.volume_up),
-        onPressed: () async 
-        {
-          setState(() 
-          {
-            boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
-
-            //print("autoSpeaking Delegate: Status = ${boardSettings.checkIsAutoSpeaking}");
-          });
-
-          await iconDb.saveSettings(boardSettings);
-        },
-      )
-    );
-  }
-
-  /// Build auto deselect button
-  /// 
-  /// 
-  AnimatedMenuItem _buildAutoDeselectModeButton() {
-    return AnimatedMenuItem(
-      labelText: boardSettings.checkIsAutoDeselecting == true ? "Disable Auto-Deselect" : "Enable Auto-Deselect",
-      currentButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        heroTag: "deselectTag",
-        mini: false,
-        child: Icon(Icons.fingerprint),
-        onPressed: () async 
-        {
-          setState(() 
-          {
-            boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
-
-            //print("autoDeselect Delegate: Status = ${boardSettings.checkIsAutoDeselecting}");
-          });
-
-          await iconDb.saveSettings(boardSettings);
-        },
-      )
-    );
-  }
-
-  /// Build switch button
-  ///
-  ///
-  AnimatedMenuItem _buildSwitchModeButton() {
-    return AnimatedMenuItem(
-      labelText: boardSettings.checkIsInSingleMode == true ? "Change to Frame Mode" : "Change to Icon Mode",
-      currentButton: FloatingActionButton(
-        backgroundColor: Colors.deepOrange,
-        heroTag: "frameTag",
-        mini: false,
-        child: Icon(Icons.border_all),
-        onPressed: () async 
-        {
-          setState(() 
-          {
-            boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
-
-            //print("modeSelect Delegate: Status = ${boardSettings.checkIsInSingleMode}");
-
-            moveIconToTop(null);
-          });
-
-          await iconDb.saveSettings(boardSettings);
-        },
-      )
-    );
-  }
-
-  /// Build resume button
-  ///
-  ///
-  AnimatedMenuItem _buildResumeChildModeButton() {
-    return AnimatedMenuItem(
-      labelText: "Resume Child Mode",
-      currentButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
-        heroTag: "resumeTag",
-        mini: false,
-        child: Icon(Icons.play_arrow),
-        onPressed: () async {
-          _resumeChildMode();
-
-          await iconDb.saveSettings(boardSettings);
-        }
-      )
-    );
-  }
-
-  /// Build icon button 
-  ///
-  ///
-  AnimatedMenuItem _buildAddFolderButton() {
-    return AnimatedMenuItem(
-      labelText: "Add a Folder",
-      currentButton: FloatingActionButton(
-        backgroundColor: Colors.amber,
-        heroTag: "addFolderTag",
-        mini: false,
-        child: Icon(Icons.folder_open),
-        onPressed: () => _navigateToFolderCreatorScreen(context),
-      ),
-    );
-  }
-
-  /// Build icon button 
-  ///
-  ///
-  AnimatedMenuItem _buildAddIconButton() {
-    return AnimatedMenuItem(
-      labelText: "Add an Icon",
-      currentButton: FloatingActionButton(
-        backgroundColor: Colors.green,
-        heroTag: "addIconTag",
-        mini: false,
-        child: Icon(Icons.add_a_photo),
-        onPressed: () => _navigateToIconCreatorScreen(context),
-      ),
-    );
-  }
-
   /// Resume child interaction mode
   /// 
   /// This disables debug mode (hides buttons)
   void _resumeChildMode() async {
-    //print('_resumeChildMode()');
+    print('_resumeChildMode()');
 
     setState(() {
       inDebugMode = false;
@@ -544,7 +458,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (boardSettings.checkIsInSingleMode == true) 
     {
-      deselectAllIcons();
+      _deselectAllIcons();
     }
     else 
     {
@@ -566,8 +480,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Toggle debug mode
   /// 
   /// 
-  void toggleDebugMode() {
-    //print("toggleDebugMode()");
+  void _toggleDebugMode() {
+    print("_toggleDebugMode()");
 
     setState(() {
       inDebugMode = true;
@@ -577,10 +491,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Deselect all icons
   /// 
   /// 
-  void deselectAllIcons() {
+  void _deselectAllIcons() {
+    print('_deselectAllIcons');
 
-    print('deselectAllIcons');
-    // TODO strip
     for (var x in stackElements) 
     {
       if (x is ReactiveIconWidget)
@@ -598,12 +511,12 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Emit speech
   /// 
   /// 
-  void emitSpeech() async {
-    //print("emitSpeech()");
+  void _emitSpeech() async {
+    print("_emitSpeech()");
 
     if (boardSettings.checkIsInSingleMode == true)
     {
-      //print("boardSettings.checkIsInSingleMode == true");
+      print("boardSettings.checkIsInSingleMode == true");
 
       for (var x in stackElements) 
       {
@@ -616,7 +529,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             if (boardSettings.checkIsAutoDeselecting == true || boardSettings.checkIsAutoSpeaking == true)
             {
               //print('boardSettings.checkIsAutoDeselecting == true');
-              deselectAllIcons();
+              _deselectAllIcons();
             }
 
             await speakerObjectReference.speak(x.key.currentState.label);
@@ -650,7 +563,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   bool _isWithinStrip(ReactiveIconWidget icon) {
-    //print("_isWithinStrip");
+    print("_isWithinStrip(ReactiveIconWidget icon)");
 
     if (sentenceStripReference == null || 
         sentenceStripReference.key.currentState == null ||
@@ -666,7 +579,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// Trigger editor for icons
   /// 
   /// 
-  void triggerEditor(Widget widget) async {
+  void _triggerEditor(Widget widget) async {
+    print("_triggerEditor(Widget widget)");
+
     if (widget is ReactiveIconWidget)
     {
       var res = await showDialog(
@@ -786,7 +701,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
-    //print("_buildFolderPopupDialog, length = ${storedIcons.length}");
+    print("_buildFolderPopupDialog, length = ${storedIcons.length}");
 
     List<Container> imgs = [];
 
@@ -838,7 +753,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _restoreIconFromStorage(SavedIcon savedIcon) async {
-    //print("_restoreIconFromStorage(SavedIcon savedIcon)");
+    print("_restoreIconFromStorage(SavedIcon savedIcon)");
 
     savedIcon.isStored = false;
     savedIcon.storedId = -1;
@@ -856,10 +771,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         isStored: savedIcon.isStored, 
         isInPlay: false,
         isPinnedToLocation: savedIcon.pinned,
-        launchEditor: triggerEditor,
+        launchEditor: _triggerEditor,
         scale: savedIcon.scale,
         defaultWidth: 200.0,
-        moveToTop: moveIconToTop,
+        moveToTop: _moveIconToTop,
         id: savedIcon.id,
         storedId: savedIcon.storedId,
         initialPosition: Offset(
@@ -871,60 +786,21 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (childButtons.length > 0)
-    {
-      childButtons.clear();
-      childButtons.add(_buildAddFolderButton());
-      childButtons.add(_buildAddIconButton());
-      childButtons.add(_buildSwitchModeButton());
-      childButtons.add(_buildAutoOutputModeButton()); 
-      childButtons.add(_buildAutoDeselectModeButton());      
-      childButtons.add(_buildResumeChildModeButton()); 
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (boardSettings != null && boardSettings.checkIsInSingleMode == false)
-      {
-        moveIconToTop(null);
-      }
-    });
-  
-    animatedMenu = _buildAnimatedMenu(childButtons);
-
-    toggleSentenceStrip();
-    
-    return InheritedVisualFieldState(
-      background: background,
-      inDebugMode: inDebugMode,
-      stackElements: stackElements,
-      animatedMenu: animatedMenu,
-      boardSettings: boardSettings,
-      documentsDirectory: dir,
-      boardSize: MediaQuery.of(context).size,
-      child: VisualFieldBox(),
-      key: GlobalKey(),
-    );
-  }
-
   /// Toggle visibility of strip
   /// 
   /// 
-  void toggleSentenceStrip() {
-    //print("toggleSentenceStrip(): ${boardSettings == null}");
+  void _toggleSentenceStrip() {
+    print("_toggleSentenceStrip(): ${boardSettings == null}");
 
     if (boardSettings == null) return;
 
     if (boardSettings.checkIsInSingleMode == true && stackElements.contains(sentenceStripReference))
     {
-      //print("toggleSentenceStrip() remove strip");
       stackElements.remove(sentenceStripReference);
     }
 
     if (boardSettings.checkIsInSingleMode == false && !stackElements.contains(sentenceStripReference))
     {
-      //print("toggleSentenceStrip() add strip");
       stackElements.insert(0, sentenceStripReference);
     }
   }
@@ -933,7 +809,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToIconCreatorScreen(BuildContext context) async {
-    //print("_navigateToIconCreatorScreen()");
+    print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
 
     if (result == null) return;
@@ -965,10 +841,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         isStored: insert.isStored, 
         isInPlay: false,
         isPinnedToLocation: insert.pinned,
-        launchEditor: triggerEditor,
+        launchEditor: _triggerEditor,
         scale: insert.scale,
         defaultWidth: 200.0,
-        moveToTop: moveIconToTop,
+        moveToTop: _moveIconToTop,
         id: insert.id,
         storedId: insert.storedId,
         initialPosition: Offset(
@@ -984,7 +860,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderCreatorScreen(BuildContext context) async {
-    //print("_navigateToIconCreatorScreen()");
+    print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FolderCreatorScreen(dir)));
 
     if (result == null) return;
@@ -1016,20 +892,159 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         isStored: insert.isStored,
         isInPlay: false,
         isPinnedToLocation: insert.pinned,
-        launchEditor: triggerEditor,
+        launchEditor: _triggerEditor,
         openFolderDialog: _navigateToFolderContentDialog,
         scale: insert.scale,
         defaultWidth: 200.0,
-        moveToTop: moveIconToTop,
+        moveToTop: _moveIconToTop,
         id: insert.id,
         initialPosition: Offset(insert.x, insert.y),));
     });
+  }
+
+  /// Build auto output button
+  /// 
+  /// 
+  AnimatedMenuItem _buildAutoOutputModeButton() {
+    print('_buildAutoOutputModeButton()');
+
+    return AnimatedMenuItem(
+      labelText: (boardSettings == null || boardSettings.checkIsAutoSpeaking == true) ? "Change to Manual Mode" : "Change to Autospeak Mode",
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        heroTag: "autoTag",
+        mini: false,
+        child: Icon(Icons.volume_up),
+        onPressed: () async 
+        {
+          setState(() 
+          {
+            boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
+          });
+
+          await iconDb.saveSettings(boardSettings);
+        },
+      )
+    );
+  }
+
+  /// Build auto deselect button
+  /// 
+  /// 
+  AnimatedMenuItem _buildAutoDeselectModeButton() {
+    print('_buildAutoDeselectModeButton()');
+
+    return AnimatedMenuItem(
+      labelText: (boardSettings == null || boardSettings.checkIsAutoDeselecting == true) ? "Disable Auto-Deselect" : "Enable Auto-Deselect",
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.red,
+        heroTag: "deselectTag",
+        mini: false,
+        child: Icon(Icons.fingerprint),
+        onPressed: () async 
+        {
+          setState(() 
+          {
+            boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
+          });
+
+          await iconDb.saveSettings(boardSettings);
+        },
+      )
+    );
+  }
+
+  /// Build switch button
+  ///
+  ///
+  AnimatedMenuItem _buildSwitchModeButton() {
+    print('_buildSwitchModeButton()');
+
+    return AnimatedMenuItem(
+      labelText: (boardSettings == null || boardSettings.checkIsInSingleMode == true) ? "Change to Frame Mode" : "Change to Icon Mode",
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.deepOrange,
+        heroTag: "frameTag",
+        mini: false,
+        child: Icon(Icons.border_all),
+        onPressed: () async 
+        {
+          setState(() 
+          {
+            boardSettings.checkIsInSingleMode = !boardSettings.checkIsInSingleMode;
+            _moveIconToTop(null);
+          });
+
+          await iconDb.saveSettings(boardSettings);
+        },
+      )
+    );
+  }
+
+  /// Build resume button
+  ///
+  ///
+  AnimatedMenuItem _buildResumeChildModeButton() {
+    print('_buildResumeChildModeButton()');
+
+    return AnimatedMenuItem(
+      labelText: "Resume Child Mode",
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
+        heroTag: "resumeTag",
+        mini: false,
+        child: Icon(Icons.play_arrow),
+        onPressed: () async {
+          _resumeChildMode();
+
+          await iconDb.saveSettings(boardSettings);
+        }
+      )
+    );
+  }
+
+  /// Build icon button 
+  ///
+  ///
+  AnimatedMenuItem _buildAddFolderButton() {
+    print('_buildAddFolderButton()');
+
+    return AnimatedMenuItem(
+      labelText: "Add a Folder",
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.amber,
+        heroTag: "addFolderTag",
+        mini: false,
+        child: Icon(Icons.folder_open),
+        onPressed: () => _navigateToFolderCreatorScreen(context),
+      ),
+    );
+  }
+
+  /// Build icon button 
+  ///
+  ///
+  AnimatedMenuItem _buildAddIconButton() {
+    print('_buildAddIconButton()');
+
+    return AnimatedMenuItem(
+      labelText: "Add an Icon",
+      currentButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        heroTag: "addIconTag",
+        mini: false,
+        child: Icon(Icons.add_a_photo),
+        onPressed: () => _navigateToIconCreatorScreen(context),
+      ),
+    );
   }
 
   /// Build menu
   ///
   ///
   AnimatedMenuWidget _buildAnimatedMenu(List<Widget> buttons) {
+    print('_buildAnimatedMenu()');
+
     return AnimatedMenuWidget(
       parentButton: Icon(Icons.settings),
       isLeft: false,
