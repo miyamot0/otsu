@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Controls/FieldBox.dart';
+import 'FieldBox.dart';
 
 /// Wrapper for stateless view of field
 /// 

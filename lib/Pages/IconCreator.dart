@@ -11,11 +11,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-import '../Controls/PreviewIcon.dart';
-import '../Controls/CustomFloatingButtonLocation.dart';
 import '../Controls/AnimatedMenu.dart';
 import '../Dialogs/DialogIconLabel.dart';
 import '../Models/EmbeddedIconModel.dart';
+import '../Views/CustomFloatingButtonLocation.dart';
+import '../Views/PreviewIcon.dart';
 
 class IconCreatorScreen extends StatefulWidget {
   final String documentsDirectory;

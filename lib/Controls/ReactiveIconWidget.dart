@@ -4,9 +4,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../Controls/IconBox.dart';
 import '../Models/IconType.dart';
 import '../InheritedWidgets/InheritedIconState.dart';
+import '../Views/IconBox.dart';
 
 class ReactiveIconWidget extends StatefulWidget {
   final String label, assetPath;

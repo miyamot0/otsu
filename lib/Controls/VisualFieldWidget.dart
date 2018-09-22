@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../Controls/AnimatedMenu.dart';
-import '../Controls/VisualFieldBox.dart';
 import '../Controls/ReactiveIconWidget.dart';
 import '../Controls/ReactiveFolderWidget.dart';
 import '../Controls/SpeakerObject.dart';
@@ -25,6 +24,8 @@ import '../Pages/FolderCreator.dart';
 import '../Pages/IconCreator.dart';
 
 import '../Storage/IconDatabase.dart';
+
+import '../Views/VisualFieldBox.dart';
 
 class VisualFieldWidget extends StatefulWidget {
 

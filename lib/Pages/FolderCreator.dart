@@ -5,11 +5,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../Controls/PreviewIcon.dart';
-import '../Controls/CustomFloatingButtonLocation.dart';
 import '../Controls/AnimatedMenu.dart';
 import '../Dialogs/DialogIconLabel.dart';
 import '../Models/EmbeddedIconModel.dart';
+import '../Views/CustomFloatingButtonLocation.dart';
+import '../Views/PreviewIcon.dart';
 
 final bool outputToTerminal = false;
 

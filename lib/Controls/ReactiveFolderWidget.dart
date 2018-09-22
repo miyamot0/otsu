@@ -4,9 +4,9 @@
 
 import 'package:flutter/material.dart';
 
-import '../Controls/FolderBox.dart';
 import '../Models/IconType.dart';
 import '../InheritedWidgets/InheritedFolderState.dart';
+import '../Views/FolderBox.dart';
 
 class ReactiveFolderWidget extends StatefulWidget {
   final String label, assetPath;
