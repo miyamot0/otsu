@@ -12,6 +12,7 @@ import '../Controls/ReactiveFolderWidget.dart';
 import '../Controls/SpeakerObject.dart';
 import '../Controls/StripObject.dart';
 import '../Dialogs/DialogEditorIcon.dart';
+import '../Dialogs/DialogIconLabel.dart';
 import '../Dialogs/DialogEditorFolder.dart';
 import '../Models/IconType.dart';
 import '../Models/EmbeddedIconModel.dart';
@@ -672,41 +673,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void triggerEditor(Widget widget) async {
-    //print("_triggerIconEditor()");
-
     if (widget is ReactiveIconWidget)
     {
-      String newName = await Navigator.of(context).push(PageRouteBuilder(
-          opaque: false,
-          pageBuilder: (BuildContext context, _, __) {
-              return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
-          }
-      ));
-
-      if (newName != null)
-      {
-          SavedIcon savedIcon = SavedIcon();
-          savedIcon.id        = widget.id;
-          savedIcon.iconName  = newName;
-          savedIcon.iconPath  = widget.assetPath;
-          savedIcon.x         = widget.key.currentState.currentPosition.dx;
-          savedIcon.y         = widget.key.currentState.currentPosition.dy;
-          savedIcon.embedded  = widget.key.currentState.isEmbbedded;
-          savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
-          savedIcon.scale     = widget.key.currentState.scale;
-          savedIcon.active    = widget.key.currentState.isInPlay;
-          savedIcon.isStored  = widget.key.currentState.isStored;
-          savedIcon.storedId  = widget.storedId;
-          savedIcon.isFolder  = false;
-
-          await iconDb.update(savedIcon);
-
-          widget.key.currentState.setState(() {
-            widget.key.currentState.label = newName;
-          });
-      }
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        
+        builder: (BuildContext context) {
+          return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
+        },
+      );
     }
 
+    // TODO: 
     if (widget is ReactiveFolderWidget)
     {
       //debugPrint("_triggerIconEditor()");
@@ -743,6 +722,151 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           });
       }
     }
+  }
+
+  Future<String> _showInputDialog(ReactiveIconWidget iconWidget) async {
+    //debugPrint("_showInputDialog()");
+    return await showDialog<String>(
+      context: context,
+      child: new DialogIconLabel(assetText: iconWidget.key.currentState.label),
+    );
+  }
+
+  /// TODO: assign size (square, based on %age height)
+  /// 
+  /// 
+  Opacity _buildPopupIconEditor(ReactiveIconWidget iconWidget) {
+    //print("_buildFolderPopupDialog, length = ${storedIcons.length}");
+
+    List<MaterialButton> imgs = [];
+
+    imgs.add(MaterialButton( 
+      color: Theme.of(context).primaryColor, 
+      textColor: Colors.white,
+      child: const Text("Increase Size"), 
+      onPressed: () async {
+        print("Increase Size");
+        iconWidget.key.currentState.setState(() {
+          iconWidget.key.currentState.scale = iconWidget.key.currentState.scale * 1.05;
+        });
+
+        _saveLatestStack(iconWidget);
+      }, 
+      splashColor: Colors.redAccent,
+    ));
+
+    imgs.add(MaterialButton( 
+      color: Theme.of(context).primaryColor, 
+      textColor: Colors.white,
+      child: const Text("Decrease Size"), 
+      onPressed: () async {
+        print("Decrease Size");
+        iconWidget.key.currentState.setState(() {
+          iconWidget.key.currentState.scale = iconWidget.key.currentState.scale * 0.95;
+        });
+
+        _saveLatestStack(iconWidget);
+      }, 
+      splashColor: Colors.redAccent,
+    ));
+
+    imgs.add(MaterialButton( 
+      color: Theme.of(context).primaryColor, 
+      textColor: Colors.white,
+      child: const Text("Pin Icon"), 
+      onPressed: () async {
+        print("Pin Icon");
+          iconWidget.key.currentState.setState(() {
+            iconWidget.key.currentState.isPinnedToLocation = !iconWidget.key.currentState.isPinnedToLocation;
+          });
+
+          _saveLatestStack(iconWidget);
+      }, 
+      splashColor: Colors.redAccent,
+    ));
+
+    imgs.add(MaterialButton( 
+      color: Theme.of(context).primaryColor, 
+      textColor: Colors.white,
+      child: const Text("Rename Icon"), 
+      onPressed: () async {
+        print("rename Icon");
+
+        String newText = await _showInputDialog(iconWidget);
+
+        if (newText == null) return;
+
+        iconWidget.key.currentState.setState(()
+        {
+          iconWidget.key.currentState.label = newText;  
+        });
+
+        _saveLatestStack(iconWidget);
+      }, 
+      splashColor: Colors.redAccent,
+    ));
+
+    imgs.add(MaterialButton( 
+      color: Theme.of(context).primaryColor, 
+      textColor: Colors.white,
+      child: const Text("Set Default Size"), 
+      onPressed: () async {
+        print("Set Default Size");
+        iconWidget.key.currentState.setState(() {
+          iconWidget.key.currentState.scale = 1.0;
+        });
+
+        _saveLatestStack(iconWidget);
+      }, 
+      splashColor: Colors.redAccent,
+    ));
+
+    imgs.add(MaterialButton( 
+      color: Colors.redAccent, 
+      textColor: Colors.white,
+      child: const Text("Delete Icon"), 
+      onPressed: () async {
+        print("Delete Icon");
+
+        iconWidget.key.currentState.controller.reverse().then((err) {
+          _removeFromDatabase(widget);
+
+          Navigator.pop(context);
+        });
+      }, 
+      splashColor: Colors.blueAccent,
+    ));
+
+/*
+    return new Scaffold(
+      backgroundColor: Colors.black.withAlpha(150),
+      body: Center(
+        child: Opacity(
+          child: dialogContainer,
+          opacity: 0.9,
+        ),
+      ),
+    );
+*/
+    return Opacity(
+      child: AlertDialog(
+        title: Center(
+          child: Text("Editing Icon: ${iconWidget.key.currentState.label}"),
+        ),
+        content: Container(
+          child: new GridView.count(
+            crossAxisCount: 3,
+            mainAxisSpacing: 4.0,
+            crossAxisSpacing: 4.0,
+            padding: const EdgeInsets.all(4.0),
+            childAspectRatio: 1.0,
+            children: imgs,
+          ),
+        width: 500.0,
+        height: 500.0,
+        ),
+      ),
+    opacity: 0.9);
   }
 
   /// Navigate to folder contents

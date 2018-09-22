@@ -4,6 +4,7 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../Controls/ReactiveIconWidget.dart';
 import '../Dialogs/DialogIconLabel.dart';
@@ -25,109 +26,7 @@ class DialogEditorIcon extends StatefulWidget {
 
 class DialogEditorIconState extends State<DialogEditorIcon> {
 
-  MaterialButton _getGrowButton(double reccHeight) {
-    return new MaterialButton( 
-      height: reccHeight, 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white,
-      child: new Text("Increase Size"), 
-      onPressed: () async {
-        widget.iconWidget.key.currentState.setState(() {
-          widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 1.05;
-        });
-
-        await widget.saveCallback(widget.iconWidget);
-      }, 
-      splashColor: Colors.redAccent);
-  }
-
-  MaterialButton _getShrinkButton(double reccHeight) {
-    return new MaterialButton( 
-      height: reccHeight, 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white, 
-      child: new Text("Decrease Size"), 
-      onPressed: () async {
-        widget.iconWidget.key.currentState.setState(() {
-          widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 0.95;
-        });
-
-        await widget.saveCallback(widget.iconWidget);
-      }, 
-      splashColor: Colors.redAccent);
-  }
-
-  MaterialButton _getPinButton(double reccHeight) {
-    return new MaterialButton( 
-      height: reccHeight, 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white, 
-      child: new Text("Fix/Unfix Position"), 
-      onPressed: () async {
-        widget.iconWidget.key.currentState.setState(() {
-          widget.iconWidget.key.currentState.isPinnedToLocation = !widget.iconWidget.key.currentState.isPinnedToLocation;
-        });
-
-        await widget.saveCallback(widget.iconWidget);
-      }, 
-      splashColor: Colors.redAccent);
-  }
-
-  MaterialButton _getRenameButton(double reccHeight) {
-    return new MaterialButton( 
-      height: reccHeight, 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white, 
-      child: new Text("Rename Element"), 
-      onPressed: () async {
-        String newText = await _showInputDialog();
-
-        if (newText == null) return;
-
-        widget.iconWidget.key.currentState.setState(()
-        {
-          widget.iconWidget.key.currentState.label = newText;  
-        });
-
-        await widget.saveCallback(widget.iconWidget);
-
-        Navigator.pop(context, newText);
-      },
-      splashColor: Colors.redAccent);
-  }
-
-  MaterialButton _getDeleteButton(double reccHeight) {
-    return new MaterialButton( 
-      height: reccHeight, 
-      color: Colors.redAccent, 
-      textColor: Colors.white, 
-      child: new Text("Delete Element"), 
-      onPressed: () {
-
-        widget.iconWidget.key.currentState.controller.reverse().then((err) {
-          widget.deleteCallback(widget.iconWidget);
-
-          Navigator.pop(context);
-        });
-      }, 
-      splashColor: Colors.redAccent);
-  }
-
-  MaterialButton _getDefaultButton(double reccHeight) {
-    return new MaterialButton( 
-      height: reccHeight, 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white, 
-      child: new Text("Default Size"), 
-      onPressed: () async {
-        widget.iconWidget.key.currentState.setState(() {
-          widget.iconWidget.key.currentState.scale = 1.0;
-        });
-
-        await widget.saveCallback(widget.iconWidget);
-      }, 
-      splashColor: Colors.redAccent);
-  }
+  final List<MaterialButton> imgs = [];
 
   /// Show edit text dialog
   /// 
@@ -140,124 +39,121 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
     );
   }
 
-  static const defaultStyle = TextStyle(
-    color: Colors.black, 
-    decoration: TextDecoration.none, 
-    fontSize: 20.0,
-  );
-
   @override
   Widget build(BuildContext context) {
-    double dialogDimension = MediaQuery.of(context).size.height * 0.7;
 
-    GestureDetector closeIcon = GestureDetector(
-      child: Icon(
-        Icons.close, 
-        size: dialogDimension * 0.125,
-      ),
-      onTap: () => Navigator.pop(context),
-    );
+    if (imgs.length == 0) {
+      imgs.add(MaterialButton( 
+        color: Theme.of(context).primaryColor, 
+        textColor: Colors.white,
+        child: const Text("Increase Size"), 
+        onPressed: () async {
+          widget.iconWidget.key.currentState.setState(() {
+            widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 1.05;
+          });
 
-    double numRows = 3.0;
-    double rowHeight = (dialogDimension * 3.0/4.0) / numRows;
+          widget.saveCallback(widget.iconWidget);
+        }, 
+        splashColor: Colors.redAccent,
+      ));
 
-    Expanded buttonContainer = Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch, 
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  child: _getGrowButton(rowHeight), 
-                  padding: EdgeInsets.all(5.0),
-                ),
-                Padding(
-                  child: _getDefaultButton(rowHeight), 
-                  padding: EdgeInsets.all(5.0),
-                ),          
-              ],
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  child: _getShrinkButton(rowHeight), 
-                  padding: EdgeInsets.all(5.0),
-                ),
-                Padding(
-                  child: _getRenameButton(rowHeight), 
-                  padding: EdgeInsets.all(5.0),
-                ),
-              ],
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  child: _getPinButton(rowHeight), 
-                  padding: EdgeInsets.all(5.0),
-                ),
-                Padding(
-                  child: _getDeleteButton(rowHeight), 
-                  padding: EdgeInsets.all(5.0),
-                ),
-              ],
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-            ),
-          ),
-        ],
-      ),
-    );
+      imgs.add(MaterialButton( 
+        color: Theme.of(context).primaryColor, 
+        textColor: Colors.white,
+        child: const Text("Decrease Size"), 
+        onPressed: () async {
+          widget.iconWidget.key.currentState.setState(() {
+            widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 0.95;
+          });
 
-    Column columnContent = Column(
-      children: [
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                child: Text(
-                  "Editing Widget: ${widget.iconWidget.key.currentState.label}", 
-                  style: defaultStyle,
-                ), 
-                padding: EdgeInsets.all(5.0),
-              ), 
-            ),
-            Align(
-              child: closeIcon, 
-              alignment: Alignment.topRight,
-            ),
-          ],
+          widget.saveCallback(widget.iconWidget);
+        }, 
+        splashColor: Colors.redAccent,
+      ));
+
+      imgs.add(MaterialButton( 
+        color: Theme.of(context).primaryColor, 
+        textColor: Colors.white,
+        child: const Text("Pin Icon"), 
+        onPressed: () async {
+            widget.iconWidget.key.currentState.setState(() {
+              widget.iconWidget.key.currentState.isPinnedToLocation = !widget.iconWidget.key.currentState.isPinnedToLocation;
+            });
+
+            widget.saveCallback(widget.iconWidget);
+        }, 
+        splashColor: Colors.redAccent,
+      ));
+
+      imgs.add(MaterialButton( 
+        color: Theme.of(context).primaryColor, 
+        textColor: Colors.white,
+        child: const Text("Rename Icon"), 
+        onPressed: () async {
+          String newText = await _showInputDialog();
+
+          if (newText == null) return;
+
+          await SystemChrome.setEnabledSystemUIOverlays([]);
+
+          widget.iconWidget.key.currentState.setState(()
+          {
+            widget.iconWidget.key.currentState.label = newText;  
+          });
+
+          widget.saveCallback(widget.iconWidget);
+        }, 
+        splashColor: Colors.redAccent,
+      ));
+
+      imgs.add(MaterialButton( 
+        color: Theme.of(context).primaryColor, 
+        textColor: Colors.white,
+        child: const Text("Set Default Size"), 
+        onPressed: () async {
+          widget.iconWidget.key.currentState.setState(() {
+            widget.iconWidget.key.currentState.scale = 1.0;
+          });
+
+          widget.saveCallback(widget.iconWidget);
+        }, 
+        splashColor: Colors.redAccent,
+      ));
+
+      imgs.add(MaterialButton( 
+        color: Colors.redAccent, 
+        textColor: Colors.white,
+        child: const Text("Delete Icon"), 
+        onPressed: () async {
+          widget.iconWidget.key.currentState.controller.reverse().then((err) {
+            widget.deleteCallback(widget.iconWidget);
+
+            Navigator.pop(context);
+          });
+        }, 
+        splashColor: Colors.blueAccent,
+      ));
+    }
+
+    return Opacity(
+      child: AlertDialog(
+        title: Center(
+          child: Text("Editing Icon: ${widget.iconWidget.key.currentState.label}"),
         ),
-        buttonContainer,
-      ],
-    );
-
-    Container dialogContainer = Container(
-      child: columnContent,
-      width: dialogDimension,
-      height: dialogDimension * 3.0/4.0,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black, 
-          width: 3.0,
-        ),
-        color: Colors.white,
-      ),
-    );
-
-    return new Scaffold(
-      backgroundColor: Colors.black.withAlpha(150),
-      body: Center(
-        child: Opacity(
-          child: dialogContainer,
-          opacity: 0.9,
+        content: Container(
+          child: new GridView.count(
+            crossAxisCount: 3,
+            mainAxisSpacing: 4.0,
+            crossAxisSpacing: 4.0,
+            padding: const EdgeInsets.all(4.0),
+            childAspectRatio: 1.0,
+            children: imgs,
+          ),
+        width: 500.0,
+        height: 500.0,
         ),
       ),
+    opacity: 0.9,
     );
   }
 }
