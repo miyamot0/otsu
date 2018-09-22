@@ -104,7 +104,6 @@ class ReactiveIconWidgetState extends State<ReactiveIconWidget> with SingleTicke
 
 	@override
 	void dispose(){
-
 	  controller.dispose();
 	  super.dispose();
 	}
