@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 
 import '../Models/IconType.dart';
-import '../Controls/VisualFieldWidget.dart';
+import '../InheritedWidgets/InheritedVisualFieldState.dart';
 
 class ReactiveIconWidget extends StatefulWidget {
   final String label, assetPath;

@@ -7,16 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../Controls/AnimatedMenu.dart';
+import '../Controls/VisualFieldBox.dart';
 import '../Controls/ReactiveIconWidget.dart';
 import '../Controls/ReactiveFolderWidget.dart';
 import '../Controls/SpeakerObject.dart';
 import '../Controls/StripObject.dart';
+
 import '../Dialogs/DialogEditorIcon.dart';
 import '../Dialogs/DialogEditorFolder.dart';
+
+import '../InheritedWidgets/InheritedVisualFieldState.dart';
+
 import '../Models/IconType.dart';
 import '../Models/EmbeddedIconModel.dart';
+
 import '../Pages/FolderCreator.dart';
 import '../Pages/IconCreator.dart';
+
 import '../Storage/IconDatabase.dart';
 
 class VisualFieldWidget extends StatefulWidget {
@@ -1053,78 +1060,4 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   }
 }
 
-/// Inherited members for icons/folders lower in tree
-/// 
-/// 
-class InheritedVisualFieldState extends InheritedWidget {
-  InheritedVisualFieldState({
-    Key key,
-    @required this.documentsDirectory,
-    @required this.background,
-    @required this.inDebugMode,
-    @required this.stackElements,
-    @required this.animatedMenu,
-    @required this.boardSize,
-    @required this.boardSettings,
-    Widget child,
-  }) : super (key: key, child: child);
 
-  final String documentsDirectory;
-  final Color background;
-  final bool inDebugMode;
-  final List<Widget> stackElements;
-  final AnimatedMenuWidget animatedMenu;
-  final Size boardSize;
-  final BoardSettings boardSettings;
-
-  @override
-  bool updateShouldNotify(InheritedVisualFieldState oldWidget) {
-    return inDebugMode != oldWidget.inDebugMode ||
-      boardSettings.checkIsInSingleMode != oldWidget.boardSettings.checkIsInSingleMode ||
-      boardSettings.checkIsAutoDeselecting != oldWidget.boardSettings.checkIsAutoDeselecting ||
-      boardSettings.checkIsAutoSpeaking != oldWidget.boardSettings.checkIsAutoSpeaking;
-  }
-
-  static InheritedVisualFieldState of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(InheritedVisualFieldState);
-  }
-}
-
-/// Wrapper for stateless view of field
-/// 
-/// 
-class VisualFieldBox extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FieldBox();
-  }
-}
-
-/// Scaffold for visual field
-/// 
-/// 
-class FieldBox extends StatelessWidget {
-  static const defaultStyle = const TextStyle(
-    color: Colors.black, 
-    decoration: TextDecoration.none, 
-    fontSize: 20.0);
-
-  @override
-  Widget build(BuildContext context) {
-    final inheritedState = InheritedVisualFieldState.of(context);
-
-    return Scaffold(
-      body: Container(
-        child: Stack(
-          children: inheritedState.stackElements
-        ),
-        decoration: BoxDecoration(
-          color: inheritedState.inDebugMode ? Colors.orangeAccent : Colors.blueAccent
-          )
-      ),
-      floatingActionButton: inheritedState.inDebugMode ? inheritedState.animatedMenu : null,
-      primary: false,
-      resizeToAvoidBottomPadding: false,
-    );  
-  }
-}
