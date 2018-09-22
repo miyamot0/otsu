@@ -329,51 +329,45 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _saveLatestStack(Widget widget) async {
-    //print("_saveLatestStack() " + new DateTime.now().toString());
+    print("_saveLatestStack() " + new DateTime.now().toString());
 
     if (iconDb == null) return;
 
     if (widget != null && widget is ReactiveIconWidget)
     {
-        if (widget.iconType == IconType.Icon)
-        {
-          SavedIcon savedIcon = SavedIcon();
-          savedIcon.id        = widget.id;
-          savedIcon.iconName  = widget.label;
-          savedIcon.iconPath  = widget.assetPath;
-          savedIcon.x         = widget.key.currentState.currentPosition.dx;
-          savedIcon.y         = widget.key.currentState.currentPosition.dy;
-          savedIcon.embedded  = widget.key.currentState.isEmbbedded;
-          savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
-          savedIcon.scale     = widget.key.currentState.scale;
-          savedIcon.active    = widget.key.currentState.isInPlay;
-          savedIcon.isStored  = widget.key.currentState.isStored;
-          savedIcon.storedId  = widget.storedId;
-          savedIcon.isFolder  = false;
+      SavedIcon savedIcon = SavedIcon();
+      savedIcon.id        = widget.id;
+      savedIcon.iconName  = widget.key.currentState.label;
+      savedIcon.iconPath  = widget.key.currentState.assetPath;
+      savedIcon.x         = widget.key.currentState.currentPosition.dx;
+      savedIcon.y         = widget.key.currentState.currentPosition.dy;
+      savedIcon.embedded  = widget.key.currentState.isEmbbedded;
+      savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
+      savedIcon.scale     = widget.key.currentState.scale;
+      savedIcon.active    = widget.key.currentState.isInPlay;
+      savedIcon.isStored  = widget.key.currentState.isStored;
+      savedIcon.storedId  = widget.storedId;
+      savedIcon.isFolder  = false;
 
-          await iconDb.update(savedIcon);
-        }
+      await iconDb.update(savedIcon);
     }
     else if (widget != null && widget is ReactiveFolderWidget)
     {
-        if (widget.iconType == IconType.Folder)
-        {
-          SavedIcon savedIcon = SavedIcon();
-          savedIcon.id        = widget.id;
-          savedIcon.iconName  = widget.label;
-          savedIcon.iconPath  = widget.assetPath;
-          savedIcon.x         = widget.key.currentState.currentPosition.dx;
-          savedIcon.y         = widget.key.currentState.currentPosition.dy;
-          savedIcon.embedded  = widget.key.currentState.isEmbbedded;
-          savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
-          savedIcon.scale     = widget.key.currentState.scale;
-          savedIcon.active    = widget.key.currentState.isInPlay;
-          savedIcon.isStored  = widget.key.currentState.isStored;
-          savedIcon.storedId  = -1;
-          savedIcon.isFolder  = true;
+      SavedIcon savedIcon = SavedIcon();
+      savedIcon.id        = widget.id;
+      savedIcon.iconName  = widget.key.currentState.label;
+      savedIcon.iconPath  = widget.key.currentState.assetPath;
+      savedIcon.x         = widget.key.currentState.currentPosition.dx;
+      savedIcon.y         = widget.key.currentState.currentPosition.dy;
+      savedIcon.embedded  = widget.key.currentState.isEmbbedded;
+      savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
+      savedIcon.scale     = widget.key.currentState.scale;
+      savedIcon.active    = widget.key.currentState.isInPlay;
+      savedIcon.isStored  = widget.key.currentState.isStored;
+      savedIcon.storedId  = -1;
+      savedIcon.isFolder  = true;
 
-          await iconDb.update(savedIcon);
-        }
+      await iconDb.update(savedIcon);
     }
 
     await iconDb.saveSettings(boardSettings);
@@ -675,7 +669,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   void triggerEditor(Widget widget) async {
     if (widget is ReactiveIconWidget)
     {
-      showDialog(
+      var res = await showDialog(
         context: context,
         barrierDismissible: true,
         
@@ -683,11 +677,23 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
         },
       );
+
+      print("res: $res");
     }
 
     // TODO: 
     if (widget is ReactiveFolderWidget)
     {
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        
+        builder: (BuildContext context) {
+          return DialogEditorFolder(widget, _removeFromDatabase, _saveLatestStack);
+        },
+      );
+
+      /*
       //debugPrint("_triggerIconEditor()");
       
       String newName = await Navigator.of(context).push(
@@ -721,159 +727,15 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             widget.key.currentState.label = newName;
           });
       }
+      */
     }
-  }
-
-  Future<String> _showInputDialog(ReactiveIconWidget iconWidget) async {
-    //debugPrint("_showInputDialog()");
-    return await showDialog<String>(
-      context: context,
-      child: new DialogIconLabel(assetText: iconWidget.key.currentState.label),
-    );
-  }
-
-  /// TODO: assign size (square, based on %age height)
-  /// 
-  /// 
-  Opacity _buildPopupIconEditor(ReactiveIconWidget iconWidget) {
-    //print("_buildFolderPopupDialog, length = ${storedIcons.length}");
-
-    List<MaterialButton> imgs = [];
-
-    imgs.add(MaterialButton( 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white,
-      child: const Text("Increase Size"), 
-      onPressed: () async {
-        print("Increase Size");
-        iconWidget.key.currentState.setState(() {
-          iconWidget.key.currentState.scale = iconWidget.key.currentState.scale * 1.05;
-        });
-
-        _saveLatestStack(iconWidget);
-      }, 
-      splashColor: Colors.redAccent,
-    ));
-
-    imgs.add(MaterialButton( 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white,
-      child: const Text("Decrease Size"), 
-      onPressed: () async {
-        print("Decrease Size");
-        iconWidget.key.currentState.setState(() {
-          iconWidget.key.currentState.scale = iconWidget.key.currentState.scale * 0.95;
-        });
-
-        _saveLatestStack(iconWidget);
-      }, 
-      splashColor: Colors.redAccent,
-    ));
-
-    imgs.add(MaterialButton( 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white,
-      child: const Text("Pin Icon"), 
-      onPressed: () async {
-        print("Pin Icon");
-          iconWidget.key.currentState.setState(() {
-            iconWidget.key.currentState.isPinnedToLocation = !iconWidget.key.currentState.isPinnedToLocation;
-          });
-
-          _saveLatestStack(iconWidget);
-      }, 
-      splashColor: Colors.redAccent,
-    ));
-
-    imgs.add(MaterialButton( 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white,
-      child: const Text("Rename Icon"), 
-      onPressed: () async {
-        print("rename Icon");
-
-        String newText = await _showInputDialog(iconWidget);
-
-        if (newText == null) return;
-
-        iconWidget.key.currentState.setState(()
-        {
-          iconWidget.key.currentState.label = newText;  
-        });
-
-        _saveLatestStack(iconWidget);
-      }, 
-      splashColor: Colors.redAccent,
-    ));
-
-    imgs.add(MaterialButton( 
-      color: Theme.of(context).primaryColor, 
-      textColor: Colors.white,
-      child: const Text("Set Default Size"), 
-      onPressed: () async {
-        print("Set Default Size");
-        iconWidget.key.currentState.setState(() {
-          iconWidget.key.currentState.scale = 1.0;
-        });
-
-        _saveLatestStack(iconWidget);
-      }, 
-      splashColor: Colors.redAccent,
-    ));
-
-    imgs.add(MaterialButton( 
-      color: Colors.redAccent, 
-      textColor: Colors.white,
-      child: const Text("Delete Icon"), 
-      onPressed: () async {
-        print("Delete Icon");
-
-        iconWidget.key.currentState.controller.reverse().then((err) {
-          _removeFromDatabase(widget);
-
-          Navigator.pop(context);
-        });
-      }, 
-      splashColor: Colors.blueAccent,
-    ));
-
-/*
-    return new Scaffold(
-      backgroundColor: Colors.black.withAlpha(150),
-      body: Center(
-        child: Opacity(
-          child: dialogContainer,
-          opacity: 0.9,
-        ),
-      ),
-    );
-*/
-    return Opacity(
-      child: AlertDialog(
-        title: Center(
-          child: Text("Editing Icon: ${iconWidget.key.currentState.label}"),
-        ),
-        content: Container(
-          child: new GridView.count(
-            crossAxisCount: 3,
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-            padding: const EdgeInsets.all(4.0),
-            childAspectRatio: 1.0,
-            children: imgs,
-          ),
-        width: 500.0,
-        height: 500.0,
-        ),
-      ),
-    opacity: 0.9);
   }
 
   /// Navigate to folder contents
   /// 
   /// 
   void _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
-    //print("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
+    print("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
 
     var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
 
