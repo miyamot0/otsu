@@ -47,12 +47,12 @@ class FolderBox extends StatelessWidget {
   static const double thickBorderWidth = 5.0;
 
   static Border thinBorder = Border.all(
-    color: Colors.black, 
+    color: const Color(0xFFFFFFFF),
     width: thinBorderWidth,
   );
 
   static Border thickBorder = Border.all(
-    color: Colors.black, 
+    color: const Color(0xFFFFFFFF),
     width: thickBorderWidth,
   );
 
