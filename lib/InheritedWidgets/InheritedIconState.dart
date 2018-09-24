@@ -32,7 +32,6 @@ class InheritedIconState extends InheritedWidget {
     this.launchEditor,
     this.label,
     this.assetPath,
-    this.documentsFolder,
     this.isInPlay,
     this.isEmbbedded,
     this.isInSingleMode,
@@ -52,7 +51,6 @@ class InheritedIconState extends InheritedWidget {
   final Function launchEditor;
   final String label;
   final String assetPath;
-  final String documentsFolder;
   final double defaultWidth;
   final double scale;
   final bool isPinnedToLocation;
