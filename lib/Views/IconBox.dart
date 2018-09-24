@@ -47,12 +47,12 @@ class IconBox extends StatelessWidget {
   static const double thickBorderWidth = 5.0;
 
   static Border thinBorder = Border.all(
-    color: const Color(0xFFFFFFFF),
+    color: const Color(0xFF000000),
     width: thinBorderWidth,
   );
 
   static Border thickBorder = Border.all(
-    color: const Color(0xFFFFFFFF),
+    color: const Color(0xFF000000),
     width: thickBorderWidth,
   );
 
@@ -133,9 +133,9 @@ class IconBox extends StatelessWidget {
       ),      
       child: DecoratedBox(
         decoration: BoxDecoration(
-          border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,      
+          border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,
           color: inheritedIconState.isInPlay ? 
-            Colors.greenAccent : 
+            Colors.greenAccent :
             Colors.white
         ),
         child: Padding(child: centerColumn, padding: EdgeInsets.all(5.0),),
@@ -147,12 +147,11 @@ class IconBox extends StatelessWidget {
       return new Positioned(
         left: inheritedIconState.currentPosition.dx, 
         key: GlobalKey(),
-        top: inheritedIconState.currentPosition.dy,         
+        top: inheritedIconState.currentPosition.dy,
         child: GestureDetector(
           child: item,
           onTap: () 
           {
-            //print("Reactive Icon Widget: onTap: Widget pinned");
             inheritedIconState.onPositionChanged(
               Offset(
                 inheritedIconState.currentPosition.dx, 
@@ -181,8 +180,6 @@ class IconBox extends StatelessWidget {
       {
         if (offset.distance < 1)
         {
-          //print("Reactive Icon Widget: onDraggableCanceled. Distance low, kill off event");
-
           return;
         }
 

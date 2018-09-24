@@ -95,11 +95,11 @@ class FolderBox extends StatelessWidget {
         minWidth:   inheritedFolderState.scale * inheritedFolderState.defaultWidth,
         maxHeight:  inheritedFolderState.scale * inheritedFolderState.defaultWidth,
         maxWidth:   inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-      ),      
+      ),
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: inheritedFolderState.isPinnedToLocation ? thickBorder : thinBorder,
-          color: inheritedFolderState.isInPlay ? 
+          color: inheritedFolderState.isInPlay ?
             Colors.greenAccent : 
             Colors.white
         ),
@@ -121,8 +121,6 @@ class FolderBox extends StatelessWidget {
       {
         if (offset.distance < 1)
         {
-          //print("onDraggableCanceled. Distance low, kill off event");
-
           return;
         }
 
@@ -148,13 +146,9 @@ class FolderBox extends StatelessWidget {
         top: inheritedFolderState.currentPosition.dy,         
         child: GestureDetector(
           child: item,
-          onTap: () 
-          {
-            //print("onTap: Folder Pressed (TODO: Open dialog)");
-            inheritedFolderState.openFolderDialog();
-            //inheritedFolderState.onPositionChanged(Offset(inheritedFolderState.currentPosition.dx, inheritedFolderState.currentPosition.dy));
-          }),
-        );
+          onTap: () => inheritedFolderState.openFolderDialog(),
+        ),
+      );
     }
 
     return new Positioned(

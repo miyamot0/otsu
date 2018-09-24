@@ -39,20 +39,37 @@ class PreviewBox extends StatelessWidget {
 
   final double opacity;
 
-  PreviewBox({this.size, this.label, this.assetPath, this.opacity: 1.0, this.backgroundColor, this.editFunction, 
-            this.showEditOptions, this.isPinnedToLocation, this.isEmbedded, this.documentsDirectory,});
+  PreviewBox({
+    this.size,
+    this.label,
+    this.assetPath,
+    this.opacity: 1.0,
+    this.backgroundColor,
+    this.editFunction,
+    this.showEditOptions,
+    this.isPinnedToLocation,
+    this.isEmbedded,
+    this.documentsDirectory,
+  });
 
   static const TextStyle defaultStyle = TextStyle(
     color: Colors.black, 
     decoration: TextDecoration.none, 
-    fontSize: 20.0);
+    fontSize: 20.0
+  );
 
-  static const Align pinnedIcon = Align(child: Icon(Icons.pin_drop,),);
-  static const Align deleteIcon = Align(child: Icon(Icons.delete,  ),);
-  static const Align growIcon   = Align(child: Icon(Icons.photo_size_select_large,),);
-  static const Align shrinkIcon = Align(child: Icon(Icons.photo_size_select_small,),);
+  static Border thickBorder = Border.all(
+    color: const Color(0xFF000000),
+    width: 5.0,
+  );
 
-  static const childArray = [pinnedIcon, growIcon, shrinkIcon, deleteIcon];
+  static const Align pinnedIcon = Align(
+    child: Icon(
+      Icons.pin_drop,
+    ),
+  );
+
+  static const childArray = [pinnedIcon];
 
   static Row topRow = Row(
     children: childArray, 
@@ -63,35 +80,20 @@ class PreviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Image imgAsset;
-
-    if (isEmbedded == true)
-    {
-      imgAsset = Image.asset(
-        assetPath,
-        height: size.height * 0.7,
-        fit: BoxFit.cover
-      );
-    }
-    else if (isEmbedded == false)
-    {
-      imgAsset = Image.asset(
-        "$documentsDirectory/$assetPath",
-        height: size.height * 0.7,
-        fit: BoxFit.cover
-      );
-    }
+    Image imgAsset = Image.asset(
+      isEmbedded == true ? assetPath : "$documentsDirectory/$assetPath",
+      height: size.height * 0.7,
+      fit: BoxFit.cover
+    );
 
     Column centerColumn = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
         Flexible(
-          child: showEditOptions ? 
-            topRow : 
-            Opacity(
-              child: topRow, 
-              opacity: 0.0,
-            ), 
+          child: Opacity(
+            child: topRow,
+            opacity: 0.0,
+          ),
           flex: 1,
         ),
         Flexible(
@@ -119,10 +121,7 @@ class PreviewBox extends StatelessWidget {
       height: size.height,
       key: GlobalKey(),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black, 
-          width: isPinnedToLocation ? 5.0 : 3.0
-        ),
+        border: thickBorder,
         color: backgroundColor,
       ),
       child: Column(
