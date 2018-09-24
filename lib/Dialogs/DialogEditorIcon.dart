@@ -22,12 +22,10 @@
     THE SOFTWARE.
 */
 
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../Controls/ReactiveIconWidget.dart';
-import '../Dialogs/DialogIconLabel.dart';
 
 class DialogEditorIcon extends StatefulWidget {
   final ReactiveIconWidget iconWidget;
@@ -47,20 +45,14 @@ class DialogEditorIcon extends StatefulWidget {
 class DialogEditorIconState extends State<DialogEditorIcon> {
 
   final List<MaterialButton> imgs = [];
-
-  /// Show edit text dialog
-  /// 
-  /// 
-  Future<String> _showInputDialog() async {
-    //debugPrint("_showInputDialog()");
-    return await showDialog<String>(
-      context: context,
-      child: new DialogIconLabel(assetText: widget.iconWidget.key.currentState.label),
-    );
-  }
+  TextEditingController myController;
 
   @override
   Widget build(BuildContext context) {
+
+    if (myController == null) {
+      myController = TextEditingController(text: widget.iconWidget.key.currentState.label);
+    }
 
     if (imgs.length == 0) {
       imgs.add(MaterialButton( 
@@ -105,6 +97,7 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         splashColor: Colors.redAccent,
       ));
 
+      /*
       imgs.add(MaterialButton( 
         color: Theme.of(context).primaryColor, 
         textColor: Colors.white,
@@ -122,6 +115,27 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
           });
 
           widget.saveCallback(widget.iconWidget);
+        }, 
+        splashColor: Colors.redAccent,
+      ));
+      */
+
+      imgs.add(MaterialButton( 
+        color: Colors.greenAccent, 
+        textColor: Colors.white,
+        child: const Text("Save and Close"), 
+        onPressed: () async {
+          if (!(myController.text == null) && widget.iconWidget.label != myController.text)
+          {
+            widget.iconWidget.key.currentState.setState(()
+            {
+              widget.iconWidget.key.currentState.label = myController.text;  
+            });
+          }
+
+          widget.saveCallback(widget.iconWidget);
+
+          Navigator.pop(context);
         }, 
         splashColor: Colors.redAccent,
       ));
@@ -157,8 +171,15 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
 
     return Opacity(
       child: AlertDialog(
-        title: Center(
-          child: Text("Editing Icon: ${widget.iconWidget.key.currentState.label}"),
+        title: TextField(
+          autofocus: false,
+          textCapitalization: TextCapitalization.words,
+          textInputAction: TextInputAction.done,
+          controller: myController,
+          decoration: new InputDecoration(
+            labelText: 'Current Icon Text',
+            hintText: '${myController.text}'
+          ),
         ),
         content: Container(
           child: new GridView.count(
@@ -168,10 +189,12 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
             padding: const EdgeInsets.all(4.0),
             childAspectRatio: 1.0,
             children: imgs,
+            shrinkWrap: true,
           ),
-        width: 500.0,
-        height: 500.0,
+          width: 500.0,
+          height: 500.0,
         ),
+        
       ),
     opacity: 0.9,
     );
