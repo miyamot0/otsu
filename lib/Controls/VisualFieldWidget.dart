@@ -175,29 +175,22 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     childButtons.add(_buildAddFolderButton());
     childButtons.add(_buildAddIconButton());
     childButtons.add(_buildSwitchModeButton());
-    childButtons.add(_buildAutoOutputModeButton()); 
-    childButtons.add(_buildAutoDeselectModeButton());      
-    childButtons.add(_buildResumeChildModeButton()); 
+    childButtons.add(_buildAutoOutputModeButton());
+    childButtons.add(_buildAutoDeselectModeButton());
+    childButtons.add(_buildResumeChildModeButton());
+
+    animatedMenu = _buildAnimatedMenu(childButtons);
   }
 
   @override
   Widget build(BuildContext context) {
     print("build(BuildContext context)");
 
-    if (childButtons.length == 0)
-    {
-      print("childButtons.length == 0");
+    //if (childButtons.length == 0)
+    //{
+    _checkAllCurrentMenuOptions();
+    //}
 
-      childButtons.clear();
-      childButtons.add(_buildAddFolderButton());
-      childButtons.add(_buildAddIconButton());
-      childButtons.add(_buildSwitchModeButton());
-      childButtons.add(_buildAutoOutputModeButton()); 
-      childButtons.add(_buildAutoDeselectModeButton());      
-      childButtons.add(_buildResumeChildModeButton()); 
-
-      animatedMenu = _buildAnimatedMenu(childButtons);
-    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       print("WidgetsBinding.instance.addPostFrameCallback(_)");
@@ -220,6 +213,27 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       child: VisualFieldBox(),
       key: GlobalKey(),
     );
+  }
+
+  void _checkAllCurrentMenuOptions() {
+      print("_checkAllCurrentMenuOptions");
+
+      if (boardSettings == null) return;
+
+      if (animatedMenu.childButtons[2].labelText != ((boardSettings.checkIsInSingleMode == true) ? "Change to Frame Mode" : "Change to Icon Mode")) {
+        childButtons.removeAt(2);
+        childButtons.insert(2, _buildSwitchModeButton());
+      }
+
+      if (animatedMenu.childButtons[3].labelText != ((boardSettings.checkIsAutoSpeaking == true) ? "Change to Manual Mode" : "Change to Autospeak Mode")) {
+        childButtons.removeAt(3);
+        childButtons.insert(3, _buildAutoOutputModeButton());
+      }
+
+      if (animatedMenu.childButtons[4].labelText != ((boardSettings.checkIsAutoDeselecting == true) ? "Disable Auto-Deselect" : "Enable Auto-Deselect")) {
+        childButtons.removeAt(4);
+        childButtons.insert(4, _buildAutoDeselectModeButton());
+      }
   }
 
   /// Is there an intersection between a folder and an icon?
