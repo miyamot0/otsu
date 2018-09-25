@@ -53,10 +53,7 @@ class InheritedVisualFieldState extends InheritedWidget {
 
   @override
   bool updateShouldNotify(InheritedVisualFieldState oldWidget) {
-    return inDebugMode != oldWidget.inDebugMode ||
-      boardSettings.checkIsInSingleMode != oldWidget.boardSettings.checkIsInSingleMode ||
-      boardSettings.checkIsAutoDeselecting != oldWidget.boardSettings.checkIsAutoDeselecting ||
-      boardSettings.checkIsAutoSpeaking != oldWidget.boardSettings.checkIsAutoSpeaking;
+    return inDebugMode != oldWidget.inDebugMode;
   }
 
   static InheritedVisualFieldState of(BuildContext context) {

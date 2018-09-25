@@ -24,6 +24,9 @@
 
 import 'package:flutter/material.dart';
 
+/// Folder state for lowest members of tree (and parents)
+///
+///
 class InheritedFolderState extends InheritedWidget {
   InheritedFolderState({
     Key key,

@@ -186,12 +186,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   Widget build(BuildContext context) {
     print("build(BuildContext context)");
 
-    //if (childButtons.length == 0)
-    //{
-    _checkAllCurrentMenuOptions();
-    //}
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       print("WidgetsBinding.instance.addPostFrameCallback(_)");
       if (boardSettings != null && boardSettings.checkIsInSingleMode == false)
@@ -199,6 +193,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         _moveIconToTop(null);
       }
     });
+
+    _checkAllCurrentMenuOptions();
   
     _toggleSentenceStrip();
     
@@ -215,6 +211,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     );
   }
 
+  /// Update individual menu items as necessary (not on totally redrawing tree)
+  ///
+  ///
   void _checkAllCurrentMenuOptions() {
       print("_checkAllCurrentMenuOptions");
 
@@ -402,7 +401,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       {
         stackElements.remove(widget);
         stackElements.add(widget);
-      });    
+      });
     }
 
     _saveLatestStack(widget);

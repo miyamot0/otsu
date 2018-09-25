@@ -24,6 +24,9 @@
 
 import 'package:flutter/material.dart';
 
+/// Icon state for lowest members of tree (and parents)
+///
+///
 class InheritedIconState extends InheritedWidget {
   InheritedIconState({
     Key key,
