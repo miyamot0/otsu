@@ -22,12 +22,10 @@
     THE SOFTWARE.
 */
 
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../Controls/ReactiveFolderWidget.dart';
-import '../Dialogs/DialogIconLabel.dart';
 
 class DialogEditorFolder extends StatefulWidget {
   final ReactiveFolderWidget folderWidget;
