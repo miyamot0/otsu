@@ -95,7 +95,6 @@ class AnimatedMenuWidget extends StatefulWidget {
   final Function onMainButtonPressed;
   final Object parentHeroTag;
   final bool isLeft;
-  Function updateState;
 
   AnimatedMenuWidget({
     this.parentButton,
@@ -124,10 +123,6 @@ class _AnimatedMenuWidget extends State<AnimatedMenuWidget> with TickerProviderS
     );
 
     super.initState();
-
-    widget.updateState = () {
-      setState(() {});
-    };
   }
 
   @override

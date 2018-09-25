@@ -255,11 +255,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
         await iconDb.update(savedIcon);
 
-        //setState(() 
-        //{
-        //  stackElements.remove(widget);          
-        //});
-
         widget.key.currentState.controller.reverse().then((err) {
         setState(() 
           {
