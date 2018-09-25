@@ -121,10 +121,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           stackElements.add(ReactiveIconWidget(
             label: icons[i].iconName,
             iconType: IconType.Icon,
-            assetPath: icons[i].iconPath, 
+            assetPath: icons[i].iconPath,
             isInSingleMode: boardSettings.checkIsInSingleMode,
             isEmbbedded: icons[i].embedded,
-            isStored: icons[i].isStored, 
+            isStored: icons[i].isStored,
             isInPlay: false,
             isPinnedToLocation: icons[i].pinned,
             launchEditor: _triggerEditor,
@@ -144,10 +144,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           stackElements.add(ReactiveFolderWidget(
             label: icons[i].iconName,
             iconType: IconType.Folder,
-            assetPath: icons[i].iconPath, 
+            assetPath: icons[i].iconPath,
             isInSingleMode: boardSettings.checkIsInSingleMode,
             isEmbbedded: icons[i].embedded,
-            isStored: icons[i].isStored, 
+            isStored: icons[i].isStored,
             launchEditor: _triggerEditor,
             openFolderDialog: _navigateToFolderContentDialog,
             isInPlay: false,
@@ -157,7 +157,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             moveToTop: _moveIconToTop,
             id: icons[i].id,
             initialPosition: Offset(
-              icons[i].x, 
+              icons[i].x,
               icons[i].y),
             ),
           );
@@ -252,26 +252,26 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
         ReactiveFolderWidget droppableFolder = folders.first;
 
-        SavedIcon savedIcon = SavedIcon();
-        savedIcon.id        = widget.id;
-        savedIcon.iconName  = widget.key.currentState.label;
-        savedIcon.iconPath  = widget.assetPath;
-        savedIcon.x         = widget.key.currentState.currentPosition.dx;
-        savedIcon.y         = widget.key.currentState.currentPosition.dy;
-        savedIcon.embedded  = widget.key.currentState.isEmbbedded;
-        savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
-        savedIcon.scale     = widget.key.currentState.scale;
-        savedIcon.active    = widget.key.currentState.isInPlay;
-        savedIcon.isStored  = true;
-        savedIcon.storedId  = droppableFolder.id;
-        savedIcon.isFolder  = false;
+        SavedIcon savedIcon = SavedIcon()
+        ..id        = widget.id
+        ..iconName  = widget.key.currentState.label
+        ..iconPath  = widget.assetPath
+        ..x         = widget.key.currentState.currentPosition.dx
+        ..y         = widget.key.currentState.currentPosition.dy
+        ..embedded  = widget.key.currentState.isEmbbedded
+        ..pinned    = widget.key.currentState.isPinnedToLocation
+        ..scale     = widget.key.currentState.scale
+        ..active    = widget.key.currentState.isInPlay
+        ..isStored  = true
+        ..storedId  = droppableFolder.id
+        ..isFolder  = false;
 
         await iconDb.update(savedIcon);
 
         widget.key.currentState.controller.reverse().then((err) {
         setState(() 
           {
-            stackElements.remove(widget);          
+            stackElements.remove(widget);
           });
         });
 
@@ -417,37 +417,37 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (widget != null && widget is ReactiveIconWidget)
     {
-      SavedIcon savedIcon = SavedIcon();
-      savedIcon.id        = widget.id;
-      savedIcon.iconName  = widget.key.currentState.label;
-      savedIcon.iconPath  = widget.key.currentState.assetPath;
-      savedIcon.x         = widget.key.currentState.currentPosition.dx;
-      savedIcon.y         = widget.key.currentState.currentPosition.dy;
-      savedIcon.embedded  = widget.key.currentState.isEmbbedded;
-      savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
-      savedIcon.scale     = widget.key.currentState.scale;
-      savedIcon.active    = widget.key.currentState.isInPlay;
-      savedIcon.isStored  = widget.key.currentState.isStored;
-      savedIcon.storedId  = widget.storedId;
-      savedIcon.isFolder  = false;
+      SavedIcon savedIcon = SavedIcon()
+      ..id        = widget.id
+      ..iconName  = widget.key.currentState.label
+      ..iconPath  = widget.key.currentState.assetPath
+      ..x         = widget.key.currentState.currentPosition.dx
+      ..y         = widget.key.currentState.currentPosition.dy
+      ..embedded  = widget.key.currentState.isEmbbedded
+      ..pinned    = widget.key.currentState.isPinnedToLocation
+      ..scale     = widget.key.currentState.scale
+      ..active    = widget.key.currentState.isInPlay
+      ..isStored  = widget.key.currentState.isStored
+      ..storedId  = widget.storedId
+      ..isFolder  = false;
 
       await iconDb.update(savedIcon);
     }
     else if (widget != null && widget is ReactiveFolderWidget)
     {
-      SavedIcon savedIcon = SavedIcon();
-      savedIcon.id        = widget.id;
-      savedIcon.iconName  = widget.key.currentState.label;
-      savedIcon.iconPath  = widget.key.currentState.assetPath;
-      savedIcon.x         = widget.key.currentState.currentPosition.dx;
-      savedIcon.y         = widget.key.currentState.currentPosition.dy;
-      savedIcon.embedded  = widget.key.currentState.isEmbbedded;
-      savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
-      savedIcon.scale     = widget.key.currentState.scale;
-      savedIcon.active    = widget.key.currentState.isInPlay;
-      savedIcon.isStored  = widget.key.currentState.isStored;
-      savedIcon.storedId  = -1;
-      savedIcon.isFolder  = true;
+      SavedIcon savedIcon = SavedIcon()
+      ..id        = widget.id
+      ..iconName  = widget.key.currentState.label
+      ..iconPath  = widget.key.currentState.assetPath
+      ..x         = widget.key.currentState.currentPosition.dx
+      ..y         = widget.key.currentState.currentPosition.dy
+      ..embedded  = widget.key.currentState.isEmbbedded
+      ..pinned    = widget.key.currentState.isPinnedToLocation
+      ..scale     = widget.key.currentState.scale
+      ..active    = widget.key.currentState.isInPlay
+      ..isStored  = widget.key.currentState.isStored
+      ..storedId  = -1
+      ..isFolder  = true;
 
       await iconDb.update(savedIcon);
     }
@@ -810,19 +810,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (result == null) return;
 
-    SavedIcon savedIcon = SavedIcon();
-    savedIcon.id        = null;
-    savedIcon.iconName  = result.iconText;
-    savedIcon.iconPath  = result.assetLocation;
-    savedIcon.x         = 0.0;
-    savedIcon.y         = 0.0;
-    savedIcon.embedded  = result.isEmbedded;
-    savedIcon.pinned    = false;
-    savedIcon.scale     = 1.0;
-    savedIcon.active    = false;
-    savedIcon.isStored  = false;
-    savedIcon.storedId  = -1;
-    savedIcon.isFolder  = false;
+    SavedIcon savedIcon = SavedIcon()
+    ..id        = null
+    ..iconName  = result.iconText
+    ..iconPath  = result.assetLocation
+    ..x         = 0.0
+    ..y         = 0.0
+    ..embedded  = result.isEmbedded
+    ..pinned    = false
+    ..scale     = 1.0
+    ..active    = false
+    ..isStored  = false
+    ..storedId  = -1
+    ..isFolder  = false;
 
     SavedIcon insert = await iconDb.insert(savedIcon);
 
@@ -861,19 +861,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (result == null) return;
 
-    SavedIcon savedIcon = SavedIcon();
-    savedIcon.id        = null;
-    savedIcon.iconName  = result.iconText;
-    savedIcon.iconPath  = result.assetLocation;
-    savedIcon.x         = 0.0;
-    savedIcon.y         = 0.0;
-    savedIcon.embedded  = result.isEmbedded;
-    savedIcon.pinned    = false;
-    savedIcon.scale     = 1.0;
-    savedIcon.active    = false;
-    savedIcon.isStored  = false;
-    savedIcon.storedId  = -1;
-    savedIcon.isFolder  = true;
+    SavedIcon savedIcon = SavedIcon()
+    ..id        = null
+    ..iconName  = result.iconText
+    ..iconPath  = result.assetLocation
+    ..x         = 0.0
+    ..y         = 0.0
+    ..embedded  = result.isEmbedded
+    ..pinned    = false
+    ..scale     = 1.0
+    ..active    = false
+    ..isStored  = false
+    ..storedId  = -1
+    ..isFolder  = true;
 
     SavedIcon insert = await iconDb.insert(savedIcon);
 
@@ -1048,5 +1048,3 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     );
   }
 }
-
-
