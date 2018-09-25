@@ -599,10 +599,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   bool _isWithinStrip(ReactiveIconWidget icon) {
-    print("_isWithinStrip(ReactiveIconWidget icon)");
-
     if (sentenceStripReference == null || 
-        sentenceStripReference.key.currentState == null ||
         sentenceStripReference.key.currentState.stripSize == null) return false;
 
     if (icon.key.currentState.currentPosition.dy > sentenceStripReference.key.currentState.stripSize.height) return false;
@@ -629,7 +626,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       );
     }
 
-    // TODO: 
     if (widget is ReactiveFolderWidget)
     {
       showDialog(
