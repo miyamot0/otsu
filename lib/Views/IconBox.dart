@@ -130,7 +130,7 @@ class IconBox extends StatelessWidget {
         minWidth:   inheritedIconState.scale * inheritedIconState.defaultWidth,
         maxHeight:  inheritedIconState.scale * inheritedIconState.defaultWidth,
         maxWidth:   inheritedIconState.scale * inheritedIconState.defaultWidth,
-      ),      
+      ),
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,

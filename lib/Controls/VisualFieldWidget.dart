@@ -612,16 +612,13 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (widget is ReactiveIconWidget)
     {
-      var res = await showDialog(
+      await showDialog(
         context: context,
-        barrierDismissible: true,
-        
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
         },
       );
-
-      print("res: $res");
     }
 
     // TODO: 
@@ -629,48 +626,11 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       showDialog(
         context: context,
-        barrierDismissible: true,
-        
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return DialogEditorFolder(widget, _removeFromDatabase, _saveLatestStack);
         },
       );
-
-      /*
-      //debugPrint("_triggerIconEditor()");
-      
-      String newName = await Navigator.of(context).push(
-        PageRouteBuilder(
-          opaque: false,
-          pageBuilder: (BuildContext context, _, __) {
-              return DialogEditorFolder(widget, _removeFromDatabase, _saveLatestStack);
-          }
-        )
-      );
-
-      if (newName != null)
-      {
-          SavedIcon savedIcon = SavedIcon();
-          savedIcon.id        = widget.id;
-          savedIcon.iconName  = newName;
-          savedIcon.iconPath  = widget.assetPath;
-          savedIcon.x         = widget.key.currentState.currentPosition.dx;
-          savedIcon.y         = widget.key.currentState.currentPosition.dy;
-          savedIcon.embedded  = widget.key.currentState.isEmbbedded;
-          savedIcon.pinned    = widget.key.currentState.isPinnedToLocation;
-          savedIcon.scale     = widget.key.currentState.scale;
-          savedIcon.active    = widget.key.currentState.isInPlay;
-          savedIcon.isStored  = widget.key.currentState.isStored;
-          savedIcon.storedId  = -1;
-          savedIcon.isFolder  = true;
-
-          await iconDb.update(savedIcon);
-
-          widget.key.currentState.setState(() {
-            widget.key.currentState.label = newName;
-          });
-      }
-      */
     }
   }
 

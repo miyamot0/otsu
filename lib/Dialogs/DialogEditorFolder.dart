@@ -47,21 +47,14 @@ class DialogEditorFolder extends StatefulWidget {
 class DialogEditorFolderState extends State<DialogEditorFolder> {
 
   final List<MaterialButton> imgs = [];
-
-  /// Show edit text dialog
-  /// 
-  /// 
-  Future<String> _showInputDialog() async {
-    //debugPrint("_showInputDialog()");
-    return await showDialog<String>(
-      context: context,
-      builder: (_) => new DialogIconLabel(assetText: widget.folderWidget.key.currentState.label),
-      //child: new DialogIconLabel(assetText: widget.folderWidget.key.currentState.label),
-    );
-  }
+  TextEditingController myController;
 
   @override
   Widget build(BuildContext context) {
+
+    if (myController == null) {
+      myController = TextEditingController(text: widget.folderWidget.key.currentState.label);
+    }
 
     if (imgs.length == 0) {
       imgs.add(MaterialButton( 
@@ -107,22 +100,21 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
       ));
 
       imgs.add(MaterialButton( 
-        color: Theme.of(context).primaryColor, 
+        color: Colors.greenAccent, 
         textColor: Colors.white,
-        child: const Text("Rename Icon"), 
+        child: const Text("Save and Close"), 
         onPressed: () async {
-          String newText = await _showInputDialog();
-
-          if (newText == null) return;
-
-          await SystemChrome.setEnabledSystemUIOverlays([]);
-
-          widget.folderWidget.key.currentState.setState(()
+          if (!(myController.text == null) && widget.folderWidget.label != myController.text)
           {
-            widget.folderWidget.key.currentState.label = newText;  
-          });
+            widget.folderWidget.key.currentState.setState(()
+            {
+              widget.folderWidget.key.currentState.label = myController.text;  
+            });
+          }
 
           widget.saveCallback(widget.folderWidget);
+
+          Navigator.pop(context);
         }, 
         splashColor: Colors.redAccent,
       ));
@@ -156,8 +148,15 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
 
     return Opacity(
       child: AlertDialog(
-        title: Center(
-          child: Text("Editing Icon: ${widget.folderWidget.key.currentState.label}"),
+        title: TextField(
+          autofocus: false,
+          textCapitalization: TextCapitalization.words,
+          textInputAction: TextInputAction.done,
+          controller: myController,
+          decoration: new InputDecoration(
+            labelText: 'Current Icon Text',
+            hintText: '${myController.text}'
+          ),
         ),
         content: Container(
           child: new GridView.count(
@@ -167,9 +166,9 @@ class DialogEditorFolderState extends State<DialogEditorFolder> {
             padding: const EdgeInsets.all(4.0),
             childAspectRatio: 1.0,
             children: imgs,
+            shrinkWrap: true,
           ),
-        width: 500.0,
-        height: 500.0,
+        width: MediaQuery.of(context).size.height / 2.0,
         ),
       ),
     opacity: 0.9,

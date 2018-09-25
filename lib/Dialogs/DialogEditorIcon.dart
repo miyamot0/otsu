@@ -97,29 +97,6 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
         splashColor: Colors.redAccent,
       ));
 
-      /*
-      imgs.add(MaterialButton( 
-        color: Theme.of(context).primaryColor, 
-        textColor: Colors.white,
-        child: const Text("Rename Icon"), 
-        onPressed: () async {
-          String newText = await _showInputDialog();
-
-          if (newText == null) return;
-
-          await SystemChrome.setEnabledSystemUIOverlays([]);
-
-          widget.iconWidget.key.currentState.setState(()
-          {
-            widget.iconWidget.key.currentState.label = newText;  
-          });
-
-          widget.saveCallback(widget.iconWidget);
-        }, 
-        splashColor: Colors.redAccent,
-      ));
-      */
-
       imgs.add(MaterialButton( 
         color: Colors.greenAccent, 
         textColor: Colors.white,
@@ -191,10 +168,8 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
             children: imgs,
             shrinkWrap: true,
           ),
-          width: 500.0,
-          height: 500.0,
+          width: MediaQuery.of(context).size.height / 2.0,
         ),
-        
       ),
     opacity: 0.9,
     );
