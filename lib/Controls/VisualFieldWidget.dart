@@ -628,7 +628,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (widget is ReactiveFolderWidget)
     {
-      showDialog(
+      await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
