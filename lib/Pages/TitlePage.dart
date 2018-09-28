@@ -23,38 +23,23 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'Pages/TitlePage.dart';
+import '../Controls/VisualFieldWidget.dart';
 
-void main() {
-  print("main()");
-  SystemChrome.setEnabledSystemUIOverlays([]).then((_) 
-  {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight, 
-      DeviceOrientation.landscapeLeft]).then((_)
-      {
-        runApp(new MainApp());
-      }); 
-  });
-}
-
-class MainApp extends StatefulWidget {
+class TitlePage extends StatelessWidget {
   @override
-  ApplicationState createState() => ApplicationState();
-}
-
-class ApplicationState extends State<MainApp> {
-  @override
-  Widget build(BuildContext context) 
-  {
-    print("ApplicationState build()");
-    return new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      showPerformanceOverlay: false,
-      home: SafeArea(
-        child: TitlePage(),        
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: RaisedButton(
+          child: Text('Launch screen'),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => VisualFieldWidget())
+            );
+          },
+        ),
       ),
     );
   }
