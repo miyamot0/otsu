@@ -27,6 +27,8 @@ import 'package:flutter/services.dart';
 
 import 'Pages/TitlePage.dart';
 
+import 'Controls/VisualFieldWidget.dart';
+
 void main() {
   print("main()");
   SystemChrome.setEnabledSystemUIOverlays([]).then((_) 
@@ -53,9 +55,11 @@ class ApplicationState extends State<MainApp> {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       showPerformanceOverlay: false,
-      home: SafeArea(
-        child: TitlePage(),        
-      ),
+      initialRoute: '/',
+      routes: {
+        '/':      (context) => TitlePage(),
+        '/board': (context) => VisualFieldWidget(),
+      },
     );
   }
 }

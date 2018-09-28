@@ -24,8 +24,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../Controls/VisualFieldWidget.dart';
-
 class TitlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -34,9 +32,9 @@ class TitlePage extends StatelessWidget {
         child: RaisedButton(
           child: Text('Launch screen'),
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.pushReplacementNamed(
               context,
-              MaterialPageRoute(builder: (context) => VisualFieldWidget())
+              "/board"
             );
           },
         ),
