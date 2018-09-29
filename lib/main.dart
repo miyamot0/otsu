@@ -30,7 +30,6 @@ import 'Pages/TitlePage.dart';
 import 'Controls/VisualFieldWidget.dart';
 
 void main() {
-  print("main()");
   SystemChrome.setEnabledSystemUIOverlays([]).then((_) 
   {
     SystemChrome.setPreferredOrientations([
@@ -51,7 +50,6 @@ class ApplicationState extends State<MainApp> {
   @override
   Widget build(BuildContext context) 
   {
-    print("ApplicationState build()");
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       showPerformanceOverlay: false,

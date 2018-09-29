@@ -144,7 +144,6 @@ class ReactiveFolderWidgetState extends State<ReactiveFolderWidget> {
   }
 
   void onTap() {
-    //print('onTap(): ${this.label}');
     setState(() {
       launchEditor(widget);
     });
@@ -157,7 +156,6 @@ class ReactiveFolderWidgetState extends State<ReactiveFolderWidget> {
   }
 
   void onPositionChanged(Offset position) {
-    //print("onPositionChanged(Offset position): ${this.label}");
     setState(() {
       currentPosition = position;
       

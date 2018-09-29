@@ -74,7 +74,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   @override
   void initState() {
-    print("initState()");
+    //print("initState()");
     sentenceStripReference = StripObject(padding: 10.0);
 
     speakerObjectReference = SpeakerObject(_emitSpeech, _toggleDebugMode);
@@ -87,7 +87,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   @override
   void dispose() {
-    print("dispose()");
+    //print("dispose()");
     iconDb.close();
 
     super.dispose();
@@ -97,7 +97,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _loadFromDatabase() async {
-    print("loadFromDatabase()");
+    //print("loadFromDatabase()");
     dir = (await getApplicationDocumentsDirectory()).path;
 
     iconDb = new IconDatabase();
@@ -184,10 +184,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    print("build(BuildContext context)");
+    //build(BuildContext context)");
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      print("WidgetsBinding.instance.addPostFrameCallback(_)");
+      //print("WidgetsBinding.instance.addPostFrameCallback(_)");
       if (boardSettings != null && boardSettings.checkIsInSingleMode == false)
       {
         _moveIconToTop(null);
@@ -215,7 +215,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   ///
   void _checkAllCurrentMenuOptions() {
-      print("_checkAllCurrentMenuOptions");
+      //print("_checkAllCurrentMenuOptions");
 
       if (boardSettings == null) return;
 
@@ -239,7 +239,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   Future<bool> _isIconOverlappingWithFolder(ReactiveIconWidget widget) async {
-    print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
+    //print("_isIconOverlappingWithFolder(ReactiveIconWidget widget)");
 
     var folders =  stackElements.where((w) => w is ReactiveFolderWidget)
                                 .where((w) => (w as ReactiveFolderWidget).key.currentState.defaultWidth != null)
@@ -285,7 +285,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _moveIconToTop(Widget widget) async {
-    print("_moveIconToTop(TestIcon widget)");
+    //print("_moveIconToTop(TestIcon widget)");
 
     if (boardSettings == null) return;
 
@@ -294,7 +294,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     {
       if (boardSettings.checkIsInSingleMode == true)
       {
-        print("VisualFieldWidget: _moveIconToTop() == IsInSingleMode");
+        //print("VisualFieldWidget: _moveIconToTop() == IsInSingleMode");
 
         for (var i = 0; i < stackElements.length; i++)
         {
@@ -341,7 +341,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (boardSettings.checkIsInSingleMode == true)
     {
-      print("VisualFieldWidget: _moveIconToTop() == IsInSingleMode");
+      //print("VisualFieldWidget: _moveIconToTop() == IsInSingleMode");
 
       for (var i = 0; i < stackElements.length; i++)
       {
@@ -411,7 +411,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _saveLatestStack(Widget widget) async {
-    print("_saveLatestStack() " + new DateTime.now().toString());
+    //print("_saveLatestStack() " + new DateTime.now().toString());
 
     if (iconDb == null) return;
 
@@ -459,7 +459,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _removeFromDatabase(Widget widget) async {
-    print("_removeFromStack(Widget widget)");
+    //print("_removeFromStack(Widget widget)");
 
     if (widget is ReactiveIconWidget)
     {
@@ -486,7 +486,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// This disables debug mode (hides buttons)
   void _resumeChildMode() async {
-    print('_resumeChildMode()');
+    //print('_resumeChildMode()');
 
     setState(() {
       inDebugMode = false;
@@ -517,7 +517,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _toggleDebugMode() {
-    print("_toggleDebugMode()");
+    //print("_toggleDebugMode()");
 
     setState(() {
       inDebugMode = true;
@@ -528,7 +528,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _deselectAllIcons() {
-    print('_deselectAllIcons');
+    //print('_deselectAllIcons');
 
     for (var x in stackElements) 
     {
@@ -548,11 +548,11 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _emitSpeech() async {
-    print("_emitSpeech()");
+    //print("_emitSpeech()");
 
     if (boardSettings.checkIsInSingleMode == true)
     {
-      print("boardSettings.checkIsInSingleMode == true");
+      //print("boardSettings.checkIsInSingleMode == true");
 
       for (var x in stackElements) 
       {
@@ -575,7 +575,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     }
     else
     {
-      print("boardSettings.checkIsInSingleMode == false");
+      //print("boardSettings.checkIsInSingleMode == false");
 
       var tempList = <ReactiveIconWidget>[];
       var outputString = "";
@@ -613,7 +613,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _triggerEditor(Widget widget) async {
-    print("_triggerEditor(Widget widget)");
+    //print("_triggerEditor(Widget widget)");
 
     if (widget is ReactiveIconWidget)
     {
@@ -642,7 +642,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
-    print("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
+    //print("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
 
     var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
 
@@ -693,7 +693,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
-    print("_buildFolderPopupDialog, length = ${storedIcons.length}");
+    //print("_buildFolderPopupDialog, length = ${storedIcons.length}");
 
     List<Container> imgs = [];
 
@@ -745,7 +745,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _restoreIconFromStorage(SavedIcon savedIcon) async {
-    print("_restoreIconFromStorage(SavedIcon savedIcon)");
+    //print("_restoreIconFromStorage(SavedIcon savedIcon)");
 
     savedIcon.isStored = false;
     savedIcon.storedId = -1;
@@ -782,7 +782,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _toggleSentenceStrip() {
-    print("_toggleSentenceStrip(): ${boardSettings == null}");
+    //print("_toggleSentenceStrip(): ${boardSettings == null}");
 
     if (boardSettings == null) return;
 
@@ -801,7 +801,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToIconCreatorScreen(BuildContext context) async {
-    print("_navigateToIconCreatorScreen()");
+    //print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
 
     if (result == null) return;
@@ -852,7 +852,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   void _navigateToFolderCreatorScreen(BuildContext context) async {
-    print("_navigateToIconCreatorScreen()");
+    //print("_navigateToIconCreatorScreen()");
     EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FolderCreatorScreen(dir)));
 
     if (result == null) return;
@@ -898,7 +898,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   AnimatedMenuItem _buildAutoOutputModeButton() {
-    print('_buildAutoOutputModeButton()');
+    //print('_buildAutoOutputModeButton()');
 
     return AnimatedMenuItem(
       labelText: (boardSettings == null || boardSettings.checkIsAutoSpeaking == true) ? "Change to Manual Mode" : "Change to Autospeak Mode",
@@ -924,7 +924,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   /// 
   AnimatedMenuItem _buildAutoDeselectModeButton() {
-    print('_buildAutoDeselectModeButton()');
+    //_buildAutoDeselectModeButton()');
 
     return AnimatedMenuItem(
       labelText: (boardSettings == null || boardSettings.checkIsAutoDeselecting == true) ? "Disable Auto-Deselect" : "Enable Auto-Deselect",
@@ -950,7 +950,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   ///
   AnimatedMenuItem _buildSwitchModeButton() {
-    print('_buildSwitchModeButton()');
+    //print('_buildSwitchModeButton()');
 
     return AnimatedMenuItem(
       labelText: (boardSettings == null || boardSettings.checkIsInSingleMode == true) ? "Change to Frame Mode" : "Change to Icon Mode",
@@ -977,7 +977,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   ///
   AnimatedMenuItem _buildResumeChildModeButton() {
-    print('_buildResumeChildModeButton()');
+    //print('_buildResumeChildModeButton()');
 
     return AnimatedMenuItem(
       labelText: "Resume Child Mode",
@@ -999,7 +999,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   ///
   AnimatedMenuItem _buildAddFolderButton() {
-    print('_buildAddFolderButton()');
+    //print('_buildAddFolderButton()');
 
     return AnimatedMenuItem(
       labelText: "Add a Folder",
@@ -1017,7 +1017,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   ///
   AnimatedMenuItem _buildAddIconButton() {
-    print('_buildAddIconButton()');
+    //print('_buildAddIconButton()');
 
     return AnimatedMenuItem(
       labelText: "Add an Icon",
@@ -1035,7 +1035,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   ///
   ///
   AnimatedMenuWidget _buildAnimatedMenu(List<Widget> buttons) {
-    print('_buildAnimatedMenu()');
+    //print('_buildAnimatedMenu()');
 
     return AnimatedMenuWidget(
       parentButton: Icon(Icons.settings),

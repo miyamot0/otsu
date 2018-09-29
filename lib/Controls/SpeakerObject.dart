@@ -39,13 +39,12 @@ class SpeakerObject extends StatefulWidget {
   /// 
   /// 
   Future<Null> speak(String output) async {
-    //debugPrint("speak: $output");
     var sendMap = <String, dynamic> { 'output' : output }; 
 
     try {
       await platform.invokeMethod('speak', sendMap);
     } on PlatformException catch (e) {
-      print('Exception: ${e.message}');
+      //print('Exception: ${e.message}');
     }
   }
 
