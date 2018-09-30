@@ -9,12 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.4.10
-  path_provider: ^0.4.1
-  date_format: ^1.0.5
-  shared_preferences: ^0.4.2
-  path: ^1.6.2
-  animated_background: ^1.0.0
+  image_picker: any
+  path_provider: any
+  date_format: any
+  shared_preferences: any
+  path: any
+  animated_background: any
   sqflite: any
 
 dev_dependencies:
