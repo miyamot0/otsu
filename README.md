@@ -4,6 +4,12 @@
 
 Project Otsu is a Flutter-powered AAC application designed specific to communication in autism spectrum disorders. This is built entirely in Google's Flutter, working seamlessly across both Android and iOS.  Only Android and iOS are actively maintained and under evaluation at this point.
 
+## TO-DO
+
+- Add license screen, with acknowledgement
+- Add introduction screen
+- Expand on Title screen options
+
 ## Derivative Works
 
 This project is a derivative work of an earlier project and uses licensed software:
@@ -23,6 +29,7 @@ This project uses licensed visual images in order to operate:
 - shared_preferences - Copyright 2017, The Chromium Authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/shared_preferences)
 - sqflite - Copyright 2017, Alexandre Roux Tekartik (MIT). [Github](https://github.com/tekartik/sqflite)
 - path - Copyright 2014, Flutter project authors (BSD-3). [Github](https://github.com/dart-lang/path)
+- flutter_animated_background - Copyright 2018, André Baltazar. [Github](https://github.com/AndreBaltazar8/flutter_animated_background)
 
 ## Installation
 
