@@ -28,6 +28,8 @@ import 'dart:math';
 import 'package:animated_background/animated_background.dart';
 import 'package:animated_background/particles.dart';
 
+import 'package:otsu/Controls/AnimatedLetter.dart';
+
 class TitlePage extends StatefulWidget {
 
   TitlePageState createState() => new TitlePageState();
@@ -52,10 +54,6 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
     fontWeight: FontWeight.bold,
     foreground: textStroke,
   );
-
-  double getOffset() {
-    return (rng.nextDouble() * 30.0 - 15.0) * pI;
-  }
 
   @override
   void dispose() {
@@ -101,77 +99,17 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Transform.rotate(
-                    child: Image.asset('titleimages/F.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/A.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/S.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/T.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
+                  AnimatedLetter('titleimages/F.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/A.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/S.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/T.png', iconSize, rng.nextDouble()),
                   Text(""),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/T.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/A.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/L.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/K.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/E.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
-                  Transform.rotate(
-                    child: Image.asset('titleimages/R.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    angle: getOffset(),
-                  ),
+                  AnimatedLetter('titleimages/T.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/A.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/L.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/K.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/E.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('titleimages/R.png', iconSize, rng.nextDouble()),
                 ],
               ),
             ),
