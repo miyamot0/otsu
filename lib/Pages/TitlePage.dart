@@ -92,10 +92,15 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
           paint: particlePaint,
         ),
         vsync: this,
-        child: new Column( 
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Center(
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height / 10.0
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -111,7 +116,7 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
                   AnimatedLetter('titleimages/E.png', iconSize, rng.nextDouble()),
                   AnimatedLetter('titleimages/R.png', iconSize, rng.nextDouble()),
                 ],
-              ),
+              )
             ),
             Center(
               child: MaterialButton( 
