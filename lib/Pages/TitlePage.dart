@@ -72,11 +72,11 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
     if (particleOptions == null)
     {
       particleOptions = ParticleOptions(
-        image: Image.asset('images/color_bubbles.png'),
-        baseColor: Colors.blue,
+        image: Image.asset('images/Blank.png'),
+        baseColor: Colors.black,
         spawnOpacity: 0.5,
-        minOpacity: 0.4,
-        maxOpacity: 0.8,
+        minOpacity: 0.8,
+        maxOpacity: 1.0,
         spawnMinSpeed: 125.0,
         spawnMaxSpeed: 250.0,
         spawnMinRadius: 50.0,
