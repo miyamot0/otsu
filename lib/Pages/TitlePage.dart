@@ -55,13 +55,13 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
     foreground: textStroke,
   );
 
-  @override
-  void dispose() {
-    particleOptions = null;
-    particlePaint = null;
+  //@override
+  //void dispose() {
+  //  particleOptions = null;
+  //  particlePaint = null;
 
-    super.dispose();
-  }
+  //  super.dispose();
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +86,13 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
     }
 
     return new Scaffold(
-      body: AnimatedBackground(
-        behaviour: RandomParticleBehaviour(
-          options: particleOptions,
-          paint: particlePaint,
-        ),
-        vsync: this,
+      //body: AnimatedBackground(
+      body: Container(
+        //behaviour: RandomParticleBehaviour(
+        //  options: particleOptions,
+        //  paint: particlePaint,
+        //),
+        //vsync: this,
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,

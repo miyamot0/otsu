@@ -46,6 +46,13 @@ class AnimatedLetterState extends State<AnimatedLetter> with SingleTickerProvide
   double pI = (22.0 / 7.0) / 180.0;
 
   @override
+  void dispose() {
+    controller.stop();
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
 

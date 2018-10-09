@@ -16,6 +16,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                                        methodChannelWithName:@"com.example.otsu/tts"
                                        binaryMessenger:controller];
     
+    AVSpeechSynthesisVoice *voice = [AVSpeechSynthesisVoice voiceWithIdentifier:@"com.apple.ttsbundle.Alex-compact"];
+    
     [ttsChanel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
         if ([@"speak" isEqualToString:call.method])
         {
@@ -25,7 +27,8 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
                 AVSpeechUtterance *speechUtterance = [AVSpeechUtterance speechUtteranceWithString: from];
                 
                 [speechUtterance setRate: AVSpeechUtteranceMaximumSpeechRate / 3];
-                speechUtterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"en-us"];
+                //speechUtterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"en-us"];
+                speechUtterance.voice = voice;
                 speechUtterance.pitchMultiplier = 1.0f;
                 [speechUtterance setVolume:0.9f];
                 [speechSynthesizer speakUtterance: speechUtterance];
