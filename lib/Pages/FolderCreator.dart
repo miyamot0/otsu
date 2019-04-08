@@ -142,6 +142,8 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
           {
             assetText = result;                
           });
+
+          SystemChrome.restoreSystemUIOverlays();
         },
       ),
     );
@@ -155,7 +157,10 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
     
     return await showDialog<String>(
       context: context,
-      child: new DialogIconLabel(assetText: assetText),
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return DialogIconLabel(assetText: assetText);
+      },
     );
   }  
 

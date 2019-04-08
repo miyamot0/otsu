@@ -138,6 +138,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
           setState(() {
             assetText = result;                
           });
+
+          SystemChrome.restoreSystemUIOverlays();
         },
       ),
     );
@@ -151,7 +153,10 @@ class _IconCreatorState extends State<IconCreatorScreen> {
     
     return await showDialog<String>(
       context: context,
-      child: new DialogIconLabel(assetText: assetText),
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return DialogIconLabel(assetText: assetText);
+      },
     );
   }  
 
