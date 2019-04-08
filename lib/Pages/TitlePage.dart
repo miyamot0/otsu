@@ -25,25 +25,14 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:animated_background/animated_background.dart';
-import 'package:animated_background/particles.dart';
-
 import 'package:otsu/Controls/AnimatedLetter.dart';
 
 class TitlePage extends StatefulWidget {
-
   TitlePageState createState() => new TitlePageState();
 }
 
 class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
-
-  double pI = (22.0 / 7.0) / 180.0;
   Random rng = new Random();
-
-  ParticleOptions particleOptions;
-  Paint particlePaint = Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 1.0;
 
   static Paint textStroke = Paint()
     ..color = Colors.deepOrange
@@ -55,44 +44,14 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
     foreground: textStroke,
   );
 
-  //@override
-  //void dispose() {
-  //  particleOptions = null;
-  //  particlePaint = null;
-
-  //  super.dispose();
-  //}
-
   @override
   Widget build(BuildContext context) {
     print('build call title');
 
     double iconSize = MediaQuery.of(context).size.width / 12.0;
 
-    if (particleOptions == null)
-    {
-      particleOptions = ParticleOptions(
-        image: Image.asset('images/Blank.png'),
-        baseColor: Colors.black,
-        spawnOpacity: 0.5,
-        minOpacity: 0.8,
-        maxOpacity: 1.0,
-        spawnMinSpeed: 125.0,
-        spawnMaxSpeed: 250.0,
-        spawnMinRadius: 50.0,
-        spawnMaxRadius: 50.0,
-        particleCount: 30,
-      );
-    }
-
     return new Scaffold(
-      //body: AnimatedBackground(
       body: Container(
-        //behaviour: RandomParticleBehaviour(
-        //  options: particleOptions,
-        //  paint: particlePaint,
-        //),
-        //vsync: this,
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
