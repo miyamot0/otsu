@@ -76,7 +76,6 @@ class ApplicationState extends State<MainApp> {
     return InheritedAppState(
       iconDb: iconDb,
       dir: dir,
-      key: key,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         showPerformanceOverlay: true,
