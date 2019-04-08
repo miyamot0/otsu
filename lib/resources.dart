@@ -26,6 +26,9 @@ export 'Models/IconType.dart';
 // Storage
 export 'Storage/IconDatabase.dart';
 
+// Misc
+export 'Misc/utilities.dart';
+
 // Widgets/Views
 export 'Controls/AnimatedLetter.dart';
 export 'Controls/AnimatedMenu.dart';
@@ -47,7 +50,3 @@ export 'Views/FolderBox.dart';
 export 'Views/PreviewBox.dart';
 export 'Views/PreviewIcon.dart';
 export 'Views/VisualFieldBox.dart';
-
-
-
-

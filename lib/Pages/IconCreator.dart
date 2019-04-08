@@ -71,7 +71,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuWidget _buildAnimatedMenu() {
-    //debugPrint("_buildAnimatedMenu()");
+    debugPrint("_buildAnimatedMenu()");
 
     if (animatedMenuWiget == null)
     {
@@ -96,7 +96,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildSaveButton() {
-    //debugPrint("_buildSaveButton()");
+    debugPrint("_buildSaveButton()");
+    
     return AnimatedMenuItem(
       labelText: "Add Current Icon to Board",
       autoDismiss: true,
@@ -121,7 +122,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildEditLabelButton() {
-    //debugPrint("_buildEditLabelButton()");
+    debugPrint("_buildEditLabelButton()");
+    
     return AnimatedMenuItem(
       labelText: "Edit Current Label",
       autoDismiss: true,
@@ -147,7 +149,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   Future<String> _showInputDialog() async {
-    //debugPrint("_showInputDialog()");
+    debugPrint("_showInputDialog()");
+    
     return await showDialog<String>(
       context: context,
       child: new DialogIconLabel(assetText: assetText),
@@ -158,7 +161,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildPhotoIconButton() {
-    //debugPrint("_buildPhotoIconButton()");
+    debugPrint("_buildPhotoIconButton()");
+    
     return AnimatedMenuItem(
       labelText: "Take a Photo",
       autoDismiss: true,
@@ -183,7 +187,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildImageIconButton() {
-    //debugPrint("_buildImageIconButton()");
+    debugPrint("_buildImageIconButton()");
+    
     return AnimatedMenuItem(
       labelText: "Load a Stored Image",
       autoDismiss: true,
@@ -208,7 +213,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   void _createLocalCopy(File image) async {
-    //debugPrint("_createLocalCopy()");
+    debugPrint("_createLocalCopy()");
+    
     String stamp = formatDate(DateTime.now(), [yyyy,'.',mm,'.',dd,'.',HH,'.',nn,'.',ss]);
     String filename = "$stamp.png";
 
@@ -229,6 +235,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   Future<String> _loadCategoriesJson(String fileName) async {
+    printDebug("_loadCategoriesJson(String fileName)");
+
     return await rootBundle.loadString('json/$fileName.json');
   }
 
@@ -236,7 +244,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   void _loadImages(String category) async {
-    //debugPrint("_loadImages()");
+    debugPrint("_loadImages()");
+    
     String distancesText = await _loadCategoriesJson(category);
     jsonAssets = json.decode(distancesText) as List;
 
