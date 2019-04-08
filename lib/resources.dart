@@ -52,5 +52,8 @@ export 'Views/PreviewBox.dart';
 export 'Views/PreviewIcon.dart';
 export 'Views/VisualFieldBox.dart';
 
+// Menus
+export 'package:otsu/Menus/EditIconMenu.dart';
+export 'package:otsu/Menus/EditFolderMenu.dart';
 
 export 'package:flutter/scheduler.dart';

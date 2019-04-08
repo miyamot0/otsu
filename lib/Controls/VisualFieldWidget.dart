@@ -36,6 +36,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   BoardSettings boardSettings;
 
   AnimatedMenuWidget animatedMenu;
+
   StripObject sentenceStripReference;
   SpeakerObject speakerObjectReference;
 
@@ -43,6 +44,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   final stackElements = <Widget>[];
   final childButtons = List<AnimatedMenuItem>();
+
+  GlobalKey scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -183,7 +186,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       boardSettings: boardSettings,
       boardSize: MediaQuery.of(context).size,
       child: VisualFieldBox(),
-      key: GlobalKey(),
+      key: scaffoldKey,
     );
   }
 
@@ -580,6 +583,50 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     return true;
   }
 
+  /// Show on-screen context menu
+  ///
+  ///
+  void _showContextMenuIcon(Offset offset, ReactiveIconWidget widget) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+
+    final resultOfMenu = await showMenu(
+      context: context,
+      items: <PopupMenuEntry<int>>[EditIconEntry(widget)],
+      position: RelativeRect.fromRect(
+          offset & Size(40, 40), // smaller rect, the touch area
+          Offset.zero & overlay.size   // Bigger rect, the entire screen
+      )
+    );
+
+    if (resultOfMenu == EditIconEntry.DeleteIcon) {
+      _removeFromDatabase(widget);
+    } else {
+      _saveLatestStack(widget);
+    }
+  }
+
+  /// Show on-screen context menu
+  ///
+  ///
+  void _showContextMenuFolder(Offset offset, ReactiveFolderWidget widget) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+
+    final resultOfMenu = await showMenu(
+      context: context,
+      items: <PopupMenuEntry<int>>[EditFolderEntry(widget)],
+      position: RelativeRect.fromRect(
+          offset & Size(40, 40), // smaller rect, the touch area
+          Offset.zero & overlay.size   // Bigger rect, the entire screen
+      )
+    );
+
+    if (resultOfMenu == EditFolderEntry.DeleteFolder) {
+      _removeFromDatabase(widget);
+    } else {
+      _saveLatestStack(widget);
+    }
+  }
+
   /// Trigger editor for icons
   /// 
   /// 
@@ -587,26 +634,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     printDebug("VisualFieldWidgetState::_triggerEditor(Widget widget)");
 
     if (widget is ReactiveIconWidget)
-    {
-      await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return DialogEditorIcon(widget, _removeFromDatabase, _saveLatestStack);
-        },
-      );
-    }
+      _showContextMenuIcon(widget.key.currentState.currentPosition, widget);
 
     if (widget is ReactiveFolderWidget)
-    {
-      await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return DialogEditorFolder(widget, _removeFromDatabase, _saveLatestStack);
-        },
-      );
-    }
+      _showContextMenuFolder(widget.key.currentState.currentPosition, widget);
   }
 
   /// Navigate to folder contents

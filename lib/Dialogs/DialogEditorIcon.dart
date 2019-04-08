@@ -30,7 +30,7 @@ class DialogEditorIcon extends StatefulWidget {
   final Function saveCallback;
 
   DialogEditorIcon(
-    this.iconWidget, 
+    this.iconWidget,
     this.deleteCallback,
     this.saveCallback,
   );
@@ -40,22 +40,16 @@ class DialogEditorIcon extends StatefulWidget {
 }
 
 class DialogEditorIconState extends State<DialogEditorIcon> {
-
   final List<MaterialButton> imgs = [];
-  TextEditingController myController;
 
   @override
   Widget build(BuildContext context) {
-
-    if (myController == null) {
-      myController = TextEditingController(text: widget.iconWidget.key.currentState.label);
-    }
 
     if (imgs.length == 0) {
       imgs.add(MaterialButton( 
         color: Theme.of(context).primaryColor, 
         textColor: Colors.white,
-        child: const Text("Increase Size"), 
+        child: const Text("Size +"), 
         onPressed: () async {
           widget.iconWidget.key.currentState.setState(() {
             widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 1.05;
@@ -69,7 +63,7 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       imgs.add(MaterialButton( 
         color: Theme.of(context).primaryColor, 
         textColor: Colors.white,
-        child: const Text("Decrease Size"), 
+        child: const Text("Size -"), 
         onPressed: () async {
           widget.iconWidget.key.currentState.setState(() {
             widget.iconWidget.key.currentState.scale = widget.iconWidget.key.currentState.scale * 0.95;
@@ -97,8 +91,9 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
       imgs.add(MaterialButton( 
         color: Colors.greenAccent, 
         textColor: Colors.white,
-        child: const Text("Save and Close"), 
+        child: const Text("Save/Close"), 
         onPressed: () async {
+          /*
           if (!(myController.text == null) && widget.iconWidget.label != myController.text)
           {
             widget.iconWidget.key.currentState.setState(()
@@ -106,10 +101,11 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
               widget.iconWidget.key.currentState.label = myController.text;  
             });
           }
+          */
 
           widget.saveCallback(widget.iconWidget);
 
-          Navigator.pop(context);
+          Navigator.of(context, rootNavigator: true).pop();
         }, 
         splashColor: Colors.redAccent,
       ));
@@ -136,7 +132,7 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
           widget.iconWidget.key.currentState.controller.reverse().then((err) {
             widget.deleteCallback(widget.iconWidget);
 
-            Navigator.pop(context);
+            Navigator.of(context, rootNavigator: true).pop();
           });
         }, 
         splashColor: Colors.blueAccent,
@@ -145,15 +141,8 @@ class DialogEditorIconState extends State<DialogEditorIcon> {
 
     return Opacity(
       child: AlertDialog(
-        title: TextField(
-          autofocus: false,
-          textCapitalization: TextCapitalization.words,
-          textInputAction: TextInputAction.done,
-          controller: myController,
-          decoration: new InputDecoration(
-            labelText: 'Current Icon Text',
-            hintText: '${myController.text}'
-          ),
+        title: Text(
+          widget.iconWidget.key.currentState.label
         ),
         content: Container(
           child: new GridView.count(
