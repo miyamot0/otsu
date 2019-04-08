@@ -99,10 +99,11 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Text("Shawn Gilroy, Louisiana State University (2018)\nMIT-Licensed",
+              child: Text("Shawn Gilroy, Louisiana State University (2018)\nBehavioral Engineering Lab\nMIT-Licensed",
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white
                 ),
                 textAlign: TextAlign.center,
               ),

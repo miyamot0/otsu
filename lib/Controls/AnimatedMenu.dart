@@ -51,7 +51,7 @@ import 'package:otsu/resources.dart';
 class AnimatedMenuItem extends FloatingActionButton {
   final FloatingActionButton currentButton;
   final bool autoDismiss;
-  String labelText;
+  final String labelText;
 
   AnimatedMenuItem(
   {

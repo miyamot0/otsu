@@ -41,7 +41,7 @@ class SpeakerObject extends StatefulWidget {
     try {
       await platform.invokeMethod('speak', sendMap);
     } on PlatformException catch (e) {
-      //print('Exception: ${e.message}');
+      printDebug('Exception: ${e.message}');
     }
   }
 

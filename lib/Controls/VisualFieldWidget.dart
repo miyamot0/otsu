@@ -169,6 +169,14 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       }
 
       _checkAllCurrentMenuOptions();
+
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return _showStartupWindow();
+        },
+      );
     });
   }
 
@@ -759,7 +767,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     );
   }
 
-  /// TODO: assign size (square, based on %age height)
+  /// Draw folder popup
   /// 
   /// 
   AlertDialog _buildFolderPopupDialog(ReactiveFolderWidget folderWidget, List<SavedIcon> storedIcons) {
@@ -805,8 +813,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           childAspectRatio: 1.0,
           children: imgs,
         ),
-      width: 500.0,
-      height: 500.0,
+      width: MediaQuery.of(context).size.height * 0.8,
+      height: MediaQuery.of(context).size.height * 0.8,
       ),
     );
   }
