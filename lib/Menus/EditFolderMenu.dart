@@ -2,7 +2,8 @@
 import 'package:otsu/resources.dart';
 
 class EditFolderEntry extends PopupMenuEntry<int> {
-  static int DeleteFolder = -1;
+  static const int DeleteFolder = -1;
+  static const int ModifyFolderLabel = -2;
 
   final ReactiveFolderWidget folderWidget;
 
@@ -37,6 +38,10 @@ class EditFolderEntryState extends State<EditFolderEntry> {
     });
   }
 
+  void _editLabel() {
+    Navigator.pop<int>(context, EditFolderEntry.ModifyFolderLabel);
+  }
+
   void _default() {
     widget.folderWidget.key.currentState.setState(() {
       widget.folderWidget.key.currentState.scale = 1.0;
@@ -44,7 +49,7 @@ class EditFolderEntryState extends State<EditFolderEntry> {
   }
 
   void _delete() {
-    Navigator.pop<int>(context, EditIconEntry.DeleteIcon);
+    Navigator.pop<int>(context, EditFolderEntry.DeleteFolder);
   }
 
   @override
@@ -62,6 +67,10 @@ class EditFolderEntryState extends State<EditFolderEntry> {
         FlatButton(
           onPressed: _pinIcon, 
           child: Text('Lock Folder')
+        ),
+        FlatButton(
+          onPressed: _editLabel, 
+          child: Text('Edit Label')
         ),
         FlatButton(
           onPressed: _default, 

@@ -600,6 +600,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     switch (resultOfMenu) {
       case EditIconEntry.DeleteIcon:
         _removeFromDatabase(widget);
+
         break;
       
       case EditIconEntry.ModifyIconLabel:
@@ -625,6 +626,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
       default:
         _saveLatestStack(widget);
+
         break;  
     }
   }
@@ -644,10 +646,37 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       )
     );
 
-    if (resultOfMenu == EditFolderEntry.DeleteFolder) {
-      _removeFromDatabase(widget);
-    } else {
-      _saveLatestStack(widget);
+    switch (resultOfMenu) {
+      case EditFolderEntry.DeleteFolder:
+        _removeFromDatabase(widget);
+
+        break;
+
+      case EditFolderEntry.ModifyFolderLabel:
+        String finalNewString = await showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return DialogIconLabel(assetText: widget.label,);
+          },
+        );
+
+        if (finalNewString != null && widget.label != finalNewString)
+        {
+          widget.key.currentState.setState(()
+          {
+            widget.key.currentState.label = finalNewString;  
+          });
+        }
+
+        _saveLatestStack(widget);
+        
+        break;
+      
+      default:
+        _saveLatestStack(widget);
+
+        break;
     }
   }
 
