@@ -1,7 +1,7 @@
 name: otsu
 description: Development prototype for flutter-based AAC app
 
-version: 1.0.2
+version: 1.0.3
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -14,7 +14,7 @@ dependencies:
   date_format: any
   shared_preferences: any
   path: any
-  animated_background: any
+  animated_background: ^1.0.1
   sqflite: any
 
 dev_dependencies:
