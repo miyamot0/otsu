@@ -69,7 +69,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuWidget _buildAnimatedMenu() {
-    debugPrint("_buildAnimatedMenu()");
+    debugPrint("IconCreatorScreen::_buildAnimatedMenu()");
 
     if (animatedMenuWiget == null)
     {
@@ -94,7 +94,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildSaveButton() {
-    debugPrint("_buildSaveButton()");
+    debugPrint("IconCreatorScreen::_buildSaveButton()");
     
     return AnimatedMenuItem(
       labelText: "Add Current Icon to Board",
@@ -120,7 +120,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildEditLabelButton() {
-    debugPrint("_buildEditLabelButton()");
+    debugPrint("IconCreatorScreen::_buildEditLabelButton()");
     
     return AnimatedMenuItem(
       labelText: "Edit Current Label",
@@ -147,7 +147,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   Future<String> _showInputDialog() async {
-    debugPrint("_showInputDialog()");
+    debugPrint("IconCreatorScreen::_showInputDialog()");
     
     return await showDialog<String>(
       context: context,
@@ -159,7 +159,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildPhotoIconButton() {
-    debugPrint("_buildPhotoIconButton()");
+    debugPrint("IconCreatorScreen::_buildPhotoIconButton()");
     
     return AnimatedMenuItem(
       labelText: "Take a Photo",
@@ -185,7 +185,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   AnimatedMenuItem _buildImageIconButton() {
-    debugPrint("_buildImageIconButton()");
+    debugPrint("IconCreatorScreen::_buildImageIconButton()");
     
     return AnimatedMenuItem(
       labelText: "Load a Stored Image",
@@ -211,7 +211,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   void _createLocalCopy(File image) async {
-    debugPrint("_createLocalCopy()");
+    debugPrint("IconCreatorScreen::_createLocalCopy()");
     
     String stamp = formatDate(DateTime.now(), [yyyy,'.',mm,'.',dd,'.',HH,'.',nn,'.',ss]);
     String filename = "$stamp.png";
@@ -233,7 +233,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   Future<String> _loadCategoriesJson(String fileName) async {
-    printDebug("_loadCategoriesJson(String fileName)");
+    printDebug("IconCreatorScreen::_loadCategoriesJson(String fileName)");
 
     return await rootBundle.loadString('json/$fileName.json');
   }
@@ -242,7 +242,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   void _loadImages(String category) async {
-    debugPrint("_loadImages()");
+    debugPrint("IconCreatorScreen::_loadImages()");
     
     String distancesText = await _loadCategoriesJson(category);
     jsonAssets = json.decode(distancesText) as List;
@@ -271,7 +271,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   void _changeImage(String assetName) {
-    //debugPrint("_changeImage()");
+    debugPrint("IconCreatorScreen::_changeImage()");
 
     setState(() {
       List<String> splitString = assetName.split(".png");
@@ -304,7 +304,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   Column _buildPreview() {
-    //debugPrint("_buildPreview()");
+    debugPrint("IconCreatorScreen::_buildPreview()");
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -317,7 +318,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   InputDecorator _buildDropDown() {
-    //debugPrint("_buildDropDown()");
+    debugPrint("IconCreatorScreen::_buildDropDown()");
+    
     return InputDecorator(
       decoration: InputDecoration(
         labelText: 'Select an Icon Category', 
@@ -356,7 +358,8 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   ///
   ///
   Expanded _buildCategoryGridview() {
-    //debugPrint("_buildCategoryGridview()");
+    debugPrint("IconCreatorScreen::_buildCategoryGridview()");
+    
     return new Expanded(
       child: new SafeArea(
         top: false,
@@ -377,7 +380,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
   /// 
   /// 
   Row _buildPhotoGallery(BuildContext context) {
-    //debugPrint("_buildPhotoGallery()");
+    debugPrint("IconCreatorScreen::_buildPhotoGallery()");
 
     final mediaQueryData = MediaQuery.of(context);
     previewSize = Size(mediaQueryData.size.width / 3, mediaQueryData.size.width / 3);

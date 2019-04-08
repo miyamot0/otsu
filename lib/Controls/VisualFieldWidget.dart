@@ -952,6 +952,18 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
           _checkAllCurrentMenuOptions();
 
+          // Check for positioning on start (for framed speech)
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            printDebug("VisualFieldWidgetState::addPostFrameCallback(_)");
+
+            if (boardSettings.checkIsInSingleMode == false)
+            {
+              _moveIconToTop(null);
+            }
+
+            _checkAllCurrentMenuOptions();
+          });
+
           await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         },
       )
