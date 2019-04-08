@@ -157,6 +157,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     animatedMenu = _buildAnimatedMenu(childButtons);
 
+    // Check for positioning on start (for framed speech)
     SchedulerBinding.instance.addPostFrameCallback((_) {
       printDebug("VisualFieldWidgetState::addPostFrameCallback(_)");
 
@@ -164,14 +165,14 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       {
         _moveIconToTop(null);
       }
+
+      _checkAllCurrentMenuOptions();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    _checkAllCurrentMenuOptions();
-  
+ 
     _toggleSentenceStrip();
     
     return InheritedVisualFieldState(
@@ -892,6 +893,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
           });
 
+          _checkAllCurrentMenuOptions();
+
           await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         },
       )
@@ -903,8 +906,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   AnimatedMenuItem _buildAutoDeselectModeButton() {
     printDebug("_buildAutoDeselectModeButton()");
-
-    //_buildAutoDeselectModeButton()');
 
     return AnimatedMenuItem(
       labelText: (boardSettings == null || boardSettings.checkIsAutoDeselecting == true) ? "Disable Auto-Deselect" : "Enable Auto-Deselect",
@@ -919,6 +920,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
           {
             boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
           });
+
+          _checkAllCurrentMenuOptions();
 
           await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         },
@@ -947,6 +950,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             _moveIconToTop(null);
           });
 
+          _checkAllCurrentMenuOptions();
+
           await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         },
       )
@@ -968,6 +973,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         child: Icon(Icons.play_arrow),
         onPressed: () async {
           _resumeChildMode();
+
+          _checkAllCurrentMenuOptions();
 
           await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         }
