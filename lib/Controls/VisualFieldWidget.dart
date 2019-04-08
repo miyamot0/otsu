@@ -33,7 +33,6 @@ class VisualFieldWidget extends StatefulWidget {
 }
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
-//  IconDatabase iconDb;  
   BoardSettings boardSettings;
 
   AnimatedMenuWidget animatedMenu;
@@ -181,7 +180,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       stackElements: stackElements,
       animatedMenu: animatedMenu,
       boardSettings: boardSettings,
-      documentsDirectory: dir,
       boardSize: MediaQuery.of(context).size,
       child: VisualFieldBox(),
       key: GlobalKey(),
@@ -774,7 +772,11 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   void _navigateToIconCreatorScreen(BuildContext context) async {
     printDebug("_navigateToIconCreatorScreen()");
-    EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => IconCreatorScreen(dir)));
+
+    EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(
+      builder: (context) => IconCreatorScreen()
+      )
+    );
 
     if (result == null) return;
 
@@ -825,7 +827,11 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   void _navigateToFolderCreatorScreen(BuildContext context) async {
     printDebug("_navigateToIconCreatorScreen()");
-    EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(builder: (context) => FolderCreatorScreen(dir)));
+    
+    EmbeddedIconModel result = await Navigator.push(context, MaterialPageRoute(
+      builder: (context) => FolderCreatorScreen()
+      )
+    );
 
     if (result == null) return;
 

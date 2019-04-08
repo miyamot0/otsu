@@ -27,9 +27,8 @@ import 'package:otsu/resources.dart';
 final bool outputToTerminal = false;
 
 class FolderCreatorScreen extends StatefulWidget {
-  final String documentsDirectory;
 
-  FolderCreatorScreen(this.documentsDirectory);
+  FolderCreatorScreen();
 
   @override
   FolderCreatorScreenState createState() => FolderCreatorScreenState();
@@ -279,7 +278,7 @@ class FolderCreatorScreenState extends State<FolderCreatorScreen> {
 
     setState(() 
     {
-      preview = PreviewIcon(previewSize, assetPath, assetText, isEmbedded, widget.documentsDirectory);
+      preview = PreviewIcon(previewSize, assetPath, assetText, isEmbedded, InheritedAppState.of(context).dir);
     });
 
     return new Row(

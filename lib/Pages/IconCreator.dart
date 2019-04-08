@@ -26,9 +26,7 @@ import 'package:otsu/resources.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class IconCreatorScreen extends StatefulWidget {
-  final String documentsDirectory;
-
-  IconCreatorScreen(this.documentsDirectory);
+  IconCreatorScreen();
 
   @override
   _IconCreatorState createState() => _IconCreatorState();
@@ -218,7 +216,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
     String stamp = formatDate(DateTime.now(), [yyyy,'.',mm,'.',dd,'.',HH,'.',nn,'.',ss]);
     String filename = "$stamp.png";
 
-    File newImage = await image.copy('${widget.documentsDirectory}/$filename');
+    File newImage = await image.copy('${InheritedAppState.of(context).dir}/$filename');
 
     if (newImage.existsSync())
     {
@@ -386,7 +384,7 @@ class _IconCreatorState extends State<IconCreatorScreen> {
 
     setState(() 
     {
-      preview = PreviewIcon(previewSize, assetPath, assetText, isEmbedded, widget.documentsDirectory);
+      preview = PreviewIcon(previewSize, assetPath, assetText, isEmbedded, InheritedAppState.of(context).dir); //widget.documentsDirectory);
     });
 
     return new Row(

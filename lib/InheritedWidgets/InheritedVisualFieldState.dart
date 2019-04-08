@@ -30,7 +30,6 @@ import 'package:otsu/resources.dart';
 class InheritedVisualFieldState extends InheritedWidget {
   InheritedVisualFieldState({
     Key key,
-    @required this.documentsDirectory,
     @required this.background,
     @required this.inDebugMode,
     @required this.stackElements,
@@ -40,7 +39,6 @@ class InheritedVisualFieldState extends InheritedWidget {
     Widget child,
   }) : super (key: key, child: child);
 
-  final String documentsDirectory;
   final Color background;
   final bool inDebugMode;
   final List<Widget> stackElements;

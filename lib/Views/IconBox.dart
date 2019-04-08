@@ -84,7 +84,7 @@ class IconBox extends StatelessWidget {
     Image imgAsset = Image.asset(
       inheritedIconState.isEmbbedded == true ? 
         inheritedIconState.assetPath : 
-        "${inheritedFieldState.documentsDirectory}/${inheritedIconState.assetPath}",
+        "${InheritedAppState.of(context).dir}/${inheritedIconState.assetPath}",
       height: (inheritedIconState.scale * inheritedIconState.defaultWidth) * 0.7,
       fit: BoxFit.cover
     );

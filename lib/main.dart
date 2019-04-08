@@ -45,29 +45,45 @@ class MainApp extends StatefulWidget {
 
 class ApplicationState extends State<MainApp> {
   IconDatabase iconDb;
+  String dir;
 
   @override
   void initState() {
     printDebug("ApplicationState::initState()");
 
     iconDb = new IconDatabase();
-    iconDb.open().then((result) => setState(() {}));
+    iconDb.open().then((result) async {
+      debugPrint("ApplicationState::" + dir);
+      setState(() {});
+    });
 
     super.initState();
+  }
+
+  void getLocalDirectory() async {
+    dir = (await getApplicationDocumentsDirectory()).path;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) 
   {
+    if (dir == null) {
+      getLocalDirectory();
+    }
+
     return InheritedAppState(
       iconDb: iconDb,
+      dir: dir,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         showPerformanceOverlay: true,
         initialRoute: '/',
         routes: {
           '/':      (context) => TitlePage(),
-          '/board': (context) => (iconDb == null) ? null : VisualFieldWidget(),
+          '/board': (context) => (iconDb == null || dir == null) ? 
+            null : 
+            VisualFieldWidget(),
         },
       ),
     );
