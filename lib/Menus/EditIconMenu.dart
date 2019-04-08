@@ -2,7 +2,8 @@
 import 'package:otsu/resources.dart';
 
 class EditIconEntry extends PopupMenuEntry<int> {
-  static int DeleteIcon = -1;
+  static const DeleteIcon = -1;
+  static const ModifyIconLabel = -2;
 
   final ReactiveIconWidget iconWidget;
 
@@ -37,6 +38,10 @@ class EditIconEntryState extends State<EditIconEntry> {
     });
   }
 
+  void _editLabel() {
+    Navigator.pop<int>(context, EditIconEntry.ModifyIconLabel);
+  }
+
   void _default() {
     widget.iconWidget.key.currentState.setState(() {
       widget.iconWidget.key.currentState.scale = 1.0;
@@ -62,6 +67,10 @@ class EditIconEntryState extends State<EditIconEntry> {
         FlatButton(
           onPressed: _pinIcon, 
           child: Text('Lock Icon')
+        ),
+        FlatButton(
+          onPressed: _editLabel, 
+          child: Text('Edit Label')
         ),
         FlatButton(
           onPressed: _default, 

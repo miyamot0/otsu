@@ -26,13 +26,13 @@ import 'package:otsu/resources.dart';
 
 class DialogIconLabel extends StatefulWidget {
   final String assetText;
-  final GlobalKey<DialogIconLabelState> key = GlobalKey<DialogIconLabelState>();
 
-  DialogIconLabel({this.assetText}) : super(key: GlobalKey());
+  DialogIconLabel({
+    this.assetText,
+  });
 
   @override
   DialogIconLabelState createState() => DialogIconLabelState(
-    key: key, 
     assetText: assetText
   );
 }
@@ -41,7 +41,9 @@ class DialogIconLabelState extends State<DialogIconLabel> {
   String assetText;
   TextControllerCustom myController;
 
-  DialogIconLabelState({Key key, this.assetText});
+  DialogIconLabelState({
+    this.assetText
+  });
 
   @override
   Widget build(BuildContext context) {

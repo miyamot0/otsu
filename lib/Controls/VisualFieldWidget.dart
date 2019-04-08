@@ -25,8 +25,9 @@
 import 'package:otsu/resources.dart';
 
 class VisualFieldWidget extends StatefulWidget {
+  final GlobalKey key;
 
-  VisualFieldWidget() : super(key: GlobalKey());
+  VisualFieldWidget({this.key});
 
   @override
   VisualFieldWidgetState createState() => VisualFieldWidgetState();
@@ -45,7 +46,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   final stackElements = <Widget>[];
   final childButtons = List<AnimatedMenuItem>();
 
-  GlobalKey scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -186,7 +186,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       boardSettings: boardSettings,
       boardSize: MediaQuery.of(context).size,
       child: VisualFieldBox(),
-      key: scaffoldKey,
     );
   }
 
@@ -598,10 +597,35 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       )
     );
 
-    if (resultOfMenu == EditIconEntry.DeleteIcon) {
-      _removeFromDatabase(widget);
-    } else {
-      _saveLatestStack(widget);
+    switch (resultOfMenu) {
+      case EditIconEntry.DeleteIcon:
+        _removeFromDatabase(widget);
+        break;
+      
+      case EditIconEntry.ModifyIconLabel:
+        String finalNewString = await showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return DialogIconLabel(assetText: widget.label,);
+          },
+        );
+
+        if (finalNewString != null && widget.label != finalNewString)
+        {
+          widget.key.currentState.setState(()
+          {
+            widget.key.currentState.label = finalNewString;  
+          });
+        }
+
+        _saveLatestStack(widget);
+
+        break;
+
+      default:
+        _saveLatestStack(widget);
+        break;  
     }
   }
 

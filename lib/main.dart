@@ -46,6 +46,7 @@ class MainApp extends StatefulWidget {
 class ApplicationState extends State<MainApp> {
   IconDatabase iconDb;
   String dir;
+  GlobalKey key = GlobalKey();
 
   @override
   void initState() {
@@ -75,6 +76,7 @@ class ApplicationState extends State<MainApp> {
     return InheritedAppState(
       iconDb: iconDb,
       dir: dir,
+      key: key,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         showPerformanceOverlay: true,
@@ -83,7 +85,7 @@ class ApplicationState extends State<MainApp> {
           '/':      (context) => TitlePage(),
           '/board': (context) => (iconDb == null || dir == null) ? 
             null : 
-            VisualFieldWidget(),
+            VisualFieldWidget(key: key),
         },
       ),
     );
