@@ -33,7 +33,7 @@ class VisualFieldWidget extends StatefulWidget {
 }
 
 class VisualFieldWidgetState extends State<VisualFieldWidget> {
-  IconDatabase iconDb;  
+//  IconDatabase iconDb;  
   BoardSettings boardSettings;
 
   AnimatedMenuWidget animatedMenu;
@@ -64,7 +64,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   @override
   void dispose() {
     printDebug("VisualFieldWidgetState::dispose()");
-    iconDb.close();
+
+    InheritedAppState.of(context).iconDb.close();
 
     super.dispose();
   }
@@ -77,17 +78,17 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     dir = (await getApplicationDocumentsDirectory()).path;
 
-    iconDb = new IconDatabase();
-    await iconDb.open();
+    //iconDb = new IconDatabase();
+    //await iconDb.open();
 
-    boardSettings = await iconDb.loadSettings();
+    boardSettings = await InheritedAppState.of(context).iconDb.loadSettings();
 
     if (boardSettings.checkIsInSingleMode == false) 
     {
       stackElements.add(sentenceStripReference);      
     }
 
-    List<SavedIcon> icons = await iconDb.getSavedIcons();
+    List<SavedIcon> icons = await InheritedAppState.of(context).iconDb.getSavedIcons();
 
     setState(() {
       for (var i = 0; i < icons.length; i++) {
@@ -242,7 +243,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         ..storedId  = droppableFolder.id
         ..isFolder  = false;
 
-        await iconDb.update(savedIcon);
+        await InheritedAppState.of(context).iconDb.update(savedIcon);
 
         widget.key.currentState.controller.reverse().then((err) {
         setState(() 
@@ -389,7 +390,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   void _saveLatestStack(Widget widget) async {
     printDebug("VisualFieldWidgetState::__saveLatestStack() " + new DateTime.now().toString());
 
-    if (iconDb == null) return;
+    if (InheritedAppState.of(context).iconDb == null) return;
 
     if (widget != null && widget is ReactiveIconWidget)
     {
@@ -407,7 +408,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       ..storedId  = widget.storedId
       ..isFolder  = false;
 
-      await iconDb.update(savedIcon);
+      await InheritedAppState.of(context).iconDb.update(savedIcon);
     }
     else if (widget != null && widget is ReactiveFolderWidget)
     {
@@ -425,10 +426,10 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       ..storedId  = -1
       ..isFolder  = true;
 
-      await iconDb.update(savedIcon);
+      await InheritedAppState.of(context).iconDb.update(savedIcon);
     }
 
-    await iconDb.saveSettings(boardSettings);
+    await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
   }
 
   /// Remove from stack
@@ -439,7 +440,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (widget is ReactiveIconWidget)
     {
-      await iconDb.delete(widget.id);
+      await InheritedAppState.of(context).iconDb.delete(widget.id);
 
       setState(() 
       {
@@ -449,7 +450,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (widget is ReactiveFolderWidget)
     {
-       await iconDb.deleteFolder(widget.id);
+       await InheritedAppState.of(context).iconDb.deleteFolder(widget.id);
 
       setState(() 
       {
@@ -486,7 +487,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       }
     }
 
-    await iconDb.saveSettings(boardSettings);
+    await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
   }
 
   /// Toggle debug mode
@@ -615,7 +616,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   void _navigateToFolderContentDialog(ReactiveFolderWidget folderWidget) async {
     printDebug("_navigateToFolderContentDialog: ${folderWidget.key.currentState.label}");
 
-    var storedIcons = await iconDb.getStoredIcons(folderWidget.id);
+    var storedIcons = await InheritedAppState.of(context).iconDb.getStoredIcons(folderWidget.id);
 
     showDialog(
       context: context,
@@ -721,7 +722,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     savedIcon.isStored = false;
     savedIcon.storedId = -1;
 
-    await iconDb.update(savedIcon);
+    await InheritedAppState.of(context).iconDb.update(savedIcon);
 
     setState(()
     {
@@ -791,7 +792,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     ..storedId  = -1
     ..isFolder  = false;
 
-    SavedIcon insert = await iconDb.insert(savedIcon);
+    SavedIcon insert = await InheritedAppState.of(context).iconDb.insert(savedIcon);
 
     setState(() 
     {
@@ -842,7 +843,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     ..storedId  = -1
     ..isFolder  = true;
 
-    SavedIcon insert = await iconDb.insert(savedIcon);
+    SavedIcon insert = await InheritedAppState.of(context).iconDb.insert(savedIcon);
 
     setState(() 
     {
@@ -885,7 +886,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             boardSettings.checkIsAutoSpeaking = !boardSettings.checkIsAutoSpeaking;
           });
 
-          await iconDb.saveSettings(boardSettings);
+          await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         },
       )
     );
@@ -913,7 +914,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             boardSettings.checkIsAutoDeselecting = !boardSettings.checkIsAutoDeselecting;   
           });
 
-          await iconDb.saveSettings(boardSettings);
+          await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         },
       )
     );
@@ -940,7 +941,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
             _moveIconToTop(null);
           });
 
-          await iconDb.saveSettings(boardSettings);
+          await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         },
       )
     );
@@ -962,7 +963,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         onPressed: () async {
           _resumeChildMode();
 
-          await iconDb.saveSettings(boardSettings);
+          await InheritedAppState.of(context).iconDb.saveSettings(boardSettings);
         }
       )
     );

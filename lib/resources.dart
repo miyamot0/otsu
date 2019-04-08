@@ -17,6 +17,7 @@ export 'package:date_format/date_format.dart';
 export 'package:path_provider/path_provider.dart';
 
 // Models
+export 'InheritedWidgets/InheritedAppState.dart';
 export 'InheritedWidgets/InheritedFolderState.dart';
 export 'InheritedWidgets/InheritedIconState.dart';
 export 'InheritedWidgets/InheritedVisualFieldState.dart';
