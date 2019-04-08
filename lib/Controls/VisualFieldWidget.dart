@@ -41,8 +41,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
   Color background = Colors.orangeAccent;
 
-  String dir;
-
   final stackElements = <Widget>[];
   final childButtons = List<AnimatedMenuItem>();
 
@@ -50,12 +48,18 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   void initState() {
     printDebug("VisualFieldWidgetState::initState()");
 
-    sentenceStripReference = StripObject(padding: 10.0);
+    sentenceStripReference = StripObject(
+      padding: 10.0
+    );
 
-    speakerObjectReference = SpeakerObject(_emitSpeech, _toggleDebugMode);
-      stackElements.add(speakerObjectReference);
+    speakerObjectReference = SpeakerObject(
+      _emitSpeech, 
+      _toggleDebugMode
+    );
+    
+    stackElements.add(speakerObjectReference);
 
-    _loadFromDatabase();
+    SchedulerBinding.instance.addPostFrameCallback((_) => _loadFromDatabase());
 
     super.initState();
   }
@@ -74,11 +78,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   /// 
   void _loadFromDatabase() async {
     printDebug("VisualFieldWidgetState::loadFromDatabase()");
-
-    dir = (await getApplicationDocumentsDirectory()).path;
-
-    //iconDb = new IconDatabase();
-    //await iconDb.open();
 
     boardSettings = await InheritedAppState.of(context).iconDb.loadSettings();
 
@@ -157,18 +156,19 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     childButtons.add(_buildResumeChildModeButton());
 
     animatedMenu = _buildAnimatedMenu(childButtons);
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       printDebug("VisualFieldWidgetState::addPostFrameCallback(_)");
 
-      if (boardSettings != null && boardSettings.checkIsInSingleMode == false)
+      if (boardSettings.checkIsInSingleMode == false)
       {
         _moveIconToTop(null);
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     _checkAllCurrentMenuOptions();
   
