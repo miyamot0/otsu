@@ -9,6 +9,7 @@ export 'dart:math';
 
 // Flutter imports
 export 'package:flutter/material.dart';
+export 'package:flutter/scheduler.dart';
 export 'package:flutter/services.dart';
 
 // External lib imports
@@ -28,7 +29,7 @@ export 'Models/IconType.dart';
 export 'Storage/IconDatabase.dart';
 
 // Misc
-export 'Misc/utilities.dart';
+export 'Misc/Utilities.dart';
 
 // Widgets/Views
 export 'Controls/AnimatedLetter.dart';
@@ -55,5 +56,3 @@ export 'Views/VisualFieldBox.dart';
 // Menus
 export 'package:otsu/Menus/EditIconMenu.dart';
 export 'package:otsu/Menus/EditFolderMenu.dart';
-
-export 'package:flutter/scheduler.dart';
