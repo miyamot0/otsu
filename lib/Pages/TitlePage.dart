@@ -30,6 +30,7 @@ class TitlePage extends StatefulWidget {
 
 class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
   Random rng = new Random();
+  double iconSize;
 
   static Paint textStroke = Paint()
     ..color = Colors.deepOrange
@@ -45,7 +46,7 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     printDebug('TitlePage::build()');
 
-    double iconSize = MediaQuery.of(context).size.width / 12.0;
+    iconSize = (iconSize == null) ? MediaQuery.of(context).size.width / 12.0 : iconSize;
 
     return new Scaffold(
       body: Container(

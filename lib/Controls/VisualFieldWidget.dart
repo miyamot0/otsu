@@ -46,7 +46,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   final stackElements = <Widget>[];
   final childButtons = List<AnimatedMenuItem>();
 
-
   @override
   void initState() {
     printDebug("VisualFieldWidgetState::initState()");
@@ -197,19 +196,33 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
       if (boardSettings == null) return;
 
+      bool shouldWeRedraw = false;
+
       if (animatedMenu.childButtons[2].labelText != ((boardSettings.checkIsInSingleMode == true) ? "Change to Frame Mode" : "Change to Icon Mode")) {
         childButtons.removeAt(2);
         childButtons.insert(2, _buildSwitchModeButton());
+
+        shouldWeRedraw = true;
       }
 
       if (animatedMenu.childButtons[3].labelText != ((boardSettings.checkIsAutoSpeaking == true) ? "Change to Manual Mode" : "Change to Autospeak Mode")) {
         childButtons.removeAt(3);
         childButtons.insert(3, _buildAutoOutputModeButton());
+
+        shouldWeRedraw = true;
       }
 
       if (animatedMenu.childButtons[4].labelText != ((boardSettings.checkIsAutoDeselecting == true) ? "Disable Auto-Deselect" : "Enable Auto-Deselect")) {
         childButtons.removeAt(4);
         childButtons.insert(4, _buildAutoDeselectModeButton());
+
+        shouldWeRedraw = true;
+      }
+
+      if (shouldWeRedraw) {
+        setState(() { 
+          animatedMenu = _buildAnimatedMenu(childButtons);
+        });
       }
   }
 
@@ -592,8 +605,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       context: context,
       items: <PopupMenuEntry<int>>[EditIconEntry(widget)],
       position: RelativeRect.fromRect(
-          offset & Size(40, 40), // smaller rect, the touch area
-          Offset.zero & overlay.size   // Bigger rect, the entire screen
+          offset & Size(50, 50),
+          Offset.zero & overlay.size
       )
     );
 
@@ -645,7 +658,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       context: context,
       items: <PopupMenuEntry<int>>[EditFolderEntry(widget)],
       position: RelativeRect.fromRect(
-          offset & Size(40, 40), // smaller rect, the touch area
+          offset & Size(50, 50), // smaller rect, the touch area
           Offset.zero & overlay.size   // Bigger rect, the entire screen
       )
     );
@@ -719,11 +732,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
     );
   }
 
-  /*
-
-  /// Show startup
-  /// 
-  /// 
   AlertDialog _showStartupWindow() {
     return AlertDialog(
       title: Center(
@@ -750,8 +758,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       ),
     );
   }
-
-  */
 
   /// TODO: assign size (square, based on %age height)
   /// 
