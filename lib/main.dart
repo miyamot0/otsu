@@ -51,25 +51,27 @@ class ApplicationState extends State<MainApp> {
   @override
   void initState() {
     printDebug("ApplicationState::initState()");
-
-    iconDb = new IconDatabase();
-    iconDb.open().then((result) async {
-      debugPrint("ApplicationState::" + dir);
-      setState(() {});
-    });
-
+    
     super.initState();
   }
 
   void getLocalDirectory() async {
-    dir = (await getApplicationDocumentsDirectory()).path;
-    setState(() {});
+    iconDb = new IconDatabase();
+    iconDb.open().then((result) async {
+      getApplicationDocumentsDirectory().then((path) async {
+        dir = (await getApplicationDocumentsDirectory()).path;
+
+        setState(() {});
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) 
   {
-    if (dir == null) {
+    printDebug("ApplicationState::build()");
+
+    if (dir == null || iconDb == null) {
       getLocalDirectory();
     }
 
@@ -78,13 +80,11 @@ class ApplicationState extends State<MainApp> {
       dir: dir,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        showPerformanceOverlay: true,
+        showPerformanceOverlay: false,
         initialRoute: '/',
         routes: {
           '/':      (context) => TitlePage(),
-          '/board': (context) => (iconDb == null || dir == null) ? 
-            null : 
-            VisualFieldWidget(key: key),
+          '/board': (context) => (iconDb == null || dir == null) ? null : VisualFieldWidget(key: key),
         },
       ),
     );

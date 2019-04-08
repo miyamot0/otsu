@@ -622,13 +622,17 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
         _saveLatestStack(widget);
 
+        SystemChrome.restoreSystemUIOverlays();
+
         break;
 
       default:
         _saveLatestStack(widget);
 
-        break;  
+        break;
     }
+
+    SystemChrome.restoreSystemUIOverlays();
   }
 
   /// Show on-screen context menu
@@ -670,7 +674,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         }
 
         _saveLatestStack(widget);
-        
+
+        SystemChrome.restoreSystemUIOverlays();
+
         break;
       
       default:
@@ -691,6 +697,9 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
 
     if (widget is ReactiveFolderWidget)
       _showContextMenuFolder(widget.key.currentState.currentPosition, widget);
+
+    // Hide bars, if necessary
+    SystemChrome.restoreSystemUIOverlays();
   }
 
   /// Navigate to folder contents
