@@ -44,17 +44,46 @@ class MainApp extends StatefulWidget {
 }
 
 class ApplicationState extends State<MainApp> {
+  IconDatabase iconDb;
+
+  @override
+  void initState() async {
+    printDebug("ApplicationState::initState()");
+
+    iconDb = new IconDatabase();
+    await iconDb.open();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) 
   {
-    return new MaterialApp(
-      debugShowCheckedModeBanner: false,
-      showPerformanceOverlay: true,
-      initialRoute: '/',
-      routes: {
-        '/':      (context) => TitlePage(),
-        '/board': (context) => VisualFieldWidget(),
-      },
+    return ApplicationStateContainer(
+      iconDb: iconDb,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        showPerformanceOverlay: true,
+        initialRoute: '/',
+        routes: {
+          '/':      (context) => TitlePage(),
+          '/board': (context) => VisualFieldWidget(),
+        },
+      ),
     );
   }
+}
+
+class ApplicationStateContainer extends InheritedWidget {
+  final IconDatabase iconDb;
+
+  const ApplicationStateContainer({
+    this.iconDb,
+    Widget child,
+  }) : super(child: child);
+
+  static ApplicationStateContainer of(BuildContext context) => context.inheritFromWidgetOfExactType(ApplicationStateContainer);
+
+  @override
+  bool updateShouldNotify(ApplicationStateContainer oldWidget) => true;
 }
