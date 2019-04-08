@@ -22,10 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-
-import '../Controls/AnimatedMenu.dart';
-import '../Storage/IconDatabase.dart';
+import 'package:otsu/resources.dart';
 
 /// Inherited members for icons/folders lower in tree
 /// 

@@ -22,10 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import '../Controls/ReactiveIconWidget.dart';
+import 'package:otsu/resources.dart';
 
 class DialogEditorIcon extends StatefulWidget {
   final ReactiveIconWidget iconWidget;

@@ -22,12 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'Pages/TitlePage.dart';
-
-import 'Controls/VisualFieldWidget.dart';
+import 'resources.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]).then((_) 
@@ -52,7 +47,7 @@ class ApplicationState extends State<MainApp> {
   {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      showPerformanceOverlay: false,
+      showPerformanceOverlay: true,
       initialRoute: '/',
       routes: {
         '/':      (context) => TitlePage(),

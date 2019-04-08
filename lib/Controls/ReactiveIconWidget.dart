@@ -22,11 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-
-import '../Models/IconType.dart';
-import '../InheritedWidgets/InheritedIconState.dart';
-import '../Views/IconBox.dart';
+import 'package:otsu/resources.dart';
 
 class ReactiveIconWidget extends StatefulWidget {
   final String label, assetPath;

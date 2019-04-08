@@ -22,10 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-import 'dart:math';
-
-import 'package:otsu/Controls/AnimatedLetter.dart';
+import 'package:otsu/resources.dart';
 
 class TitlePage extends StatefulWidget {
   TitlePageState createState() => new TitlePageState();
@@ -101,7 +98,7 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Text("Fast Talker (Flutter-port) was developed by Shawn Gilroy, \nLouisiana State University (2018) \nMIT-Licensed",
+              child: Text("Shawn Gilroy, Louisiana State University (2018)\nMIT-Licensed",
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,

@@ -22,7 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
+import 'package:otsu/resources.dart';
 import 'dart:math' as math;
 
 class CustomFloatingButtonLocation extends FloatingActionButtonLocation {

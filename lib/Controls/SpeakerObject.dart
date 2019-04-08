@@ -22,10 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:otsu/resources.dart';
 
 class SpeakerObject extends StatefulWidget {
   final Function emitSpeech;

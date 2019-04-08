@@ -22,11 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-
-import '../Models/IconType.dart';
-import '../InheritedWidgets/InheritedFolderState.dart';
-import '../Views/FolderBox.dart';
+import 'package:otsu/resources.dart';
 
 class ReactiveFolderWidget extends StatefulWidget {
   final String label, assetPath;

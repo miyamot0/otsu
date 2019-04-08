@@ -22,9 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-
-import 'FieldBox.dart';
+import 'package:otsu/resources.dart';
 
 /// Wrapper for stateless view of field
 /// 

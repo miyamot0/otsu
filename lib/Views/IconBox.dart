@@ -22,10 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-
-import '../InheritedWidgets/InheritedIconState.dart';
-import '../InheritedWidgets/InheritedVisualFieldState.dart';
+import 'package:otsu/resources.dart';
 
 class IconBox extends StatelessWidget {
   static const defaultStyle = TextStyle(

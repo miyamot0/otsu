@@ -22,14 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'dart:async';
-import 'package:flutter/material.dart';
-
-import '../Controls/AnimatedMenu.dart';
-import '../Dialogs/DialogIconLabel.dart';
-import '../Models/EmbeddedIconModel.dart';
-import '../Views/CustomFloatingButtonLocation.dart';
-import '../Views/PreviewIcon.dart';
+import 'package:otsu/resources.dart';
 
 final bool outputToTerminal = false;
 

@@ -22,9 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
-
-import 'PreviewBox.dart';
+import 'package:otsu/resources.dart';
 
 class PreviewIcon extends StatelessWidget {
   final Size previewSize;

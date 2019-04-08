@@ -22,7 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'package:flutter/material.dart';
+import 'package:otsu/resources.dart';
 
 /// Folder state for lowest members of tree (and parents)
 ///

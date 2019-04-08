@@ -22,30 +22,7 @@
     THE SOFTWARE.
 */
 
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-
-import '../Controls/AnimatedMenu.dart';
-import '../Controls/ReactiveIconWidget.dart';
-import '../Controls/ReactiveFolderWidget.dart';
-import '../Controls/SpeakerObject.dart';
-import '../Controls/StripObject.dart';
-
-import '../Dialogs/DialogEditorIcon.dart';
-import '../Dialogs/DialogEditorFolder.dart';
-
-import '../InheritedWidgets/InheritedVisualFieldState.dart';
-
-import '../Models/IconType.dart';
-import '../Models/EmbeddedIconModel.dart';
-
-import '../Pages/FolderCreator.dart';
-import '../Pages/IconCreator.dart';
-
-import '../Storage/IconDatabase.dart';
-
-import '../Views/VisualFieldBox.dart';
+import 'package:otsu/resources.dart';
 
 class VisualFieldWidget extends StatefulWidget {
 

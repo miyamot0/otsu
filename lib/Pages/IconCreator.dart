@@ -22,20 +22,8 @@
     THE SOFTWARE.
 */
 
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:date_format/date_format.dart';
+import 'package:otsu/resources.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
-import '../Controls/AnimatedMenu.dart';
-import '../Dialogs/DialogIconLabel.dart';
-import '../Models/EmbeddedIconModel.dart';
-import '../Views/CustomFloatingButtonLocation.dart';
-import '../Views/PreviewIcon.dart';
 
 class IconCreatorScreen extends StatefulWidget {
   final String documentsDirectory;
