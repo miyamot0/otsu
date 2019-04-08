@@ -25,6 +25,8 @@
 import 'resources.dart';
 
 void main() {
+  printDebug("main::main()");
+
   SystemChrome.setEnabledSystemUIOverlays([]).then((_) 
   {
     SystemChrome.setPreferredOrientations([

@@ -43,7 +43,7 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    printDebug('build call title');
+    printDebug('TitlePage::build()');
 
     double iconSize = MediaQuery.of(context).size.width / 12.0;
 
