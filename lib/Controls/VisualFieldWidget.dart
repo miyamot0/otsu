@@ -174,7 +174,7 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
-          return _showStartupWindow();
+          return showStartupWindow(context);
         },
       );
     });
@@ -737,33 +737,6 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
       builder: (BuildContext context) {
         return _buildFolderPopupDialog(folderWidget, storedIcons);
       },
-    );
-  }
-
-  AlertDialog _showStartupWindow() {
-    return AlertDialog(
-      title: Center(
-        child: Text(
-          "Project Name: Otsu (Version 0.1)"
-        ),
-      ),
-      content: Container(
-        child: Wrap(
-          alignment: WrapAlignment.start,
-          children: <Widget> [
-            Text(
-              "This application is designed to be used alongside function-based communication training. The application provides Icon- (single icon output) and Frame-based output (sentence strip output). The board begins empty, but you can access the necessary settings for holding the SPEAKER for ~5 seconds. Once in this mode you may edit settings, add or adjust icons, and even change the nature of the communication response.",
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                fontStyle: FontStyle.normal,
-                fontSize: 24.0,
-              ),
-            ),
-          ],
-        ),
-      width: 500.0,
-      height: 500.0,
-      ),
     );
   }
 
