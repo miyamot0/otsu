@@ -5,6 +5,7 @@ OpenAAC is a Flutter-powered AAC application designed specific to communication 
 Only Android and iOS are actively maintained and under evaluation at this point.
 
 ## AAC Features
+
  - Dynamically add icons and modify text
  - Native, Skia-powered views in iOS/Android
  - Includes single item and frame (i.e., sentence frame) support
@@ -13,10 +14,25 @@ Only Android and iOS are actively maintained and under evaluation at this point.
  - All boards are locally managed--nothing is ever transmitted
 
 ## Images
+
+Title Screen
+
 ![Alt text](previews/openaac_intro.gif?raw=true "Title screen")
+
+A "learner" and "therapist" mode is availabe, to minimize distractions
+
 ![Alt text](previews/openaac_unlock.gif?raw=true "Unlock screen")
+
+Add as many, or as few, icons to the field as desired
+
 ![Alt text](previews/openaac_add.gif?raw=true "Add icons")
+
+Most aspects of icons (e.g., size, text, positioning, dragging) can be modified
+
 ![Alt text](previews/openaac_modify.gif?raw=true "Modify icons")
+
+The software accomodates single-icon (i.e., touch to speak) and frame-speech (i.e., create a sentence, then speak it)
+
 ![Alt text](previews/openaac_frame.gif?raw=true "Change mode")
 
 ## Derivative Works
@@ -50,7 +66,7 @@ This is currently under active development and evaluation.
 
 ## Todo
 
-- Voice options
+- More options for voice
 
 ## License
 
