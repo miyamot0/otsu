@@ -1,18 +1,27 @@
-# AAC Prototype using Flutter
+# OpenAAC using Google Flutter (Codename Otsu)
 
-## Project Name: Otsu
+OpenAAC is a Flutter-powered AAC application designed specific to communication in autism spectrum disorders--though extensible to virtually any communication disorder, to a degree. This is built entirely in Google's Flutter to provide a customized interface for learners that is consistent across Android and iOS (and any other platform google supports in the future, using the Skia backend).
 
-Project Otsu is a Flutter-powered AAC application designed specific to communication in autism spectrum disorders. This is built entirely in Google's Flutter, working seamlessly across both Android and iOS.  Only Android and iOS are actively maintained and under evaluation at this point.
+Only Android and iOS are actively maintained and under evaluation at this point.
 
-## TO-DO
+## AAC Features
+ - Dynamically add icons and modify text
+ - Native, Skia-powered views in iOS/Android
+ - Includes single item and frame (i.e., sentence frame) support
+ - Dynamically resize, mark icons, and apply other within-stimulus prompts
+ - Incorporate images from anywhere, including your camera or from downloaded pictures
+ - All boards are locally managed--nothing is ever transmitted
 
-- Add license screen, with acknowledgement
-- Add introduction screen
-- Expand on Title screen options
+## Images
+![Alt text](previews/openaac_intro.gif?raw=true "Title screen")
+![Alt text](previews/openaac_unlock.gif?raw=true "Unlock screen")
+![Alt text](previews/openaac_add.gif?raw=true "Add icons")
+![Alt text](previews/openaac_modify.gif?raw=true "Modify icons")
+![Alt text](previews/openaac_frame.gif?raw=true "Change mode")
 
 ## Derivative Works
 
-This project is a derivative work of an earlier project and uses licensed software:
+This project is a derivative work of a peer-reviewed software, under the following licenses:
 
 - [Fast Talker](https://github.com/miyamot0/FastTalker) - MIT - Copyright 2016-2018 Shawn Gilroy. [www.smallnstats.com]
 - [Cross-Platform-Communication-App](https://github.com/miyamot0/Cross-Platform-Communication-App) - MIT - Copyright 2016-2017 Shawn Gilroy. [www.smallnstats.com](http://www.smallnstats.com)
@@ -23,13 +32,13 @@ This project uses licensed visual images in order to operate:
 
 ## Dependencies
 
+- package_info - Copyright 2017 The Chromium Authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/package_info)
 - image_picker - Copyright 2017, Flutter project authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/image_picker)
 - path_provider - Copyright 2017, Flutter project authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/path_provider)
+- path - Copyright 2014, Flutter project authors (BSD-3). [Github](https://github.com/dart-lang/path)
 - date_format - Copyright (c) 2017, Ravi Teja Gudapati <tejainece@gmail.com> (BSD-3). [Github](https://github.com/tejainece/date_format)
 - shared_preferences - Copyright 2017, The Chromium Authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/shared_preferences)
 - sqflite - Copyright 2017, Alexandre Roux Tekartik (MIT). [Github](https://github.com/tekartik/sqflite)
-- path - Copyright 2014, Flutter project authors (BSD-3). [Github](https://github.com/dart-lang/path)
-- flutter_animated_background - Copyright 2018, André Baltazar. [Github](https://github.com/AndreBaltazar8/flutter_animated_background)
 
 ## Installation
 
@@ -38,6 +47,10 @@ This application can be installed as either an Android or iOS application.
 ## Development
 
 This is currently under active development and evaluation.
+
+## Todo
+
+- Voice options
 
 ## License
 
