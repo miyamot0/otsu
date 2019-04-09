@@ -42,11 +42,21 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
     foreground: textStroke,
   );
 
+  Future<double> monitorLayout(Stream<double> mediaQueryWidth) async {
+    await for (double width in mediaQueryWidth) {
+      if (width > 0) {
+        return width;
+      } 
+    }
+
+    return -1;
+  }
+
   @override
   Widget build(BuildContext context) {
     printDebug('TitlePage::build()');
 
-    iconSize = (iconSize == null) ? MediaQuery.of(context).size.width / 12.0 : iconSize;
+    iconSize = (iconSize == null || iconSize == 0) ? MediaQuery.of(context).size.width / 12.0 : iconSize;
 
     return new Scaffold(
       body: Container(
@@ -59,20 +69,34 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
               padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height / 10.0
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(""),
-                  AnimatedLetter('images/O.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('images/P.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('images/E.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('images/N.png', iconSize, rng.nextDouble()),
-                  Text(""),
-                  AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('images/C.png', iconSize, rng.nextDouble()),
-                  Text(""),
-                ],
+              child: FutureBuilder(
+                future: monitorLayout(Stream<double>.periodic(
+                  Duration(milliseconds: 30), 
+                  (_) => MediaQuery.of(context).size.width),
+                ),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data > 0) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text(""),
+                          AnimatedLetter('images/O.png', iconSize, rng.nextDouble()),
+                          AnimatedLetter('images/P.png', iconSize, rng.nextDouble()),
+                          AnimatedLetter('images/E.png', iconSize, rng.nextDouble()),
+                          AnimatedLetter('images/N.png', iconSize, rng.nextDouble()),
+                          Text(""),
+                          AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
+                          AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
+                          AnimatedLetter('images/C.png', iconSize, rng.nextDouble()),
+                          Text(""),
+                        ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }
+                },
               )
             ),
             Center(
