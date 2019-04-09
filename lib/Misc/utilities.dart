@@ -22,10 +22,9 @@
     THE SOFTWARE.
 */
 
-bool inDebugMode = true;
+bool printDebugMessagesToConsole = true;
 
 void printDebug(String msg) {
-  if (inDebugMode) {
+  if (printDebugMessagesToConsole)
     print(msg);
-  }
 }

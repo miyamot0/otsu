@@ -46,6 +46,8 @@ class VisualFieldWidgetState extends State<VisualFieldWidget> {
   final stackElements = <Widget>[];
   final childButtons = List<AnimatedMenuItem>();
 
+  bool inDebugMode = false;
+
   @override
   void initState() {
     printDebug("VisualFieldWidgetState::initState()");
