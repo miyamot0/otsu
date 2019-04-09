@@ -92,7 +92,13 @@ class AnimatedLetterState extends State<AnimatedLetter> with SingleTickerProvide
     }
 
     return Transform.rotate(
-      child: image,
+      child: Container(
+        child: image,
+        decoration: new BoxDecoration(
+          border: Border.all(color: Colors.black),
+          color: Colors.white,
+        ),
+      ),
       angle: animation.value * pI,
     );
   }

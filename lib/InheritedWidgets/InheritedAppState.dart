@@ -27,10 +27,12 @@ import 'package:otsu/resources.dart';
 class InheritedAppState extends InheritedWidget {
   final IconDatabase iconDb;
   final String dir;
+  final PackageInfo appInfo;
 
   const InheritedAppState({
     this.iconDb,
     this.dir,
+    this.appInfo,
     Widget child,
   }) : super(child: child);
 

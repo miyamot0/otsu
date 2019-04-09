@@ -15,6 +15,7 @@ export 'package:flutter/services.dart';
 // External lib imports
 export 'package:image_picker/image_picker.dart';
 export 'package:date_format/date_format.dart';
+export 'package:package_info/package_info.dart';
 export 'package:path_provider/path_provider.dart';
 
 // Models
@@ -54,5 +55,5 @@ export 'Views/PreviewIcon.dart';
 export 'Views/VisualFieldBox.dart';
 
 // Menus
-export 'package:otsu/Menus/EditIconMenu.dart';
-export 'package:otsu/Menus/EditFolderMenu.dart';
+export 'Menus/EditIconMenu.dart';
+export 'Menus/EditFolderMenu.dart';

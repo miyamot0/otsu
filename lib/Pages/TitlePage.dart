@@ -62,17 +62,16 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  AnimatedLetter('titleimages/F.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/A.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/S.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/T.png', iconSize, rng.nextDouble()),
                   Text(""),
-                  AnimatedLetter('titleimages/T.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/A.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/L.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/K.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/E.png', iconSize, rng.nextDouble()),
-                  AnimatedLetter('titleimages/R.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('images/O.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('images/P.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('images/E.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('images/N.png', iconSize, rng.nextDouble()),
+                  Text(""),
+                  AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
+                  AnimatedLetter('images/C.png', iconSize, rng.nextDouble()),
+                  Text(""),
                 ],
               )
             ),
@@ -99,7 +98,7 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Text("Shawn Gilroy, Louisiana State University (2018)\nBehavioral Engineering Lab\nMIT-Licensed",
+              child: Text("Shawn Gilroy, Louisiana State University (2018-2019)\nBehavioral Engineering Lab\nMIT-Licensed (${InheritedAppState.of(context).appInfo.appName}:${InheritedAppState.of(context).appInfo.version})",
                 style: TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,

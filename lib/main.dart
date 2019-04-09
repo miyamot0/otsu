@@ -47,19 +47,22 @@ class ApplicationState extends State<MainApp> {
   IconDatabase iconDb;
   String dir;
   GlobalKey key = GlobalKey();
+  PackageInfo appInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+  );
 
-  @override
-  void initState() {
-    printDebug("ApplicationState::initState()");
-    
-    super.initState();
-  }
-
+  /// Load up shared resources
+  ///
+  ///
   void getLocalDirectory() async {
     iconDb = new IconDatabase();
     iconDb.open().then((result) async {
       getApplicationDocumentsDirectory().then((path) async {
         dir = (await getApplicationDocumentsDirectory()).path;
+        appInfo = await PackageInfo.fromPlatform();
 
         setState(() {});
       });
@@ -71,20 +74,23 @@ class ApplicationState extends State<MainApp> {
   {
     printDebug("ApplicationState::build()");
 
-    if (dir == null || iconDb == null) {
+    if (dir == null || iconDb == null)
       getLocalDirectory();
-    }
 
     return InheritedAppState(
       iconDb: iconDb,
       dir: dir,
+      appInfo: appInfo,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         showPerformanceOverlay: false,
         initialRoute: '/',
         routes: {
           '/':      (context) => TitlePage(),
-          '/board': (context) => (iconDb == null || dir == null) ? null : VisualFieldWidget(key: key),
+          '/board': (context) => (iconDb == null || dir == null) ? null : 
+          VisualFieldWidget(
+              key: key
+          ),
         },
       ),
     );
