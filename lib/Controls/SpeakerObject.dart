@@ -90,9 +90,10 @@ class SpeakerObjectState extends State<SpeakerObject> {
       );
     }
 
-    return Positioned(
-      left: mediaQueryData.size.width - width - padding,
-      top:  padding,
+    return AlignPositioned(
+      alignment: Alignment.topRight,
+      dy: padding,
+      dx: -padding,
       child: GestureDetector(
         onTapDown: pressSpeechEmitterTest,
         onTapUp: releaseSpeechEmitterTest,
@@ -100,11 +101,8 @@ class SpeakerObjectState extends State<SpeakerObject> {
         child: Container(
           width: width,
           height: width,
-          child: Align(
-            alignment: Alignment.center,
-            child: image
-          ),
-          decoration: box
+          child: image,
+          decoration: box,
         ),
       ),
     ); 

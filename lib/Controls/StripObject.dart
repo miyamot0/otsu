@@ -62,9 +62,10 @@ class StripObjectState extends State<StripObject> {
       stripSize = Size((mediaQueryData.size.width - (2 * widget.padding)) * 0.8, (mediaQueryData.size.height - (2 * widget.padding)) * 0.25);
     }
 
-    return Positioned(
-      left: widget.padding,
-      top:  widget.padding,
+    return AlignPositioned(
+      alignment: Alignment.topLeft,
+      dx: widget.padding,
+      dy:  widget.padding,
       child: Container(
         width: stripSize.width,
         height: stripSize.height,

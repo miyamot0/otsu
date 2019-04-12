@@ -33,13 +33,6 @@ class FolderBox extends StatelessWidget {
     inherit: false,
   );
 
-  static const Align editMarker = Align(
-    child: Icon(
-      Icons.edit,
-      ),
-    alignment: Alignment.centerRight,
-  );
-
   static const double thinBorderWidth  = 3.0;
   static const double thickBorderWidth = 5.0;
 
@@ -72,7 +65,9 @@ class FolderBox extends StatelessWidget {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => inheritedFolderState.onTap(),
-          child: editMarker,
+          child: Icon(
+            Icons.edit,
+          ),
         ),
         dx: -10,
         dy: 10,
