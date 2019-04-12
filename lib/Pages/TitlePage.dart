@@ -30,7 +30,6 @@ class TitlePage extends StatefulWidget {
 
 class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
   Random rng = new Random();
-  double iconSize;
 
   static Paint textStroke = Paint()
     ..color = Colors.deepOrange
@@ -42,6 +41,9 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
     foreground: textStroke,
   );
 
+  /// Workaround for android inflation woes
+  ///
+  ///
   Future<double> monitorLayout(Stream<double> mediaQueryWidth) async {
     await for (double width in mediaQueryWidth) {
       if (width > 0) {
@@ -56,84 +58,78 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     printDebug('TitlePage::build()');
 
-    iconSize = (iconSize == null || iconSize == 0) ? MediaQuery.of(context).size.width / 12.0 : iconSize;
-
     return new Scaffold(
-      body: Container(
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height / 10.0
-              ),
-              child: FutureBuilder(
-                future: monitorLayout(
-                  Stream<double>.periodic(
-                    Duration(milliseconds: 50), 
-                    (_) => MediaQuery.of(context).size.width
-                  ),
-                ),
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData && snapshot.data > 0) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text(""),
-                        AnimatedLetter('images/I.png', iconSize, rng.nextDouble()),
-                        AnimatedLetter('images/C.png', iconSize, rng.nextDouble()),
-                        AnimatedLetter('images/O.png', iconSize, rng.nextDouble()),
-                        AnimatedLetter('images/N.png', iconSize, rng.nextDouble()),
-                        Text(""),
-                        AnimatedLetter('images/T.png', iconSize, rng.nextDouble()),
-                        AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
-                        AnimatedLetter('images/L.png', iconSize, rng.nextDouble()),
-                        AnimatedLetter('images/K.png', iconSize, rng.nextDouble()),
-                        Text(""),
-                      ],
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              )
-            ),
-            Center(
-              child: MaterialButton( 
-                height: 40.0, 
-                minWidth: 70.0, 
-                color: Colors.redAccent, 
-                textColor: Colors.white, 
-                padding: EdgeInsets.all(20.0),
-                child: Text("Load Communication Board",
-                  style: TextStyle(
-                    fontSize: 24.0,
-                  ),
-                ), 
-                onPressed: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    "/board"
-                  );
-                },
-                splashColor: Colors.blueAccent,
-              )
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Text("Shawn Gilroy, Louisiana State University (2018-2019)\nBehavioral Engineering Lab\nMIT-Licensed (${InheritedAppState.of(context).appInfo.appName}:${InheritedAppState.of(context).appInfo.version})",
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white
-                ),
-                textAlign: TextAlign.center,
-              ),
-            )
-          ],
+      body: FutureBuilder(
+        future: monitorLayout(
+          Stream<double>.periodic(
+            Duration(milliseconds: 50), 
+            (_) => MediaQuery.of(context).size.width
+          ),
         ),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasData && snapshot.data > 0) {
+            return Stack(
+              children: <Widget>[
+                AlignPositioned(
+                  alignment: Alignment.topCenter,
+                  dy: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text(""),
+                      AnimatedLetter('images/I.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      AnimatedLetter('images/C.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      AnimatedLetter('images/O.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      AnimatedLetter('images/N.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      Text(""),
+                      AnimatedLetter('images/T.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      AnimatedLetter('images/A.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      AnimatedLetter('images/L.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      AnimatedLetter('images/K.png', MediaQuery.of(context).size.width / 12.0, rng.nextDouble()),
+                      Text(""),
+                    ],
+                  ),
+                ),
+                AlignPositioned(
+                  alignment: Alignment.center,
+                  child: MaterialButton( 
+                    height: 40.0, 
+                    minWidth: 70.0, 
+                    color: Colors.redAccent, 
+                    textColor: Colors.white, 
+                    padding: EdgeInsets.all(20.0),
+                    child: Text("Load Communication Board",
+                      style: TextStyle(
+                        fontSize: 24.0,
+                      ),
+                    ), 
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        "/board"
+                      );
+                    },
+                    splashColor: Colors.blueAccent,
+                  ),
+                ),
+                AlignPositioned(
+                  alignment: Alignment.bottomCenter,
+                  child: Text("Shawn Gilroy, Louisiana State University (2018-2019)\nBehavioral Engineering Lab\nMIT-Licensed (${InheritedAppState.of(context).appInfo.appName}:${InheritedAppState.of(context).appInfo.version})",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                )
+
+              ],
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
       backgroundColor: Colors.lightBlueAccent,
     );
