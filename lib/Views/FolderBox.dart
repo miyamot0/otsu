@@ -26,8 +26,8 @@ import 'package:otsu/resources.dart';
 
 class FolderBox extends StatelessWidget {
   static const defaultStyle = TextStyle(
-    color: Colors.black, 
-    decoration: TextDecoration.none, 
+    color: Colors.black,
+    decoration: TextDecoration.none,
     fontWeight: FontWeight.normal,
     fontSize: 20.0,
     inherit: false,
@@ -58,41 +58,59 @@ class FolderBox extends StatelessWidget {
     final InheritedFolderState inheritedFolderState = InheritedFolderState.of(context);
     final InheritedVisualFieldState inheritedFieldState = InheritedVisualFieldState.of(context);
 
-    GestureDetector settingsIcon =  GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => inheritedFolderState.onTap(),
-      child: editMarker,
-    );
-
-    Row topRow = Row(
-      children: [settingsIcon],
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.end,
-      verticalDirection: VerticalDirection.up,
-    );
-
     Image imgAsset = Image.asset(
       inheritedFolderState.assetPath,
       height: (inheritedFolderState.scale * inheritedFolderState.defaultWidth) * 0.7,
       fit: BoxFit.cover,
     );
 
-    Column centerColumn = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(child: inheritedFieldState.inDebugMode ? topRow : Opacity(child: topRow, opacity: 0.0,), flex: 1),
-        Flexible(child: Align(alignment: Alignment.center, child: imgAsset,), flex: 6),
-        Flexible(child: Align(alignment: Alignment.center, child: Text(inheritedFolderState.label, style: defaultStyle)), flex: 2)
-      ]
-    );
-
-    ConstrainedBox item = ConstrainedBox(
-      constraints: new BoxConstraints(
-        minHeight:  inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-        minWidth:   inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-        maxHeight:  inheritedFolderState.scale * inheritedFolderState.defaultWidth,
-        maxWidth:   inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+    var widgetList = (inheritedFieldState.inDebugMode) ? 
+    // In debug
+    <Widget>[
+      AlignPositioned(
+        alignment: Alignment.topRight,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => inheritedFolderState.onTap(),
+          child: editMarker,
+        ),
+        dx: -10,
+        dy: 10,
       ),
+      AlignPositioned(
+        alignment: Alignment.center,
+        child: imgAsset,
+      ),
+      AlignPositioned(
+        alignment: Alignment.bottomCenter,
+        dy: -10,
+        child: Text(
+          inheritedFolderState.label, 
+          style: defaultStyle,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ] : 
+    // Normal
+    <Widget>[
+      AlignPositioned(
+        alignment: Alignment.center,
+        child: imgAsset,
+      ),
+      AlignPositioned(
+        alignment: Alignment.bottomCenter,
+        dy: -10,
+        child: Text(
+          inheritedFolderState.label, 
+          style: defaultStyle,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ];
+
+    SizedBox item = SizedBox(
+      height: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
+      width: inheritedFolderState.scale * inheritedFolderState.defaultWidth,
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: inheritedFolderState.isPinnedToLocation ? thickBorder : thinBorder,
@@ -100,9 +118,8 @@ class FolderBox extends StatelessWidget {
             Colors.greenAccent : 
             Colors.white
         ),
-        child: Padding(
-          child: centerColumn, 
-          padding: EdgeInsets.all(5.0),
+        child: Stack(
+          children: widgetList,
         ),
       ),
     );
