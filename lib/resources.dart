@@ -38,18 +38,22 @@ export 'package:flutter/services.dart';
 
 // External lib imports
 export 'package:align_positioned/align_positioned.dart';
-export 'package:image_picker/image_picker.dart';
 export 'package:date_format/date_format.dart';
+export 'package:image_picker/image_picker.dart';
 export 'package:package_info/package_info.dart';
 export 'package:path_provider/path_provider.dart';
+export 'package:shared_preferences/shared_preferences.dart';
+export 'package:sqflite/sqflite.dart';
 
 // Models
 export 'InheritedWidgets/InheritedAppState.dart';
 export 'InheritedWidgets/InheritedFolderState.dart';
 export 'InheritedWidgets/InheritedIconState.dart';
 export 'InheritedWidgets/InheritedVisualFieldState.dart';
+export 'Models/BoardSettings.dart';
 export 'Models/EmbeddedIconModel.dart';
 export 'Models/IconType.dart';
+export 'Models/SavedIcon.dart';
 
 // Storage
 export 'Storage/IconDatabase.dart';

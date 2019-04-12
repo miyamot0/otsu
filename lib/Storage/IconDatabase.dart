@@ -22,104 +22,22 @@
     THE SOFTWARE.
 */
 
-import 'dart:async';
-import 'dart:io';
-
-import 'package:sqflite/sqflite.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:sqflite/sqflite.dart' show getDatabasesPath;
+import 'package:otsu/resources.dart';
 import 'package:path/path.dart' show join;
-
-final String tableIcon      = "Icon";
-final String idTag          = "idcolumn";
-final String nameTag        = "namecolumn";
-final String pathTag        = "pathcolum";
-final String xTag           = "xcolumn";
-final String yTag           = "ycolumn";
-final String embeddedTag    = "embeddedcolumn";
-final String pinnedTag      = "pincolumn";
-final String scaleTag       = "scalecolumn";
-final String activeTag      = "activecolumn";
-final String isStoredTag    = "isstoredcolumn";
-final String storedIdTag    = "storedidcolumn";
-final String isFolderTag    = "isfoldercolumn";
-
-class BoardSettings {
-  bool checkIsInSingleMode;
-  bool checkIsAutoSpeaking;
-  bool checkIsAutoDeselecting;
-
-  BoardSettings({this.checkIsInSingleMode, 
-                 this.checkIsAutoSpeaking, 
-                 this.checkIsAutoDeselecting});
-}
-
-class SavedIcon {
-
-  int id;
-  String iconName;
-  String iconPath;
-  double x;
-  double y;
-  bool embedded;
-  bool pinned;
-  double scale;
-  bool active;
-  bool isStored;
-  int storedId;
-  bool isFolder;
-
-  SavedIcon();
-
-  Map<String, dynamic> toMap() {
-    var map = <String, dynamic> {
-      nameTag:      iconName,
-      pathTag:      iconPath,
-      xTag:         x,
-      yTag:         y,
-      embeddedTag:  embedded == true ? 1 : 0,
-      pinnedTag:    pinned == true ? 1 : 0,
-      scaleTag:     scale,
-      idTag:        id,
-      activeTag:    active == true ? 1 : 0,
-      isStoredTag:  isStored == true ? 1 : 0,
-      storedIdTag:  storedId,
-      isFolderTag:  isFolder == true ? 1 : 0,
-    };
-
-    if (id == null) {
-      map[idTag]    = null;
-    }
-
-    return map;
-  }
-
-  SavedIcon.fromMap(Map<String, dynamic> map) {
-    id        = map[idTag] as int;
-    iconName  = map[nameTag] as String;
-    iconPath  = map[pathTag] as String;
-    x         = map[xTag] as double;
-    y         = map[yTag] as double;
-    embedded  = map[embeddedTag] == 1;
-    pinned    = map[pinnedTag] == 1;
-    scale     = map[scaleTag] as double;
-    active    = map[activeTag] == 1;
-    isStored  = map[isStoredTag] == 1;
-    storedId  = map[storedIdTag] as int;
-    isFolder  = map[isFolderTag] == 1;
-  }
-}
 
 class IconDatabase
 {
   Database db;
   SharedPreferences settings;
 
-  Future open() async {
-    
+  /// Open database
+  /// 
+  /// 
+  Future open() async {    
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, "icon.db");  
+
+    loadSettings();
 
     try {
       await Directory(databasesPath).create(recursive: true);
@@ -146,12 +64,11 @@ class IconDatabase
     } catch (_) {}
   }
 
+  /// Load settings
+  /// 
+  /// 
   Future<BoardSettings> loadSettings() async {
-
-    if (settings == null)
-    {
-      settings = await SharedPreferences.getInstance();
-    }
+    settings = settings ?? await SharedPreferences.getInstance();
 
     bool checkIsInSingleMode    = settings.getBool('isInSingleMode') ?? true;
     bool checkIsAutoSpeaking    = settings.getBool('isAutoSpeaking') ?? false;
@@ -164,7 +81,12 @@ class IconDatabase
     );
   }
 
+  /// Save settings
+  ///
+  ///
   Future<BoardSettings> saveSettings(BoardSettings currentSettings) async {
+    settings = settings ?? await SharedPreferences.getInstance();
+
     await settings.setBool('isInSingleMode',    currentSettings.checkIsInSingleMode);
     await settings.setBool('isAutoSpeaking',    currentSettings.checkIsAutoSpeaking);
     await settings.setBool('isAutoDeselecting', currentSettings.checkIsAutoDeselecting);
@@ -172,8 +94,10 @@ class IconDatabase
     return currentSettings;
   }
 
+  /// Insert into database
+  ///
+  ///
   Future<SavedIcon> insert(SavedIcon savedIcon) async {
-
     if (savedIcon.id == null) {
       savedIcon.id = await db.insert(tableIcon, savedIcon.toMap());
       //debugPrint("insert... id: ${savedIcon.id}");
@@ -200,6 +124,9 @@ class IconDatabase
     return savedIcon;
   }
 
+  /// Get icon from database
+  /// 
+  /// 
   Future<SavedIcon> getSavedIcon(int id) async {
     List<Map> maps = await db.query(tableIcon,
         columns: [idTag, nameTag, pathTag, xTag, yTag, embeddedTag, pinnedTag, scaleTag, activeTag, isStoredTag, storedIdTag, isFolderTag],
@@ -213,6 +140,9 @@ class IconDatabase
     return null;
   }
 
+  /// Get icons from database
+  /// 
+  /// 
   Future<List<SavedIcon>> getSavedIcons() async {
     List<Map> maps = await db.query(tableIcon, columns: [idTag, nameTag, pathTag, xTag, yTag, embeddedTag, pinnedTag, 
                                     scaleTag, activeTag, isStoredTag, storedIdTag, isFolderTag],);
@@ -227,6 +157,9 @@ class IconDatabase
     return icons;
   }
 
+  /// Get icons from database
+  /// 
+  /// 
   Future<List<SavedIcon>> getStoredIcons(int id) async {
     List<Map> maps = await db.query(tableIcon,
         columns: [idTag, nameTag, pathTag, xTag, yTag, embeddedTag, pinnedTag, scaleTag, activeTag, isStoredTag, storedIdTag, isFolderTag],
@@ -243,26 +176,40 @@ class IconDatabase
     return icons;
   }
 
+  /// Delete icon from db
+  /// 
+  /// 
   Future<int> delete(int id) async {
     return await db.delete(tableIcon, where: "$idTag = ?", whereArgs: [id]);
   }
 
+  /// Delete folder and contents
+  /// 
+  /// 
   Future<int> deleteFolder(int id) async {
     await db.delete(tableIcon, where: "$idTag = ?", whereArgs: [id]);
 
     return await db.delete(tableIcon, where: "$storedIdTag = ?", whereArgs: [id]); 
   }
 
+  /// Update icon
+  /// 
+  /// 
   Future<int> update(SavedIcon savedIcon) async {
     //debugPrint("Update: id: ${savedIcon.id}");
     
     return await db.update(tableIcon, savedIcon.toMap(), where: "$idTag = ?", whereArgs: [savedIcon.id]);
   }
 
+  /// Clear all icons
+  /// 
+  /// 
   Future<int> clearIcons() async {
     return await db.delete(tableIcon, where: null);
   }
 
+  /// Close database
+  /// 
+  /// 
   Future close() async => db.close();
-
 }

@@ -53,11 +53,15 @@ class SpeakerObjectState extends State<SpeakerObject> {
   static const padding = 10.0;
 
   DateTime emitterPressTime;
-  Image image, imageBase, imageActive;
+  Image image,
+        imageBase, 
+        imageActive;
   MediaQueryData mediaQueryData;
   double width;
 
-  static const BoxDecoration box = BoxDecoration(color: Colors.transparent);
+  static const BoxDecoration box = BoxDecoration(
+    color: Colors.transparent
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +99,7 @@ class SpeakerObjectState extends State<SpeakerObject> {
           decoration: box,
         ),
       ),
-    ); 
+    );
   }
 
   /// Back to base graphics
