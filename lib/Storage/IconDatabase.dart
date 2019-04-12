@@ -125,23 +125,25 @@ class IconDatabase
       await Directory(databasesPath).create(recursive: true);
     } catch (_) {}
 
-    db = await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
-      await db.execute('''
-      create table $tableIcon (
-        $idTag integer primary key autoincrement, 
-        $nameTag text not null, 
-        $pathTag text not null, 
-        $xTag real not null, 
-        $yTag real not null, 
-        $embeddedTag integer not null, 
-        $pinnedTag integer not null, 
-        $scaleTag real not null,
-        $activeTag integer not null,
-        $isStoredTag integer not null,
-        $storedIdTag integer not null,
-        $isFolderTag integer not null )
-      ''');
-    });
+    try {
+      db = await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
+        await db.execute('''
+        create table $tableIcon (
+          $idTag integer primary key autoincrement, 
+          $nameTag text not null, 
+          $pathTag text not null, 
+          $xTag real not null, 
+          $yTag real not null, 
+          $embeddedTag integer not null, 
+          $pinnedTag integer not null, 
+          $scaleTag real not null,
+          $activeTag integer not null,
+          $isStoredTag integer not null,
+          $storedIdTag integer not null,
+          $isFolderTag integer not null )
+        ''');
+      });
+    } catch (_) {}
   }
 
   Future<BoardSettings> loadSettings() async {
@@ -151,13 +153,9 @@ class IconDatabase
       settings = await SharedPreferences.getInstance();
     }
 
-    bool checkIsInSingleMode    = settings.getBool('isInSingleMode');
-    bool checkIsAutoSpeaking    = settings.getBool('isAutoSpeaking');
-    bool checkIsAutoDeselecting = settings.getBool('isAutoDeselecting');
-
-    checkIsInSingleMode     = checkIsInSingleMode     == null ? true  : checkIsInSingleMode;
-    checkIsAutoSpeaking     = checkIsAutoSpeaking     == null ? false : checkIsAutoSpeaking;
-    checkIsAutoDeselecting  = checkIsAutoDeselecting  == null ? true  : checkIsAutoDeselecting;    
+    bool checkIsInSingleMode    = settings.getBool('isInSingleMode') ?? true;
+    bool checkIsAutoSpeaking    = settings.getBool('isAutoSpeaking') ?? false;
+    bool checkIsAutoDeselecting = settings.getBool('isAutoDeselecting') ?? true;
 
     return BoardSettings(
       checkIsInSingleMode:    checkIsInSingleMode,

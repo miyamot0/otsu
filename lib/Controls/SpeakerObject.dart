@@ -30,7 +30,7 @@ class SpeakerObject extends StatefulWidget {
 
   SpeakerObject(this.emitSpeech, this.toggleDebug);
 
-  static const platform = const MethodChannel('com.example.otsu/tts');
+  static const platform = const MethodChannel('com.smallnstats.otsu/tts');
 
   /// Pipe text into platform-specific TTS
   /// 
@@ -61,34 +61,24 @@ class SpeakerObjectState extends State<SpeakerObject> {
 
   @override
   Widget build(BuildContext context) {
+    mediaQueryData = mediaQueryData ?? MediaQuery.of(context);
+    width = (mediaQueryData.size.height - (2 * padding)) * 0.25;
 
-    if (mediaQueryData == null)
-    {
-      mediaQueryData = MediaQuery.of(context);
-      width = (mediaQueryData.size.height - (2 * padding)) * 0.25;
-    }
+    imageBase = imageBase ?? Image.asset(
+      'images/speaker.png',
+      color: Colors.black,
+      height: width,
+      fit: BoxFit.cover
+    );
 
-    if (imageBase == null)
-    {
-      imageBase = Image.asset(
-        'images/speaker.png',
-        color: Colors.black,
-        height: width,
-        fit: BoxFit.cover
-      );
+    image = imageBase;
 
-      image = imageBase;
-    }
-
-    if (imageActive == null)
-    {
-      imageActive = Image.asset(
-        'images/speaker.png',
-        color: Colors.greenAccent,
-        height: width,
-        fit: BoxFit.cover
-      );
-    }
+    imageActive = imageActive ?? Image.asset(
+      'images/speaker.png',
+      color: Colors.greenAccent,
+      height: width,
+      fit: BoxFit.cover
+    );
 
     return AlignPositioned(
       alignment: Alignment.topRight,
@@ -108,6 +98,9 @@ class SpeakerObjectState extends State<SpeakerObject> {
     ); 
   }
 
+  /// Back to base graphics
+  ///
+  ///
   void cancelActionRedraw() {
     setState(()
     {
@@ -116,6 +109,8 @@ class SpeakerObjectState extends State<SpeakerObject> {
   }
 
   /// Initial tap for emitter
+  /// 
+  /// 
   void pressSpeechEmitterTest(TapDownDetails deets) {
     setState(() 
     { 
@@ -125,6 +120,8 @@ class SpeakerObjectState extends State<SpeakerObject> {
   }
 
   /// Determine how to handle interaction with emitter
+  /// 
+  /// 
   void releaseSpeechEmitterTest(TapUpDetails deets) {
     if (DateTime.now().difference(emitterPressTime).inSeconds < 5)
     {

@@ -13,7 +13,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     AVSpeechSynthesizer *speechSynthesizer = [[AVSpeechSynthesizer alloc]init];
     FlutterViewController* controller = (FlutterViewController*)self.window.rootViewController;
     FlutterMethodChannel* ttsChanel = [FlutterMethodChannel
-                                       methodChannelWithName:@"com.example.otsu/tts"
+                                       methodChannelWithName:@"com.smallnstats.otsu/tts"
                                        binaryMessenger:controller];
     
     AVSpeechSynthesisVoice *voice = [AVSpeechSynthesisVoice voiceWithIdentifier:@"com.apple.ttsbundle.Alex-compact"];

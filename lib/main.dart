@@ -54,19 +54,15 @@ class ApplicationState extends State<MainApp> {
     buildNumber: 'Unknown',
   );
 
-  /// Load up shared resources
-  ///
-  ///
-  void getLocalDirectory() async {
+  @protected
+  Future<bool> loadAllReferences(BuildContext context) async {
     iconDb = new IconDatabase();
-    iconDb.open().then((result) async {
-      getApplicationDocumentsDirectory().then((path) async {
-        dir = (await getApplicationDocumentsDirectory()).path;
-        appInfo = await PackageInfo.fromPlatform();
+    await iconDb.open();
+    
+    dir = (await getApplicationDocumentsDirectory()).path;
+    appInfo = await PackageInfo.fromPlatform();
 
-        setState(() {});
-      });
-    });
+    return true;
   }
 
   @override
@@ -74,25 +70,34 @@ class ApplicationState extends State<MainApp> {
   {
     printDebug("ApplicationState::build()");
 
-    if (dir == null || iconDb == null)
-      getLocalDirectory();
-
-    return InheritedAppState(
-      iconDb: iconDb,
-      dir: dir,
-      appInfo: appInfo,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        showPerformanceOverlay: false,
-        initialRoute: '/',
-        routes: {
-          '/':      (context) => TitlePage(),
-          '/board': (context) => (iconDb == null || dir == null) ? null : 
-          VisualFieldWidget(
-              key: key
-          ),
-        },
-      ),
+    return new FutureBuilder(
+      future: loadAllReferences(context),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasData && snapshot.data) {
+          return InheritedAppState(
+            iconDb: iconDb,
+            dir: dir,
+            appInfo: appInfo,
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              showPerformanceOverlay: false,
+              initialRoute: '/',
+              routes: {
+                '/':      (context) => TitlePage(),
+                '/board': (context) => VisualFieldWidget(
+                    key: key
+                ),
+              },
+            ),
+          );
+        } else {
+          return MaterialApp(
+            home: Scaffold(
+              backgroundColor: Colors.lightBlue,
+            ),
+          );
+        }
+      },
     );
   }
 }

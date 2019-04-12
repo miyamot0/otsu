@@ -32,17 +32,18 @@ class StripObject extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => new StripObjectState(
-    key: key
+    key: key,
   );
 }
 
-class StripObjectState extends State<StripObject> {  
+class StripObjectState extends State<StripObject> {
   StripObjectState({Key key});
   Size stripSize;
 
   static const Color backgroundColor = Colors.white;
   static const Color borderColor = Colors.black;
   static const double borderWidth = 3.0;
+  MediaQueryData mediaQueryData;
 
   static Border border = Border.all(
     color: borderColor, 
@@ -56,11 +57,8 @@ class StripObjectState extends State<StripObject> {
 
   @override
   Widget build(BuildContext context) {
-    if (stripSize == null)
-    {
-      var mediaQueryData = MediaQuery.of(context);
-      stripSize = Size((mediaQueryData.size.width - (2 * widget.padding)) * 0.8, (mediaQueryData.size.height - (2 * widget.padding)) * 0.25);
-    }
+    mediaQueryData = mediaQueryData ?? MediaQuery.of(context);
+    stripSize = stripSize ?? Size((mediaQueryData.size.width - (2 * widget.padding)) * 0.8, (mediaQueryData.size.height - (2 * widget.padding)) * 0.25);
 
     return AlignPositioned(
       alignment: Alignment.topLeft,
