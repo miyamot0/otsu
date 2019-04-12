@@ -72,31 +72,30 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
               child: FutureBuilder(
                 future: monitorLayout(
                   Stream<double>.periodic(
-                    Duration(milliseconds: 30), 
+                    Duration(milliseconds: 50), 
                     (_) => MediaQuery.of(context).size.width
                   ),
                 ),
                 builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data > 0) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text(""),
-                          AnimatedLetter('images/O.png', iconSize, rng.nextDouble()),
-                          AnimatedLetter('images/P.png', iconSize, rng.nextDouble()),
-                          AnimatedLetter('images/E.png', iconSize, rng.nextDouble()),
-                          AnimatedLetter('images/N.png', iconSize, rng.nextDouble()),
-                          Text(""),
-                          AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
-                          AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
-                          AnimatedLetter('images/C.png', iconSize, rng.nextDouble()),
-                          Text(""),
-                        ],
-                      );
-                    } else {
-                      return Container();
-                    }
+                  if (snapshot.hasData && snapshot.data > 0) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(""),
+                        AnimatedLetter('images/I.png', iconSize, rng.nextDouble()),
+                        AnimatedLetter('images/C.png', iconSize, rng.nextDouble()),
+                        AnimatedLetter('images/O.png', iconSize, rng.nextDouble()),
+                        AnimatedLetter('images/N.png', iconSize, rng.nextDouble()),
+                        Text(""),
+                        AnimatedLetter('images/T.png', iconSize, rng.nextDouble()),
+                        AnimatedLetter('images/A.png', iconSize, rng.nextDouble()),
+                        AnimatedLetter('images/L.png', iconSize, rng.nextDouble()),
+                        AnimatedLetter('images/K.png', iconSize, rng.nextDouble()),
+                        Text(""),
+                      ],
+                    );
+                  } else {
+                    return Container();
                   }
                 },
               )

@@ -1,4 +1,4 @@
-package com.example.otsu;
+package com.smallnstats.otsu;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -19,7 +19,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
-    private static String CHANNEL = "com.example.otsu/tts";
+    private static String CHANNEL = "com.smallnstats.otsu/tts";
 
     public TextToSpeech speaker;
     String toSpeak;
