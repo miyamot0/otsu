@@ -70,9 +70,11 @@ class TitlePageState extends State<TitlePage> with TickerProviderStateMixin {
                 top: MediaQuery.of(context).size.height / 10.0
               ),
               child: FutureBuilder(
-                future: monitorLayout(Stream<double>.periodic(
-                  Duration(milliseconds: 30), 
-                  (_) => MediaQuery.of(context).size.width),
+                future: monitorLayout(
+                  Stream<double>.periodic(
+                    Duration(milliseconds: 30), 
+                    (_) => MediaQuery.of(context).size.width
+                  ),
                 ),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.hasData) {

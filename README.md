@@ -55,6 +55,8 @@ This project uses licensed visual images in order to operate:
 - date_format - Copyright (c) 2017, Ravi Teja Gudapati <tejainece@gmail.com> (BSD-3). [Github](https://github.com/tejainece/date_format)
 - shared_preferences - Copyright 2017, The Chromium Authors (BSD-3). [Github](https://github.com/flutter/plugins/tree/master/packages/shared_preferences)
 - sqflite - Copyright 2017, Alexandre Roux Tekartik (MIT). [Github](https://github.com/tekartik/sqflite)
+- align_positioned - Copyright 2019 by Marcelo Glasberg (BSD-2). [Github](https://github.com/marcglasberg/align_positioned)
+
 
 ## Installation
 

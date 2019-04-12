@@ -33,13 +33,6 @@ class IconBox extends StatelessWidget {
     inherit: false,
   );
 
-  static const Align editMarker = Align(
-    child: Icon(
-      Icons.edit,
-      ),
-    alignment: Alignment.centerRight,
-  );
-
   static const double thinBorderWidth  = 3.0;
   static const double thickBorderWidth = 5.0;
 
@@ -63,24 +56,6 @@ class IconBox extends StatelessWidget {
     InheritedIconState inheritedIconState = InheritedIconState.of(context);
     InheritedVisualFieldState inheritedFieldState = InheritedVisualFieldState.of(context);
 
-    GestureDetector settingsIcon =  GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: ()
-      {
-        if (!inheritedFieldState.inDebugMode) return;
-
-        inheritedIconState.onTap();
-      },
-      child: editMarker,
-    );
-
-    Row topRow = Row(
-      children: [settingsIcon],
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.end,
-      verticalDirection: VerticalDirection.up,
-    );
-
     Image imgAsset = Image.asset(
       inheritedIconState.isEmbbedded == true ? 
         inheritedIconState.assetPath : 
@@ -89,54 +64,71 @@ class IconBox extends StatelessWidget {
       fit: BoxFit.cover
     );
 
-    Column centerColumn = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Flexible(
-          child: inheritedFieldState.inDebugMode ? 
-          topRow : 
-          Opacity(
-            child: topRow, 
-            opacity: 0.0,
-          ), 
-          flex: 1,
-        ),
-        Flexible(
-          child: Align(
-            alignment: Alignment.center, 
-            child: imgAsset,
-          ), 
-          flex: 6,
-        ),
-        Flexible(
-          child: Align(
-            alignment: Alignment.center, 
-            child: Text(
-              inheritedIconState.label, 
-              style: defaultStyle,
-            ),
-          ), 
-          flex: 2
-        ),
-      ]
-    );
+    var widgetList = (inheritedFieldState.inDebugMode) ? 
+    // In debug
+    <Widget>[
+      AlignPositioned(
+        alignment: Alignment.topRight,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: ()
+          {
+            if (!inheritedFieldState.inDebugMode) return;
 
-    ConstrainedBox item = ConstrainedBox(
-      constraints: new BoxConstraints(
-        minHeight:  inheritedIconState.scale * inheritedIconState.defaultWidth,
-        minWidth:   inheritedIconState.scale * inheritedIconState.defaultWidth,
-        maxHeight:  inheritedIconState.scale * inheritedIconState.defaultWidth,
-        maxWidth:   inheritedIconState.scale * inheritedIconState.defaultWidth,
+            inheritedIconState.onTap();
+          },
+          child: Icon(
+            Icons.edit,
+          ),
+        ),
+        dx: -10,
+        dy: 10,
       ),
+      AlignPositioned(
+        alignment: Alignment.center,
+        child: imgAsset,
+      ),
+      AlignPositioned(
+        alignment: Alignment.bottomCenter,
+        dy: -10,
+        child: Text(
+          inheritedIconState.label, 
+          style: defaultStyle,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ] : 
+    // Normal
+    <Widget>[
+      AlignPositioned(
+        alignment: Alignment.center,
+        child: imgAsset,
+      ),
+      AlignPositioned(
+        alignment: Alignment.bottomCenter,
+        dy: -10,
+        child: Text(
+          inheritedIconState.label, 
+          style: defaultStyle,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ];
+
+    SizedBox item = SizedBox(
+      height: inheritedIconState.scale * inheritedIconState.defaultWidth,
+      width: inheritedIconState.scale * inheritedIconState.defaultWidth,
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: inheritedIconState.isPinnedToLocation ? thickBorder : thinBorder,
           color: inheritedIconState.isInPlay ? 
             Colors.greenAccent :
-            Colors.white
+            Colors.white,
         ),
-        child: Padding(child: centerColumn, padding: EdgeInsets.all(5.0),),
-      )
+        child: Stack(
+          children: widgetList,
+        ),
+      ),
     );
 
     if (inheritedIconState.isPinnedToLocation == true)
@@ -199,6 +191,7 @@ class IconBox extends StatelessWidget {
       left: inheritedIconState.currentPosition.dx,
       key: GlobalKey(),
       top: inheritedIconState.currentPosition.dy,
-      child: draggable);
+      child: draggable
+    );
   }
 }

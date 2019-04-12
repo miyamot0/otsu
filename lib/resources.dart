@@ -37,6 +37,7 @@ export 'package:flutter/scheduler.dart';
 export 'package:flutter/services.dart';
 
 // External lib imports
+export 'package:align_positioned/align_positioned.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:date_format/date_format.dart';
 export 'package:package_info/package_info.dart';
